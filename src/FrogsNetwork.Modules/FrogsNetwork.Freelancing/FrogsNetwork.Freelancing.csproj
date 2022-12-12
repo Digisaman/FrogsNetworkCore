@@ -18,4 +18,8 @@
     <PackageReference Include="OrchardCore.DisplayManagement" Version="1.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\OrchardCore\OrchardCore.Admin.Abstractions\OrchardCore.Admin.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>
