@@ -21,71 +21,51 @@ public class Migrations : DataMigration
             .Column<string>(nameof(Country.Name), c => c.NotNull().WithLength(50))
         );
 
-        
 
-        return 1;
-    }
-
-    public int UpdateFrom1()
-    {
         SchemaBuilder.CreateTable(nameof(Region), table => table
             .Column<int>(nameof(Region.Id), col => col.PrimaryKey())
             .Column<string>(nameof(Region.Name), c => c.NotNull().WithLength(50))
-            .Column<int>(nameof(Region.CountryId), c=> c.NotNull())
+            .Column<int>(nameof(Region.CountryId), c => c.NotNull())
 
             ).
             CreateForeignKey("FK_Region_Country", nameof(Region), new string[] { nameof(Region.CountryId) }, nameof(Country), new string[] { nameof(Country.Id) });
-        return 2;
-    }
 
-    public int UpdateFrom2()
-    {
         SchemaBuilder.CreateTable(nameof(City), table => table
             .Column<int>(nameof(City.Id), col => col.PrimaryKey())
             .Column<string>(nameof(City.Name), c => c.NotNull().WithLength(50))
-            .Column<int>(nameof(City.RegionId), c=>c.NotNull())
+            .Column<int>(nameof(City.RegionId), c => c.NotNull()))
+            .CreateForeignKey("FK_City_Region", nameof(City), new string[] { nameof(City.RegionId) }, nameof(Region), new string[] { nameof(Region.Id) });
 
-            ).
-            CreateForeignKey("FK_City_Region", nameof(City), new string[] { nameof(City.RegionId) }, nameof(Region), new string[] { nameof(Region.Id) });
-        return 3;
-    }
-
-    public int UpdateFrom3()
-    {
         SchemaBuilder.CreateTable(nameof(FreelancerUser), table => table
-            .Column<int>(nameof(FreelancerUser.Id), col => col.PrimaryKey().Identity())
-            .Column<int>(nameof(FreelancerUser.UserId), c => c.NotNull())
-            .Column<int>(nameof(FreelancerUser.CountryId), c => c.NotNull())
-            .Column<int>(nameof(FreelancerUser.RegionId), c => c.NotNull())
-            .Column<int>(nameof(FreelancerUser.CityId), c => c.NotNull())
-            .Column<DateTime>(nameof(FreelancerUser.BirthDate))
-            .Column<string>(nameof(FreelancerUser.Lat), c => c.WithLength(50))
-            .Column<string>(nameof(FreelancerUser.Long), c => c.WithLength(50))
-            .Column<string>(nameof(FreelancerUser.VAT), c => c.WithLength(50))
-            .Column<string>(nameof(FreelancerUser.Address), c => c.WithLength(100))
-            .Column<string>(nameof(FreelancerUser.PostalCode), c => c.WithLength(50))
-            .Column<string>(nameof(FreelancerUser.Tel), c => c.WithLength(50))
-            .Column<string>(nameof(FreelancerUser.FirstName), c => c.WithLength(50))
-            .Column<string>(nameof(FreelancerUser.LastName), c => c.WithLength(50))
-            .Column<string>(nameof(FreelancerUser.Mobile), c => c.WithLength(50))
-            .Column<string>(nameof(FreelancerUser.Website), c => c.WithLength(50))
-            )
-            .CreateForeignKey("FK_Freelancer_User", nameof(FreelancerUser), new string[] { nameof(FreelancerUser.UserId) }, nameof(UserIndex), new string[] { nameof(UserIndex.Id) })
-            .CreateForeignKey("FK_Freelancer_Country", nameof(FreelancerUser), new string[] { nameof(FreelancerUser.CountryId) }, nameof(Country), new string[] { nameof(Country.Id) })
-            .CreateForeignKey("FK_Freelancer_Region", nameof(FreelancerUser), new string[] { nameof(FreelancerUser.RegionId) }, nameof(Region), new string[] { nameof(Region.Id) })
-            .CreateForeignKey("FK_Freelancer_City", nameof(FreelancerUser), new string[] { nameof(FreelancerUser.CityId) }, nameof(City), new string[] { nameof(City.Id) });
-        return 4;
-    }
+    .Column<int>(nameof(FreelancerUser.Id), col => col.PrimaryKey().Identity())
+    .Column<int>(nameof(FreelancerUser.UserId), c => c.NotNull())
+    .Column<int>(nameof(FreelancerUser.CountryId), c => c.NotNull())
+    .Column<int>(nameof(FreelancerUser.RegionId), c => c.NotNull())
+    .Column<int>(nameof(FreelancerUser.CityId), c => c.NotNull())
+    .Column<DateTime>(nameof(FreelancerUser.BirthDate))
+    .Column<string>(nameof(FreelancerUser.Lat), c => c.WithLength(50))
+    .Column<string>(nameof(FreelancerUser.Long), c => c.WithLength(50))
+    .Column<string>(nameof(FreelancerUser.VAT), c => c.WithLength(50))
+    .Column<string>(nameof(FreelancerUser.Address), c => c.WithLength(100))
+    .Column<string>(nameof(FreelancerUser.PostalCode), c => c.WithLength(50))
+    .Column<string>(nameof(FreelancerUser.Tel), c => c.WithLength(50))
+    .Column<string>(nameof(FreelancerUser.FirstName), c => c.WithLength(50))
+    .Column<string>(nameof(FreelancerUser.LastName), c => c.WithLength(50))
+    .Column<string>(nameof(FreelancerUser.Mobile), c => c.WithLength(50))
+    .Column<string>(nameof(FreelancerUser.Website), c => c.WithLength(50))
+    )
+    .CreateForeignKey("FK_Freelancer_User", nameof(FreelancerUser), new string[] { nameof(FreelancerUser.UserId) }, nameof(UserIndex), new string[] { nameof(UserIndex.Id) })
+    .CreateForeignKey("FK_Freelancer_Country", nameof(FreelancerUser), new string[] { nameof(FreelancerUser.CountryId) }, nameof(Country), new string[] { nameof(Country.Id) })
+    .CreateForeignKey("FK_Freelancer_Region", nameof(FreelancerUser), new string[] { nameof(FreelancerUser.RegionId) }, nameof(Region), new string[] { nameof(Region.Id) })
+    .CreateForeignKey("FK_Freelancer_City", nameof(FreelancerUser), new string[] { nameof(FreelancerUser.CityId) }, nameof(City), new string[] { nameof(City.Id) });
 
 
-    public int UpdateFrom4()
-    {
         SchemaBuilder.CreateTable(nameof(CompanyUser), table => table
             .Column<int>(nameof(CompanyUser.Id), col => col.PrimaryKey().Identity())
             .Column<int>(nameof(CompanyUser.UserId), c => c.NotNull())
-            //.Column<int>(nameof(CompanyUser.CountryId), c => c.Nullable())
-            //.Column<int>(nameof(CompanyUser.RegionId), c => c.Nullable())
-            //.Column<int>(nameof(CompanyUser.CityId), c => c.Nullable())
+            .Column<int>(nameof(CompanyUser.CountryId), c => c.NotNull())
+            .Column<int>(nameof(CompanyUser.RegionId), c => c.NotNull())
+            .Column<int>(nameof(CompanyUser.CityId), c => c.NotNull())
             .Column<string>(nameof(CompanyUser.Lat), c => c.WithLength(50))
             .Column<string>(nameof(CompanyUser.Long), c => c.WithLength(50))
             .Column<string>(nameof(CompanyUser.VAT), c => c.WithLength(50))
@@ -98,12 +78,16 @@ public class Migrations : DataMigration
             .Column<string>(nameof(CompanyUser.ContactPersonPosition), c => c.WithLength(50))
             .Column<string>(nameof(CompanyUser.ContactPersonName), c => c.WithLength(50))
             )
-            .CreateForeignKey("FK_Company_User", nameof(CompanyUser), new string[] { nameof(CompanyUser.UserId) }, nameof(UserIndex), new string[] { nameof(UserIndex.Id) });
-            //.CreateForeignKey("FK_Company_Country", nameof(CompanyUser), new string[] { nameof(CompanyUser.CountryId) }, nameof(Country), new string[] { nameof(Country.Id) })
-            //.CreateForeignKey("FK_Company_Region", nameof(CompanyUser), new string[] { nameof(CompanyUser.RegionId) }, nameof(Region), new string[] { nameof(Region.Id) })
-            //.CreateForeignKey("FK_Company_City", nameof(CompanyUser), new string[] { nameof(CompanyUser.CityId) }, nameof(City), new string[] { nameof(City.Id) });
-        return 5;
+            .CreateForeignKey("FK_Company_User", nameof(CompanyUser), new string[] { nameof(CompanyUser.UserId) }, nameof(UserIndex), new string[] { nameof(UserIndex.Id) })
+            .CreateForeignKey("FK_Company_Country", nameof(CompanyUser), new string[] { nameof(CompanyUser.CountryId) }, nameof(Country), new string[] { nameof(Country.Id) })
+            .CreateForeignKey("FK_Company_Region", nameof(CompanyUser), new string[] { nameof(CompanyUser.RegionId) }, nameof(Region), new string[] { nameof(Region.Id) })
+            .CreateForeignKey("FK_Company_City", nameof(CompanyUser), new string[] { nameof(CompanyUser.CityId) }, nameof(City), new string[] { nameof(City.Id) });
+        
+
+        return 1;
     }
+
+    
 
 
 }
