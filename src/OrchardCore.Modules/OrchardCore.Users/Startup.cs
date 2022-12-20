@@ -157,8 +157,14 @@ namespace OrchardCore.Users
                 // Specify OrchardCore User requirements.
                 // A user name cannot include an @ symbol, i.e. be an email address
                 // An email address must be provided, and be unique.
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._+";
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._+@";
                 options.User.RequireUniqueEmail = true;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredUniqueChars = 3;
+                options.Password.RequiredLength = 8;
             })
             .AddDefaultTokenProviders();
 
