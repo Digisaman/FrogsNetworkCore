@@ -1,4 +1,6 @@
 using Fluid;
+using FrogsNetwork.Freelancing.Handlers;
+using FrogsNetwork.Freelancing.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +10,8 @@ using OrchardCore.Data.Migration;
 using OrchardCore.Environment.Shell;
 using OrchardCore.Modules;
 using OrchardCore.Security.Permissions;
+using OrchardCore.Users.Events;
+using OrchardCore.Users.Services;
 
 namespace FrogsNetwork.Freelancing
 {
@@ -25,8 +29,10 @@ namespace FrogsNetwork.Freelancing
         public override void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IPermissionProvider, Permissions>();
-
             services.AddDataMigration<Migrations>();
+            services.AddScoped<IRegistrationFormEvents, UserRegistrationHandler>();
+            services.AddTransient<UserService>();
+            services.AddTransient<ProfileService>();
         }
 
         public override void Configure(IApplicationBuilder builder, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)

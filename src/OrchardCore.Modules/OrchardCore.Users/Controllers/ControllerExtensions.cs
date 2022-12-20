@@ -55,8 +55,9 @@ namespace OrchardCore.Users.Controllers
         /// <param name="model"></param>
         /// <param name="confirmationEmailSubject"></param>
         /// <param name="logger"></param>
+        /// <param name="userManager">Optioanl parameter to add user to role before registeration events are fired</param>
         /// <returns></returns>
-        internal static async Task<IUser> RegisterUser(this Controller controller, RegisterViewModel model, string confirmationEmailSubject, ILogger logger)
+        internal static async Task<IUser> RegisterUser(this Controller controller, RegisterViewModel model, string confirmationEmailSubject, ILogger logger, UserManager<IUser> userManager = null)
         {
             var registrationEvents = controller.ControllerContext.HttpContext.RequestServices.GetRequiredService<IEnumerable<IRegistrationFormEvents>>();
             var userService = controller.ControllerContext.HttpContext.RequestServices.GetRequiredService<IUserService>();
@@ -70,7 +71,10 @@ namespace OrchardCore.Users.Controllers
                 if (controller.ModelState.IsValid)
                 {
                     var user = await userService.CreateUserAsync(new User { UserName = model.UserName, Email = model.Email, EmailConfirmed = !settings.UsersMustValidateEmail, IsEnabled = !settings.UsersAreModerated }, model.Password, (key, message) => controller.ModelState.AddModelError(key, message)) as User;
-
+                    if ( userManager != null && model.Role != null )
+                    {
+                        await userManager.AddToRoleAsync(user, model.Role);
+                    }
                     if (user != null && controller.ModelState.IsValid)
                     {
                         if (settings.UsersMustValidateEmail && !user.EmailConfirmed)
