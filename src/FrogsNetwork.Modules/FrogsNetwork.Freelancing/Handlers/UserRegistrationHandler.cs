@@ -15,8 +15,8 @@ namespace FrogsNetwork.Freelancing.Handlers
 
         public Task RegisteredAsync(IUser user)
         {
-            _profileService.AddUserProfile(user);
-            return Task.CompletedTask;
+            return _profileService.AddUserProfile(user);
+            //return Task.CompletedTask;
         }
 
         public Task RegistrationValidationAsync(Action<string, string> reportError)

@@ -32,7 +32,7 @@ public class Migrations : DataMigration
 
         SchemaBuilder.CreateTable(nameof(City), table => table
             .Column<int>(nameof(City.Id), col => col.PrimaryKey())
-            .Column<string>(nameof(City.Name), c => c.NotNull().WithLength(50))
+            .Column<string>(nameof(City.Name), c => c.NotNull().WithLength(100))
             .Column<int>(nameof(City.RegionId), c => c.NotNull()))
             .CreateForeignKey("FK_City_Region", nameof(City), new string[] { nameof(City.RegionId) }, nameof(Region), new string[] { nameof(Region.Id) });
 

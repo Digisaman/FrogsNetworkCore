@@ -23,63 +23,68 @@ public class ProfileService : IProfileService
         _session = session;
     }
 
-    public async void AddUserProfile(IUser user)
+    public async Task<bool> AddUserProfile(IUser user)
     {
 
-        var userInfo = await _userService.GetUserAsync(user.UserName) as User;
+        var userInfo = _userService.GetUserAsync(user.UserName).Result as User;
         //UserInfo userInfo = await _userService.GetUserInfor(user);
         //{
         if ( userInfo == null)
         {
             //log
-            return;
+            return false;
         }
         if (userInfo.RoleNames.Contains(nameof(Roles.Freelancer)))
-            AddFreelancerAsync(userInfo.UserId).Wait();
+        {
+            bool result = AddFreelancerAsync(userInfo.UserId).Result;
+            return result;
+        }
         else if (userInfo.RoleNames.Contains(nameof(Roles.Company)))
-            AddCompanyAsync(new CompanyProfileViewModel
-            {
-                UserId = userInfo.UserId
-            });
+        {
+            bool result = AddCompanyAsync(userInfo.UserId).Result;
+            return result;
+        }
         else
         {
             //log
+            return false;
+         
         }
     }
     private async Task<bool> AddFreelancerAsync(string userdId)
     {
-        var result = await _session.LinqQueryAsync(c =>
+        var result = _session.LinqQueryAsync(c =>
             c.GetTable<FreelancerUser>()
-            .FirstOrDefaultAsync( c=> c.UserId == userdId));
+            .FirstOrDefaultAsync( c=> c.UserId == userdId)).Result;
 
         if (result == null)
         {
-            var insertedCount = await _session.LinqTableQueryAsync<FreelancerUser, int>(table => table
+            var insertedCount = _session.LinqTableQueryAsync<FreelancerUser, int>(table => table
             .InsertAsync(
                 () => new FreelancerUser
                 {
                     UserId = userdId       
                 }));
-            return (insertedCount == 1);
+            return (insertedCount.Result == 1);
         }
         return true;
     }
 
-    private async Task<bool> AddCompanyAsync(CompanyProfileViewModel viewModel)
+    private async Task<bool> AddCompanyAsync(string userdId)
     {
-        var result = await _session.LinqQueryAsync(c =>
+        var result = _session.LinqQueryAsync(c =>
            c.GetTable<CompanyUser>()
-           .FirstOrDefaultAsync(c => c.UserId == viewModel.UserId));
+           .FirstOrDefaultAsync(c => c.UserId == userdId)).Result;
 
         if (result == null)
         {
-            var insertedCount = await _session.LinqTableQueryAsync<CompanyUser, int>(table => table
+            var insertedCount = _session.LinqTableQueryAsync<CompanyUser, int>(table => table
             .InsertAsync(
                 () => new CompanyUser
                 {
-                    UserId = viewModel.UserId
+                    UserId = userdId
                 }));
-            return (insertedCount == 1);
+            return (insertedCount.Result == 1);
         }
         return true;
 

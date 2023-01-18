@@ -9,5 +9,6 @@ using OrchardCore.Users;
 namespace FrogsNetwork.Freelancing.Services;
 public interface IProfileService
 {
-    void AddUserProfile(IUser user);
+   
+    Task<bool> AddUserProfile(IUser user);
 }
