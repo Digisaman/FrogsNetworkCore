@@ -12,6 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Lombiq.HelpfulLibraries.AspNetCore" Version="5.1.0" />
+    <PackageReference Include="Lombiq.HelpfulLibraries.Common" Version="5.1.0" />
+    <PackageReference Include="Lombiq.HelpfulLibraries.LinqToDb" Version="5.1.0" />
+    <PackageReference Include="Lombiq.HelpfulLibraries.OrchardCore" Version="5.1.0" />
+    <PackageReference Include="Lombiq.HelpfulLibraries.RestEase" Version="5.1.0" />
     <PackageReference Include="OrchardCore.Module.Targets" Version="1.5.0" />
     <PackageReference Include="OrchardCore.ContentManagement" Version="1.5.0" />
     <PackageReference Include="OrchardCore.ContentTypes.Abstractions" Version="1.5.0" />

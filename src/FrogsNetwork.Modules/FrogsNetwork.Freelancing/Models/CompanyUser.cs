@@ -9,7 +9,7 @@ public class CompanyUser : BaseUser
 {
     public virtual int Id { get; set; }
 
-    public virtual int UserId { get; set; }
+    public virtual string UserId { get; set; }
 
     public virtual string CompanyTel { get; set; } = "";
 

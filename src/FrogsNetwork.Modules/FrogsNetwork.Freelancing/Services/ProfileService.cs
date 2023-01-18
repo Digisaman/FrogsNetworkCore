@@ -1,19 +1,26 @@
 using FrogsNetwork.Freelancing.Models;
 using FrogsNetwork.Freelancing.ViewModels;
+using LinqToDB;
+using Lombiq.HelpfulLibraries.LinqToDb;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using OrchardCore.Users;
 using OrchardCore.Users.Models;
 using OrchardCore.Users.Services;
+using ISession = YesSql.ISession;
 
 namespace FrogsNetwork.Freelancing.Services;
 public class ProfileService : IProfileService
 {
     private readonly IUserService _userService;
+    private readonly ISession _session;
 
-    public ProfileService(IUserService userService)
+    public ProfileService(
+        IUserService userService,
+        ISession session)
     {
         _userService = userService;
+        _session = session;
     }
 
     public async void AddUserProfile(IUser user)
@@ -28,12 +35,9 @@ public class ProfileService : IProfileService
             return;
         }
         if (userInfo.RoleNames.Contains(nameof(Roles.Freelancer)))
-            AddFreelancer(new FreelancerProfileViewModel
-            {
-                UserId = userInfo.UserId
-            });
+            AddFreelancerAsync(userInfo.UserId).Wait();
         else if (userInfo.RoleNames.Contains(nameof(Roles.Company)))
-            AddCompany(new CompanyProfileViewModel
+            AddCompanyAsync(new CompanyProfileViewModel
             {
                 UserId = userInfo.UserId
             });
@@ -42,21 +46,42 @@ public class ProfileService : IProfileService
             //log
         }
     }
-    private void AddFreelancer(FreelancerProfileViewModel viewModel)
+    private async Task<bool> AddFreelancerAsync(string userdId)
     {
-        //_freelancerRepository.Create(new FreelancerUser
-        //{
-        //    UserId = viewModel.UserId
-        //});
+        var result = await _session.LinqQueryAsync(c =>
+            c.GetTable<FreelancerUser>()
+            .FirstOrDefaultAsync( c=> c.UserId == userdId));
+
+        if (result == null)
+        {
+            var insertedCount = await _session.LinqTableQueryAsync<FreelancerUser, int>(table => table
+            .InsertAsync(
+                () => new FreelancerUser
+                {
+                    UserId = userdId       
+                }));
+            return (insertedCount == 1);
+        }
+        return true;
     }
 
-
-    private void AddCompany(CompanyProfileViewModel viewModel)
+    private async Task<bool> AddCompanyAsync(CompanyProfileViewModel viewModel)
     {
-        //_companyRepository.Create(new CompanyUser
-        //{
-        //    UserId = viewModel.UserId
-        //});
+        var result = await _session.LinqQueryAsync(c =>
+           c.GetTable<CompanyUser>()
+           .FirstOrDefaultAsync(c => c.UserId == viewModel.UserId));
+
+        if (result == null)
+        {
+            var insertedCount = await _session.LinqTableQueryAsync<CompanyUser, int>(table => table
+            .InsertAsync(
+                () => new CompanyUser
+                {
+                    UserId = viewModel.UserId
+                }));
+            return (insertedCount == 1);
+        }
+        return true;
 
     }
 }

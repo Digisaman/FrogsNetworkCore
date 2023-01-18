@@ -4,7 +4,7 @@ public class FreelancerUser : BaseUser
 {
     public virtual int Id { get; set; }
 
-    public virtual int UserId { get; set; }
+    public virtual string UserId { get; set; }
 
     public virtual string Tel { get; set; } = "";
 
