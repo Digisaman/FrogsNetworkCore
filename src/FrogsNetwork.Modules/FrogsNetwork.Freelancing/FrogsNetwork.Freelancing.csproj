@@ -8,7 +8,51 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Remove="DBScripts\LocalDB_Seed.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\01 - Create Tables.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\02 - Insert Countries.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\03 - Insert Regions.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\04 - Insert Cities 01.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\04 - Insert Cities 02.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\04 - Insert Cities 03.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\04 - Insert Cities 04.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\04 - Insert Cities 05.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\04 - Insert Cities 06.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\04 - Insert Cities 07.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\04 - Insert Cities 08.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\04 - Insert Cities 09.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\04 - Insert Cities 10.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\04 - Insert Cities 11.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\04 - Insert Cities 12.sql" />
+    <EmbeddedResource Remove="DBScripts\LocationDB\README.md" />
+    <EmbeddedResource Remove="DBScripts\RemoteDB_CreateLinkedServer.sql" />
+    <EmbeddedResource Remove="DBScripts\RemoteDB_Seed.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="DBScripts\LocalDB_Seed.sql" />
+    <None Include="DBScripts\LocationDB\01 - Create Tables.sql" />
+    <None Include="DBScripts\LocationDB\02 - Insert Countries.sql" />
+    <None Include="DBScripts\LocationDB\03 - Insert Regions.sql" />
+    <None Include="DBScripts\LocationDB\04 - Insert Cities 01.sql" />
+    <None Include="DBScripts\LocationDB\04 - Insert Cities 02.sql" />
+    <None Include="DBScripts\LocationDB\04 - Insert Cities 03.sql" />
+    <None Include="DBScripts\LocationDB\04 - Insert Cities 04.sql" />
+    <None Include="DBScripts\LocationDB\04 - Insert Cities 05.sql" />
+    <None Include="DBScripts\LocationDB\04 - Insert Cities 06.sql" />
+    <None Include="DBScripts\LocationDB\04 - Insert Cities 07.sql" />
+    <None Include="DBScripts\LocationDB\04 - Insert Cities 08.sql" />
+    <None Include="DBScripts\LocationDB\04 - Insert Cities 09.sql" />
+    <None Include="DBScripts\LocationDB\04 - Insert Cities 10.sql" />
+    <None Include="DBScripts\LocationDB\04 - Insert Cities 11.sql" />
+    <None Include="DBScripts\LocationDB\04 - Insert Cities 12.sql" />
+    <None Include="DBScripts\LocationDB\README.md" />
+    <None Include="DBScripts\RemoteDB_CreateLinkedServer.sql" />
+    <None Include="DBScripts\RemoteDB_Seed.sql" />
   </ItemGroup>
 
   <ItemGroup>
