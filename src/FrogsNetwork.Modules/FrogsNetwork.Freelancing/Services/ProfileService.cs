@@ -29,7 +29,7 @@ public class ProfileService : IProfileService
         var userInfo = _userService.GetUserAsync(user.UserName).Result as User;
         //UserInfo userInfo = await _userService.GetUserInfor(user);
         //{
-        if ( userInfo == null)
+        if (userInfo == null)
         {
             //log
             return false;
@@ -48,14 +48,33 @@ public class ProfileService : IProfileService
         {
             //log
             return false;
-         
+
         }
     }
+
+    public Roles GetUserRole(IUser user)
+    {
+        var userInfo = _userService.GetUserAsync(user.UserName).Result as User;
+        //UserInfo userInfo = await _userService.GetUserInfor(user);
+        //{
+        
+        if (userInfo.RoleNames.Contains(nameof(Roles.Freelancer)))
+        {
+            return Roles.Freelancer;
+        }
+        else if (userInfo.RoleNames.Contains(nameof(Roles.Company)))
+        {
+            return Roles.Company;
+        }
+        return Roles.None;
+    }
+
+
     private async Task<bool> AddFreelancerAsync(string userdId)
     {
         var result = _session.LinqQueryAsync(c =>
             c.GetTable<FreelancerUser>()
-            .FirstOrDefaultAsync( c=> c.UserId == userdId)).Result;
+            .FirstOrDefaultAsync(c => c.UserId == userdId)).Result;
 
         if (result == null)
         {
@@ -63,7 +82,7 @@ public class ProfileService : IProfileService
             .InsertAsync(
                 () => new FreelancerUser
                 {
-                    UserId = userdId       
+                    UserId = userdId
                 }));
             return (insertedCount.Result == 1);
         }
@@ -88,5 +107,225 @@ public class ProfileService : IProfileService
         }
         return true;
 
+    }
+
+    public async Task<bool> EditFreelancer(FreelancerProfileViewModel viewModel)
+    {
+
+
+
+        //record.Address = viewModel.Address;
+        //record.BirthDate = viewModel.BirthDate;
+        //record.CityId = viewModel.CityId;
+        //record.CountryId = viewModel.CountryId;
+        //record.Lat = viewModel.Lat;
+        //record.Long = viewModel.Long;
+        //record.Mobile = viewModel.Mobile;
+        //record.PostalCode = viewModel.PostalCode;
+        //record.RegionId = viewModel.RegionId;
+        //record.Tel = viewModel.Tel;
+        //record.VAT = viewModel.VAT;
+        //record.LastName = viewModel.LastName;
+        //record.FirstName = viewModel.FirstName;
+        //record.Website = viewModel.Website;
+
+        FreelancerUser record = new FreelancerUser
+        {
+            Id = viewModel.Id,
+            UserId = viewModel.UserId,
+        };
+        var modifiedCount = _session.LinqTableQueryAsync<FreelancerUser, int>(table => table
+            .Where(record => record.Id == viewModel.Id)
+            .Set(record => record.Address, viewModel.Address)
+            .Set(record => record.BirthDate, viewModel.BirthDate)
+            .Set(record => record.CityId, viewModel.CityId)
+            .Set(record => record.CountryId, viewModel.CountryId)
+            .Set(record => record.Lat, viewModel.Lat)
+            .Set(record => record.Long, viewModel.Long)
+            .Set(record => record.Mobile, viewModel.Mobile)
+            .Set(record => record.PostalCode, viewModel.PostalCode)
+            .Set(record => record.RegionId, viewModel.RegionId)
+            .Set(record => record.Tel, viewModel.Tel)
+            .Set(record => record.LastName, viewModel.LastName)
+            .Set(record => record.FirstName, viewModel.FirstName)
+            .Set(record => record.Website, viewModel.Website)
+            .UpdateAsync());
+        return (modifiedCount.Result == 1);
+
+
+
+
+    }
+
+    public async Task<bool> EditCompany(CompanyProfileViewModel viewModel)
+    {
+        return true;
+    }
+    //public void EditCompany(CompanyProfileViewModel viewModel)
+    //{
+    //    CompanyUser record = _companyRepository.Get(viewModel.Id);
+    //    record.Address = viewModel.Address;
+    //    record.ContactPersonPosition = viewModel.ContactPersonPosition;
+    //    record.ContactPersonName = viewModel.ContactPersonName;
+    //    record.CityId = viewModel.CityId;
+    //    record.CountryId = viewModel.CountryId;
+    //    record.Lat = viewModel.Lat;
+    //    record.Long = viewModel.Long;
+    //    record.PostalCode = viewModel.PostalCode;
+    //    record.RegionId = viewModel.RegionId;
+    //    record.CompanyTel = viewModel.Tel;
+    //    record.VAT = viewModel.VAT;
+    //    record.Website = viewModel.Website;
+
+    //    record.Activities = viewModel.Activities;
+    //    record.CompanyName = viewModel.CompanyName;
+    //    _companyRepository.Update(record);
+    //}
+
+    //public CompanyProfileViewModel GetCompany(int userId)
+    //{
+    //    CompanyUser user = _companyRepository.Table
+    //       .FirstOrDefault(c => c.UserId == userId);
+    //    if (user != null)
+    //    {
+    //        CompanyProfileViewModel viewModel = new CompanyProfileViewModel
+    //        {
+    //            Address = user.Address,
+    //            CityId = user.CityId,
+    //            ContactPersonPosition = user.ContactPersonPosition,
+    //            CountryId = user.CountryId,
+    //            Id = user.Id,
+    //            Lat = user.Lat,
+    //            Long = user.Long,
+    //            PostalCode = user.PostalCode,
+    //            RegionId = user.RegionId,
+    //            Tel = user.CompanyTel,
+    //            UserId = user.UserId,
+    //            VAT = user.VAT,
+    //            Website = user.Website,
+    //            Activities = user.Activities,
+    //            CompanyName = user.CompanyName,
+    //            ContactPersonName = user.ContactPersonName
+
+
+    //        };
+    //        return viewModel;
+    //    }
+    //    return null;
+    //}
+
+    public async Task<FreelancerProfileViewModel> GetFreelancerProfile(string userId)
+    {
+        var user = _session.LinqQueryAsync(c =>
+          c.GetTable<FreelancerUser>()
+          .FirstOrDefaultAsync(c => c.UserId == userId)).Result;
+
+        if (user != null)
+        {
+            FreelancerProfileViewModel viewModel = new FreelancerProfileViewModel
+            {
+                Address = user.Address,
+                CityId = user.CityId,
+                CountryId = user.CountryId,
+                Id = user.Id,
+                Lat = user.Lat,
+                Long = user.Long,
+                PostalCode = user.PostalCode,
+                RegionId = user.RegionId,
+                Tel = user.Tel,
+                UserId = user.UserId,
+                VAT = user.VAT,
+                Mobile = user.Mobile,
+                BirthDate = user.BirthDate,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Website = user.Website
+            };
+            return viewModel;
+        }
+        return null;
+    }
+
+    //public FreelancerUser GetFreelancerBase(int userId)
+    //{
+    //    FreelancerUser user = _freelancerRepository.Table
+    //      .FirstOrDefault(c => c.UserId == userId);
+
+    //    return user;
+    //}
+
+    public async Task<IEnumerable<Nationality>> GetNationalities()
+    {
+        return _session.LinqQueryAsync(c =>
+         c.GetTable<Nationality>().ToListAsync()).Result;
+    }
+
+    public async Task<IEnumerable<Country>> GetCountries()
+    {
+        return _session.LinqQueryAsync(c =>
+       c.GetTable<Country>().ToListAsync()).Result;
+    }
+
+    public async Task<IEnumerable<Region>> GetRegions(int countryId)
+    {
+        return _session.LinqQueryAsync(c =>
+       c.GetTable<Region>()
+       .Where( c => c.CountryId == countryId)
+       .ToListAsync()).Result;
+    }
+
+
+    public async Task<IEnumerable<City>> GetCities(int regionId)
+    {
+        return _session.LinqQueryAsync(c =>
+         c.GetTable<City>()
+         .Where(c => c.RegionId == regionId)
+         .ToListAsync()).Result;
+    }
+
+    public async Task<List<FreelancerNationalityViewModel>> GetFreelancerNationalities(int freelancerId)
+    {
+        //var result = _session.LinqQueryAsync(c =>
+        // c.GetTable<FreelancerNationality>()
+        // .Where( c => c.FreelancerId == freelancerId)
+        // .ToListAsync()).Result;
+
+        var result = _session.LinqQueryAsync(
+            accessor =>
+                (from freelancerNationality in accessor.GetTable<FreelancerNationality>()
+                 join nationality in accessor.GetTable<Nationality>()
+                 on freelancerNationality.NationalityId equals nationality.Id
+                 where freelancerNationality.FreelancerId == freelancerId
+                 select new FreelancerNationalityViewModel
+                 {
+                     FreelancerId = freelancerNationality.FreelancerId,
+                     Id = freelancerNationality.Id,
+                     NationalityId = nationality.Id,
+                     NationalityTitle = nationality.Name
+                 })
+                .ToListAsync()).Result;
+        return result;
+    }
+
+    public async Task<bool> AddFreelancerNationality(FreelancerNationality freelancerNationality)
+    {
+        var insertedCount = _session.LinqTableQueryAsync<FreelancerNationality, int>(table => table
+            .InsertAsync(
+                () => new FreelancerNationality
+                {
+                    FreelancerId = freelancerNationality.FreelancerId,
+                    NationalityId = freelancerNationality.NationalityId
+                }));
+        return (insertedCount.Result == 1);
+    }
+
+    public async Task<bool> RemoveFreelancerNationality(int id)
+    {
+
+        var deletedCount = _session.LinqTableQueryAsync<FreelancerNationality, int>(table => table
+            .Where(record => record.Id == id)
+            .DeleteAsync());
+
+        return (deletedCount.Result == 1);
     }
 }

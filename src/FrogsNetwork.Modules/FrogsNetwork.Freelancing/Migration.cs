@@ -120,7 +120,7 @@ public class Migrations : DataMigration
             .Column<int>(nameof(FreelancerNationality.NationalityId), c => c.NotNull())
         )
         .CreateForeignKey("FK_FreelancerNationality_Freelancer", nameof(FreelancerNationality), new string[] { nameof(FreelancerNationality.FreelancerId) }, nameof(FreelancerUser), new string[] { nameof(FreelancerUser.Id) })
-        .CreateForeignKey("FK_FreelancerNationality_Freelancer", nameof(FreelancerNationality), new string[] { nameof(FreelancerNationality.NationalityId) }, nameof(Nationality), new string[] { nameof(Nationality.Id) });
+        .CreateForeignKey("FK_FreelancerNationality_Nationality", nameof(FreelancerNationality), new string[] { nameof(FreelancerNationality.NationalityId) }, nameof(Nationality), new string[] { nameof(Nationality.Id) });
 
 
         SchemaBuilder.CreateTable(nameof(FreelancerLanguage), table => table
@@ -128,8 +128,8 @@ public class Migrations : DataMigration
             .Column<int>(nameof(FreelancerLanguage.FreelancerId), c => c.NotNull())
             .Column<int>(nameof(FreelancerLanguage.LanguageId), c => c.NotNull())
         )
-        .CreateForeignKey("FK_FreelancerNationality_Freelancer", nameof(FreelancerLanguage), new string[] { nameof(FreelancerLanguage.FreelancerId) }, nameof(FreelancerUser), new string[] { nameof(FreelancerUser.Id) })
-        .CreateForeignKey("FK_FreelancerNationality_Freelancer", nameof(FreelancerLanguage), new string[] { nameof(FreelancerLanguage.LanguageId) }, nameof(Language), new string[] { nameof(Language.Id) });
+        .CreateForeignKey("FK_FreelancerLanguage_Freelancer", nameof(FreelancerLanguage), new string[] { nameof(FreelancerLanguage.FreelancerId) }, nameof(FreelancerUser), new string[] { nameof(FreelancerUser.Id) })
+        .CreateForeignKey("FK_FreelancerLanguage_Language", nameof(FreelancerLanguage), new string[] { nameof(FreelancerLanguage.LanguageId) }, nameof(Language), new string[] { nameof(Language.Id) });
         return 4;
     }
 
