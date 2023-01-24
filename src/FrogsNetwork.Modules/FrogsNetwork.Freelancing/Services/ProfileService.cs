@@ -57,7 +57,7 @@ public class ProfileService : IProfileService
         var userInfo = _userService.GetUserAsync(user.UserName).Result as User;
         //UserInfo userInfo = await _userService.GetUserInfor(user);
         //{
-        
+
         if (userInfo.RoleNames.Contains(nameof(Roles.Freelancer)))
         {
             return Roles.Freelancer;
@@ -149,8 +149,8 @@ public class ProfileService : IProfileService
             .Set(record => record.LastName, viewModel.LastName)
             .Set(record => record.FirstName, viewModel.FirstName)
             .Set(record => record.Website, viewModel.Website)
-            .UpdateAsync());
-        return (modifiedCount.Result == 1);
+            .UpdateAsync()).Result;
+        return (modifiedCount == 1);
 
 
 
@@ -257,7 +257,9 @@ public class ProfileService : IProfileService
     public async Task<IEnumerable<Nationality>> GetNationalities()
     {
         return _session.LinqQueryAsync(c =>
-         c.GetTable<Nationality>().ToListAsync()).Result;
+         c.GetTable<Nationality>()
+         .OrderBy(c => c.Name)
+         .ToListAsync()).Result;
     }
 
     public async Task<IEnumerable<Country>> GetCountries()
@@ -270,7 +272,8 @@ public class ProfileService : IProfileService
     {
         return _session.LinqQueryAsync(c =>
        c.GetTable<Region>()
-       .Where( c => c.CountryId == countryId)
+       .Where(c => c.CountryId == countryId)
+       .OrderBy(c => c.Name)
        .ToListAsync()).Result;
     }
 
@@ -280,6 +283,7 @@ public class ProfileService : IProfileService
         return _session.LinqQueryAsync(c =>
          c.GetTable<City>()
          .Where(c => c.RegionId == regionId)
+         .OrderBy(c => c.Name)
          .ToListAsync()).Result;
     }
 
@@ -296,6 +300,7 @@ public class ProfileService : IProfileService
                  join nationality in accessor.GetTable<Nationality>()
                  on freelancerNationality.NationalityId equals nationality.Id
                  where freelancerNationality.FreelancerId == freelancerId
+                 orderby nationality.Name
                  select new FreelancerNationalityViewModel
                  {
                      FreelancerId = freelancerNationality.FreelancerId,

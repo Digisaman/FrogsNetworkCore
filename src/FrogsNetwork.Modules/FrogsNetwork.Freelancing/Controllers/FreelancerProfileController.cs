@@ -15,6 +15,7 @@ using OrchardCore.Users.Services;
 using OrchardCore.Users;
 using OrchardCore.Users.Models;
 using FrogsNetwork.Freelancing.Services;
+using FrogsNetwork.Freelancing.Helpers;
 
 namespace FrogsNetwork.Freelancing.Controllers;
 
@@ -55,6 +56,7 @@ public class FreelancerProfileController : Controller
             var user = _userService.GetAuthenticatedUserAsync(User).Result as User; 
 
             this.ViewModel = _profileService.GetFreelancerProfile(user.UserId).Result;
+          
 
             this.ViewModel.Nationalities = GetNationalities();
             this.ViewModel.Countries = GetCountries();
@@ -158,7 +160,8 @@ public class FreelancerProfileController : Controller
             var user = _userService.GetAuthenticatedUserAsync(User).Result as User;
             this.ViewModel = _profileService.GetFreelancerProfile(user.UserId).Result;
 
-            //this.ViewModel.UpdateModel(viewModel);
+            this.ViewModel.UpdateModel(viewModel);
+           
 
             this.ViewModel.Countries = GetCountries();
 

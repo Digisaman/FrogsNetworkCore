@@ -1,25 +1,10 @@
 using System.Reflection;
+using LinqToDB.Extensions;
 
 namespace FrogsNetwork.Freelancing.Helpers;
 public static class ReflectionHelpers
 {
-    //public static T UpdateModel<T>(this T source, T destination)
-    //{
-    //    foreach(System.Reflection.PropertyInfo propertyInfo in typeof(T).GetProperties())
-    //    {
-    //        if ( propertyInfo.PropertyType.IsPrimitive)
-    //        {
-    //            if ( propertyInfo.PropertyType == typeof(string))
-    //            {
-    //                object objDestination = propertyInfo.GetValue(destination);
-    //                object objSource= propertyInfo.GetValue(destination);
-
-    //            }
-    //        }
-    //    }
-    //    return source;
-
-    //}
+   
 
     public static T UpdateModel<T>(this T self, T to) where T : class
     {
@@ -28,7 +13,7 @@ public static class ReflectionHelpers
             var type = typeof(T);
             var ignoreList = new List<string>(new string[] { "Id" });
             var properties = from pi in type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                             where !(ignoreList.Contains(pi.Name) || !pi.PropertyType.IsSimpleType() || pi.GetIndexParameters().Length != 0)
+                             where !(ignoreList.Contains(pi.Name) || !pi.GetMemberType().IsSimpleType() || pi.GetIndexParameters().Length != 0)
                              select pi;
 
             foreach (var property in properties)

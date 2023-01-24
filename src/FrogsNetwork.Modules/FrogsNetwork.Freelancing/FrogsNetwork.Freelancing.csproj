@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Helpers\ReflectionHelpers.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Remove="DBScripts\LocalDB_Seed.sql" />
     <EmbeddedResource Remove="DBScripts\LocationDB\01 - Create Tables.sql" />
     <EmbeddedResource Remove="DBScripts\LocationDB\02 - Insert Countries.sql" />
@@ -75,10 +71,6 @@
     <ProjectReference Include="..\..\OrchardCore\OrchardCore.Admin.Abstractions\OrchardCore.Admin.Abstractions.csproj" />
     <ProjectReference Include="..\..\OrchardCore\OrchardCore.DisplayManagement\OrchardCore.DisplayManagement.csproj" />
     <ProjectReference Include="..\..\OrchardCore\OrchardCore.Users.Core\OrchardCore.Users.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Helpers\" />
   </ItemGroup>
 
 </Project>
