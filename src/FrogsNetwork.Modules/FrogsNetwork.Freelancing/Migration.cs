@@ -96,6 +96,22 @@ public class Migrations : DataMigration
         return 2;
     }
 
+    public int UpdateFrom2()
+    {
+        SchemaBuilder.CreateTable(nameof(Language), table => table
+            .Column<int>(nameof(Language.Id), col => col.PrimaryKey().Identity())
+            .Column<string>(nameof(Language.Name), c => c.NotNull().WithLength(50))
+        );
+
+        SchemaBuilder.CreateTable(nameof(Nationality), table => table
+           .Column<int>(nameof(Nationality.Id), col => col.PrimaryKey().Identity())
+           .Column<string>(nameof(Nationality.Name), c => c.NotNull().WithLength(50))
+       );
+
+
+        return 3;
+    }
+
 
 
 
