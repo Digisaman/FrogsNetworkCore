@@ -1,4 +1,4 @@
-@model FrogsNetwork.Freelancing.ViewModels.FreelancerProfileViewModel
+@model FrogsNetwork.Freelancing.ViewModels.CompanyProfileViewModel
 
 
 @{
@@ -9,21 +9,36 @@
 
 <h1>@T["Basic Profile"]</h1>
 <p>@T["Use the form below to update your basic information."]</p>
-<form asp-controller="FreelancerProfile" asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal no-multisubmit">
+<form asp-controller="CompanyProfile" asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal no-multisubmit">
 
 
-    <fieldset>
-        <div class="row">
-            <div class="col">
 
+    <div class="row">
+        <div class="col">
+            <fieldset>
                 <legend>@T["Profile Information"]</legend>
                 <div>
-                    <label for="vat">@T["First Name:"]</label>
-                    @Html.TextBox("FirstName")
+                    <label for="CompanyName">@T["Company Name:"]</label>
+                    @Html.TextBox("CompanyName")
                 </div>
                 <div>
-                    <label for="vat">@T["Last Name:"]</label>
-                    @Html.TextBox("LastName")
+                    <label for="Activities">@T["Activities:"]</label>
+                    @Html.TextBox("Activities")
+                </div>
+
+                <div>
+                    <label for="ContactPersonName">@T["Contact Person Name:"]</label>
+                    @Html.TextBox("ContactPersonName")
+                </div>
+
+                <div>
+                    <label for="ContactPersonPosition">@T["Contact Person Position:"]</label>
+                    @Html.TextBox("ContactPersonPosition")
+                </div>
+
+                <div>
+                    <label for="Tel">@T["Company Tel:"]</label>
+                    @Html.TextBox("Tel")
                 </div>
 
                 <div>
@@ -31,78 +46,13 @@
                     @Html.TextBox("Website")
                 </div>
 
-                <div>
-                    <label for="Tel">@T["Tel:"]</label>
-                    @Html.TextBox("Tel")
-                </div>
+            </fieldset>
 
-                <div>
-                    <label for="Mobile">@T["Mobile:"]</label>
-                    @Html.TextBox("Mobile")
-                </div>
+        </div>
 
-                <div>
-                    <label for="VAT">@T["VAT:"]</label>
-                    @Html.TextBox("VAT")
-                </div>
-
-                <div>
-                    <label for="BirthDate">@T["BirthDate:"]</label>
-                    <br />
-                    @Html.EditorFor(m => m.BirthDate, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
-
-                <div>
-                    <button class="primarybutton" style="width:200px" type="submit">@T["Save"]</button>
-                </div>
-
-                <fieldset>
-                    <div>
-                        <label for="language">@T["Nationality :"]</label>
-                        <br />
-                        @Html.DropDownListFor(m => m.SelectedNationalityId, Model.Nationalities)
-                    </div>
-                    <div>
-                        <button class="primarybutton" style="width:200px" type="submit"
-                                formaction="@Url.Action("AddNationality")">
-                            @T["Add Nationality"]
-                        </button>
-                    </div>
-                    <div class="panel-body">
-                        <table id="assets-data-table" class="table table-striped table-bordered" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Nationality</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            @foreach (var entry in Model.FreelancerNationalities)
-                            {
-                                <tr>
-                                    <td>
-                                        @entry.NationalityTitle
-                                    </td>
-                                    <td>
-                                        @Html.ActionLink("Remove", "RemoveNationality", "FreelancerProfile", new { entry.Id }, null)
-                                    </td>
-                                </tr>
-                            }
-                        </table>
-
-                    </div>
-                </fieldset>
-
-
-                <div>
-
-                    <button class="primarybutton" style="width:200px" type="submit">@T["Save"]</button>
-                    <br />
-                    <button class="primarybutton" style="width:200px" formaction="/Users/FreelancerExtended" type="submit">Professional Profile</button>
-                </div>
-
-            </div>
-
-            <div class="col">
+        <div class="col">
+            <fieldset>
+                <legend>@T["Location Information"]</legend>
                 <div>
                     <label for="country">@T["Country:"]</label>
                     <br />
@@ -129,13 +79,21 @@
                     @Html.TextBox("PostalCode")
                 </div>
                 <br />
-                <div id="MapDiv" style="width: 400px; height: 400px">
-                </div>
-            </div>
+                @*<div id="MapDiv" style="width: 400px; height: 400px">
+                </div>*@
+            </fieldset>
 
         </div>
-    </fieldset>
 
+    </div>
+
+    <div class="row">
+        <div class="col-2">
+            <button class="primarybutton" style="width:200px" type="submit">@T["Save Profile"]</button>
+            <br />
+            <button class="primarybutton" style="width:200px" formaction="/FreelancerSearch" type="submit">Search Freelancers</button>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
             crossorigin="anonymous"></script>
@@ -193,7 +151,7 @@
                             infoWindow.open(map, marker);
         @*@Model.Lat = evt.latLng.lat().toFixed(6);
                                 @Model.Long = evt.latLng.lng().toFixed(6);*@
-                                    });
+                                            });
 
         @* google.maps.event.addListener(marker, 'dragend', function (evt) {
                             @Model.Lat = evt.latLng.lat().toFixed(6);
@@ -201,7 +159,7 @@
 
                             map.panTo(evt.latLng);
                             });*@
-                                })(marker, data);
+                                        })(marker, data);
                 }
             }
         });

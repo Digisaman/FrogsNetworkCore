@@ -108,24 +108,6 @@ public class ProfileService : IProfileService
 
     public async Task<bool> EditFreelancer(FreelancerProfileViewModel viewModel)
     {
-
-
-
-        //record.Address = viewModel.Address;
-        //record.BirthDate = viewModel.BirthDate;
-        //record.CityId = viewModel.CityId;
-        //record.CountryId = viewModel.CountryId;
-        //record.Lat = viewModel.Lat;
-        //record.Long = viewModel.Long;
-        //record.Mobile = viewModel.Mobile;
-        //record.PostalCode = viewModel.PostalCode;
-        //record.RegionId = viewModel.RegionId;
-        //record.Tel = viewModel.Tel;
-        //record.VAT = viewModel.VAT;
-        //record.LastName = viewModel.LastName;
-        //record.FirstName = viewModel.FirstName;
-        //record.Website = viewModel.Website;
-
         FreelancerUser record = new FreelancerUser
         {
             Id = viewModel.Id,
@@ -157,7 +139,29 @@ public class ProfileService : IProfileService
 
     public async Task<bool> EditCompany(CompanyProfileViewModel viewModel)
     {
-        return true;
+        CompanyUser record = new CompanyUser
+        {
+            Id = viewModel.Id,
+            UserId = viewModel.UserId,
+        };
+        var modifiedCount = _session.LinqTableQueryAsync<CompanyUser, int>(table => table
+            .Where(record => record.Id == viewModel.Id)
+            .Set(record => record.Address, viewModel.Address)
+            .Set(record => record.Activities, viewModel.Activities)
+            .Set(record => record.CompanyName, viewModel.CompanyName)
+            .Set(record => record.CityId, viewModel.CityId)
+            .Set(record => record.CountryId, viewModel.CountryId)
+            .Set(record => record.CompanyTel, viewModel.Tel)
+            .Set(record => record.ContactPersonName, viewModel.ContactPersonName)
+            .Set(record => record.ContactPersonPosition, viewModel.ContactPersonPosition)
+            .Set(record => record.Lat, viewModel.Lat)
+            .Set(record => record.Long, viewModel.Long)
+            .Set(record => record.PostalCode, viewModel.PostalCode)
+            .Set(record => record.RegionId, viewModel.RegionId)
+            .Set(record => record.Website, viewModel.Website)
+            .Set(record => record.VAT, viewModel.VAT)
+            .UpdateAsync()).Result;
+        return (modifiedCount == 1);
     }
     //public void EditCompany(CompanyProfileViewModel viewModel)
     //{

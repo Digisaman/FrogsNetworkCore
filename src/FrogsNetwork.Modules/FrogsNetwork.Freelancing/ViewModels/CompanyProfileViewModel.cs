@@ -15,19 +15,7 @@ namespace FrogsNetwork.Freelancing.ViewModels
         public string CompanyName { get; set; }
 
         public string Activities { get; set; }
-
-        public List<SelectListItem> Countries { get; set; }
-
-        public List<SelectListItem> Regions { get; set; }
-
-        public List<SelectListItem> Cities { get; set; }
-
-        public CompanyProfileViewModel()
-        {
-            Countries = new List<SelectListItem>();
-            Regions = new List<SelectListItem>();
-            Cities = new List<SelectListItem>();
-        }
+        
     }
 
 }
