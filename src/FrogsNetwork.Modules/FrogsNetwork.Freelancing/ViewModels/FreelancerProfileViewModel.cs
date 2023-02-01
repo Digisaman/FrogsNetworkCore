@@ -8,9 +8,7 @@ namespace FrogsNetwork.Freelancing.ViewModels
 
         public FreelancerProfileViewModel()
         {
-            Countries = new List<SelectListItem>().AsEnumerable();
-            Regions = new List<SelectListItem>().AsEnumerable();
-            Cities = new List<SelectListItem>().AsEnumerable();
+           
             Nationalities = new List<SelectListItem>().AsEnumerable();
 
             FreelancerNationalities = new List<FreelancerNationalityViewModel>();
@@ -32,12 +30,6 @@ namespace FrogsNetwork.Freelancing.ViewModels
 
         public IEnumerable<SelectListItem> Nationalities { get; set; }
         public List<FreelancerNationalityViewModel> FreelancerNationalities { get; set; }
-        public IEnumerable<SelectListItem> Countries { get; set; }
-
-        public IEnumerable<SelectListItem> Regions { get; set; }
-
-        public IEnumerable<SelectListItem> Cities { get; set; }
-
     }
 
 }

@@ -3,6 +3,7 @@ using FrogsNetwork.Freelancing.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
+using OrchardCore.Modules;
 using OrchardCore.Users;
 using OrchardCore.Users.Events;
 using OrchardCore.Users.Models;
@@ -26,10 +27,10 @@ namespace FrogsNetwork.Freelancing.Handlers
         public Task LoggedInAsync(IUser user)
         {
             Roles role = _profileService.GetUserRole(user);
-            if ( role == Roles.Freelancer)
-                _httpContext.HttpContext.Response.Redirect("/FreelancerProfile/Index");
-            else if ( role == Roles.Company)
-                _httpContext.HttpContext.Response.Redirect(_httpContext.HttpContext.Request.PathBase + "/freelancing/company/profile");
+            if (role == Roles.Freelancer)
+               _httpContext.HttpContext.Session.SetString("returnUrl", "/FreelancerProfile/Index");
+            else if (role == Roles.Company)
+                _httpContext.HttpContext.Session.SetString("returnUrl", "/CompanyProfile/Index");
             return Task.CompletedTask;
         }
 

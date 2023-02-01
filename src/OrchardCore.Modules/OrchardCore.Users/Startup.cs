@@ -137,6 +137,8 @@ namespace OrchardCore.Users
             );
 
             builder.UseAuthorization();
+
+            builder.UseSession();
         }
 
         public override void ConfigureServices(IServiceCollection services)
@@ -253,6 +255,10 @@ namespace OrchardCore.Users
             services.AddScoped<IUserEventHandler, UserDisabledEventHandler>();
 
             services.AddTransient<IConfigureOptions<ResourceManagementOptions>, UserOptionsConfiguration>();
+
+            services.AddMvc()
+            .AddSessionStateTempDataProvider();
+            services.AddSession();
         }
     }
 

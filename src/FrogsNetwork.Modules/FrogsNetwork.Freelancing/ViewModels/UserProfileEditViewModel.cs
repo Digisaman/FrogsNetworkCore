@@ -1,7 +1,14 @@
+using Microsoft.AspNetCore.Mvc.Rendering;
 namespace FrogsNetwork.Freelancing.ViewModels
 {
     public class UserProfileEditViewModel
     {
+        public UserProfileEditViewModel()
+        {
+            Countries = new List<SelectListItem>().AsEnumerable();
+            Regions = new List<SelectListItem>().AsEnumerable();
+            Cities = new List<SelectListItem>().AsEnumerable();
+        }
         public int Id { get; set; }
 
         public string UserId { get; set; }
@@ -27,11 +34,13 @@ namespace FrogsNetwork.Freelancing.ViewModels
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+        public IEnumerable<SelectListItem> Countries { get; set; }
 
-        public UserProfileEditViewModel()
-        {
+        public IEnumerable<SelectListItem> Regions { get; set; }
 
-        }
+        public IEnumerable<SelectListItem> Cities { get; set; }
+
+        
     }
 
 }

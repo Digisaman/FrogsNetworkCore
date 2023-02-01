@@ -31,6 +31,7 @@ namespace FrogsNetwork.Freelancing
 
         public override void ConfigureServices(IServiceCollection services)
         {
+          
             services.AddScoped<IPermissionProvider, Permissions>();
             services.AddDataMigration<Migrations>();
             services.AddScoped<IRegistrationFormEvents, UserRegistrationHandler>();
@@ -38,13 +39,17 @@ namespace FrogsNetwork.Freelancing
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<UserService>();
             services.AddTransient<ProfileService>();
-            
+            services.AddMvc()
+            .AddSessionStateTempDataProvider();
+            services.AddSession();
+
         }
 
         public override void Configure(IApplicationBuilder builder, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
         {
             var moduleRoutePrefix = "freelancing";
             var freelancerProfileControllerName = typeof(FreelancerProfileController).ControllerName();
+            var companyProfileControllerName = typeof(CompanyProfileController).ControllerName();
 
             //routes.MapAreaControllerRoute(
             //    name: "Freelancing",
@@ -54,13 +59,32 @@ namespace FrogsNetwork.Freelancing
             //);
 
             routes.MapAreaControllerRoute(
-              name: "FreelancerProfileIndex",
+              name: $"{freelancerProfileControllerName}{nameof(FreelancerProfileController.Index)}",
               areaName: "FrogsNetwork.Freelancing",
-              pattern: "FreelancerProfile/Index",
-              defaults: new { controller = freelancerProfileControllerName, action = nameof(FreelancerProfileController.Index) }
-          );
+              pattern: $"{freelancerProfileControllerName}/{nameof(FreelancerProfileController.Index)}",
+              defaults: new { controller = freelancerProfileControllerName, action = nameof(FreelancerProfileController.Index) });
+
+            routes.MapAreaControllerRoute(
+             name: $"{companyProfileControllerName}{nameof(CompanyProfileController.Index)}",
+             areaName: "FrogsNetwork.Freelancing",
+             pattern: $"{companyProfileControllerName}/{nameof(CompanyProfileController.Index)}",
+             defaults: new { controller = companyProfileControllerName, action = nameof(CompanyProfileController.Index) });
+
+            routes.MapAreaControllerRoute(
+              name: $"{freelancerProfileControllerName}{nameof(FreelancerProfileController.AddNationality)}",
+              areaName: "FrogsNetwork.Freelancing",
+              pattern: $"{freelancerProfileControllerName}/{nameof(FreelancerProfileController.AddNationality)}",
+              defaults: new { controller = freelancerProfileControllerName, action = nameof(FreelancerProfileController.AddNationality) });
+
+            routes.MapAreaControllerRoute(
+              name: $"{freelancerProfileControllerName}{nameof(FreelancerProfileController.RemoveNationality)}",
+              areaName: "FrogsNetwork.Freelancing",
+              pattern: $"{freelancerProfileControllerName}/{nameof(FreelancerProfileController.RemoveNationality)}",
+              defaults: new { controller = freelancerProfileControllerName, action = nameof(FreelancerProfileController.RemoveNationality) });
 
             builder.UseAuthorization();
+
+            builder.UseSession();
         }
     }
 }

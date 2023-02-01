@@ -4,6 +4,8 @@ using LinqToDB;
 using Lombiq.HelpfulLibraries.LinqToDb;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using OrchardCore.ContentManagement;
 using OrchardCore.Users;
 using OrchardCore.Users.Models;
 using OrchardCore.Users.Services;
@@ -27,13 +29,8 @@ public class ProfileService : IProfileService
     {
 
         var userInfo = _userService.GetUserAsync(user.UserName).Result as User;
-        //UserInfo userInfo = await _userService.GetUserInfor(user);
-        //{
-        if (userInfo == null)
-        {
-            //log
-            return false;
-        }
+        
+       
         if (userInfo.RoleNames.Contains(nameof(Roles.Freelancer)))
         {
             bool result = AddFreelancerAsync(userInfo.UserId).Result;
@@ -149,6 +146,7 @@ public class ProfileService : IProfileService
             .Set(record => record.LastName, viewModel.LastName)
             .Set(record => record.FirstName, viewModel.FirstName)
             .Set(record => record.Website, viewModel.Website)
+            .Set(record => record.VAT, viewModel.VAT)
             .UpdateAsync()).Result;
         return (modifiedCount == 1);
 
@@ -246,6 +244,39 @@ public class ProfileService : IProfileService
         return null;
     }
 
+    public async Task<CompanyProfileViewModel> GetCompanyProfile(string userId)
+    {
+        var user = _session.LinqQueryAsync(c =>
+          c.GetTable<CompanyUser>()
+          .FirstOrDefaultAsync(c => c.UserId == userId)).Result;
+
+        if (user != null)
+        {
+            CompanyProfileViewModel viewModel = new CompanyProfileViewModel
+            {
+                Address = user.Address,
+                CityId = user.CityId,
+                CountryId = user.CountryId,
+                Id = user.Id,
+                Lat = user.Lat,
+                Long = user.Long,
+                PostalCode = user.PostalCode,
+                RegionId = user.RegionId,
+                UserId = user.UserId,
+                VAT = user.VAT,
+                Website = user.Website,
+                Activities = user.Activities,
+                CompanyName = user.CompanyName,
+                ContactPersonName = user.ContactPersonName,
+                ContactPersonPosition = user.ContactPersonPosition,
+                Tel = user.CompanyTel
+
+            };
+            return viewModel;
+        }
+        return null;
+    }
+
     //public FreelancerUser GetFreelancerBase(int userId)
     //{
     //    FreelancerUser user = _freelancerRepository.Table
@@ -254,37 +285,55 @@ public class ProfileService : IProfileService
     //    return user;
     //}
 
-    public async Task<IEnumerable<Nationality>> GetNationalities()
+    public async Task<IEnumerable<SelectListItem>> GetNationalities()
     {
         return _session.LinqQueryAsync(c =>
          c.GetTable<Nationality>()
          .OrderBy(c => c.Name)
-         .ToListAsync()).Result;
+         .Select(c => new SelectListItem
+         {
+             Value = c.Id.ToString(),
+             Text = c.Name
+         }).ToListAsync()).Result;
     }
 
-    public async Task<IEnumerable<Country>> GetCountries()
+    public async Task<IEnumerable<SelectListItem>> GetCountries()
     {
         return _session.LinqQueryAsync(c =>
-       c.GetTable<Country>().ToListAsync()).Result;
+       c.GetTable<Country>()
+      .OrderBy(c => c.Name)
+         .Select(c => new SelectListItem
+         {
+             Value = c.Id.ToString(),
+             Text = c.Name
+         }).ToListAsync()).Result;
     }
 
-    public async Task<IEnumerable<Region>> GetRegions(int countryId)
+    public async Task<IEnumerable<SelectListItem>> GetRegions(int countryId)
     {
         return _session.LinqQueryAsync(c =>
        c.GetTable<Region>()
        .Where(c => c.CountryId == countryId)
        .OrderBy(c => c.Name)
-       .ToListAsync()).Result;
+         .Select(c => new SelectListItem
+         {
+             Value = c.Id.ToString(),
+             Text = c.Name
+         }).ToListAsync()).Result;
     }
 
 
-    public async Task<IEnumerable<City>> GetCities(int regionId)
+    public async Task<IEnumerable<SelectListItem>> GetCities(int regionId)
     {
         return _session.LinqQueryAsync(c =>
          c.GetTable<City>()
          .Where(c => c.RegionId == regionId)
          .OrderBy(c => c.Name)
-         .ToListAsync()).Result;
+         .Select(c => new SelectListItem
+         {
+             Value = c.Id.ToString(),
+             Text = c.Name
+         }).ToListAsync()).Result;
     }
 
     public async Task<List<FreelancerNationalityViewModel>> GetFreelancerNationalities(int freelancerId)
@@ -333,4 +382,42 @@ public class ProfileService : IProfileService
 
         return (deletedCount.Result == 1);
     }
+
+    public async Task<IDictionary<string, string>> GetTaxonomies(IContentManager contentManager, string taxonomyName)
+    {
+
+        IDictionary<string, string> terms = await contentManager.GetTaxonomyTermsDisplayTextsAsync(taxonomyName);
+        return terms;
+    }
+
+
+
+    //public IEnumerable<TaxonomyItemViewModel> GetExpertise(int parentId = 0)
+    //{
+
+    //    if (parentId == 0)
+    //    {
+    //        TaxonomyPart masterTaxonomyPart = _taxonomyService.GetTaxonomyByName("Expertise");
+    //        IQueryable<TermPart> parts = masterTaxonomyPart.Terms.AsQueryable();
+
+    //        parts = parts.Where(c => c.Path == "/" && c.TaxonomyId == masterTaxonomyPart.Id);
+    //        return parts.Select(c => new TaxonomyItemViewModel
+    //        {
+    //            Id = c.Id,
+    //            Name = c.Name
+    //        });
+    //    }
+    //    else
+    //    {
+    //        TaxonomyPart masterTaxonomyPart = _taxonomyService.GetTaxonomyByName("Expertise");
+    //        IQueryable<TermPart> parts = masterTaxonomyPart.Terms.AsQueryable();
+    //        string path = string.Format("/{0}/", parentId);
+    //        parts = parts.Where(c => c.Path.EndsWith(path) && c.TaxonomyId == masterTaxonomyPart.Id);
+    //        return parts.Select(c => new TaxonomyItemViewModel
+    //        {
+    //            Id = c.Id,
+    //            Name = c.Name
+    //        });
+    //    }
+    //}
 }

@@ -53,22 +53,25 @@ public class FreelancerProfileController : Controller
     {
         try
         {
+            
             var user = _userService.GetAuthenticatedUserAsync(User).Result as User; 
 
             this.ViewModel = _profileService.GetFreelancerProfile(user.UserId).Result;
           
+            
 
-            this.ViewModel.Nationalities = GetNationalities();
-            this.ViewModel.Countries = GetCountries();
+
+            this.ViewModel.Nationalities = _profileService.GetNationalities().Result;
+            this.ViewModel.Countries = _profileService.GetCountries().Result;
             this.ViewModel.Regions = new List<SelectListItem>().AsEnumerable();
             this.ViewModel.Cities = new List<SelectListItem>().AsEnumerable();
             if (ViewModel.CountryId != 0)
             {
-                this.ViewModel.Regions = GetRegionList(this.ViewModel.CountryId);
+                this.ViewModel.Regions = _profileService.GetRegions(this.ViewModel.CountryId).Result;
             }
             if (ViewModel.RegionId != 0)
             {
-                this.ViewModel.Cities = GetCityList(this.ViewModel.RegionId);
+                this.ViewModel.Cities = _profileService.GetCities(this.ViewModel.RegionId).Result;
             }
 
             this.ViewModel.FreelancerNationalities = _profileService.GetFreelancerNationalities(this.ViewModel.Id).Result;
@@ -163,9 +166,9 @@ public class FreelancerProfileController : Controller
             this.ViewModel.UpdateModel(viewModel);
            
 
-            this.ViewModel.Countries = GetCountries();
+            this.ViewModel.Countries = _profileService.GetCountries().Result;
 
-            this.ViewModel.Nationalities = GetNationalities();
+            this.ViewModel.Nationalities = _profileService.GetNationalities().Result;
 
             //if (this.ViewModel.SelectedNationalityId != 0)
             //{
@@ -181,11 +184,11 @@ public class FreelancerProfileController : Controller
 
             if (this.ViewModel.CountryId != 0)
             {
-                this.ViewModel.Regions = GetRegionList(this.ViewModel.CountryId);
+                this.ViewModel.Regions = _profileService.GetRegions(this.ViewModel.CountryId).Result;
 
                 if (this.ViewModel.RegionId != 0)
                 {
-                    this.ViewModel.Cities = GetCityList(this.ViewModel.RegionId);
+                    this.ViewModel.Cities = _profileService.GetCities(this.ViewModel.RegionId).Result;
                 }
             }
 
@@ -272,7 +275,7 @@ public class FreelancerProfileController : Controller
 
             var user = _userService.GetAuthenticatedUserAsync(User).Result as User;
             this.ViewModel = _profileService.GetFreelancerProfile(user.UserId).Result;
-            //this.ViewModel.UpdateModel(viewModel);
+            this.ViewModel.UpdateModel(viewModel);
             if (this.ViewModel.SelectedNationalityId.HasValue && this.ViewModel.SelectedNationalityId.Value != 0)
             {
                 //this.ViewModel.SelectedNationalityId = selectedNationalityId.Value;
@@ -304,41 +307,41 @@ public class FreelancerProfileController : Controller
         }
     }
 
-    #region Lookups
-    private IEnumerable<SelectListItem> GetNationalities()
-    {
-        return _profileService.GetNationalities().Result.Select(c => new SelectListItem
-        {
-            Value = c.Id.ToString(),
-            Text = c.Name
-        }).ToList();
-    }
+    //#region Lookups
+    //private IEnumerable<SelectListItem> GetNationalities()
+    //{
+    //    return _profileService.GetNationalities().Result.Select(c => new SelectListItem
+    //    {
+    //        Value = c.Id.ToString(),
+    //        Text = c.Name
+    //    }).ToList();
+    //}
 
-    private List<SelectListItem> GetCountries()
-    {
-        return _profileService.GetCountries().Result.Select(c => new SelectListItem
-        {
-            Value = c.Id.ToString(),
-            Text = c.Name
-        }).ToList();
-    }
+    //private List<SelectListItem> GetCountries()
+    //{
+    //    return _profileService.GetCountries().Result.Select(c => new SelectListItem
+    //    {
+    //        Value = c.Id.ToString(),
+    //        Text = c.Name
+    //    }).ToList();
+    //}
 
-    private List<SelectListItem> GetRegionList(int countryId)
-    {
-        return _profileService.GetRegions(countryId).Result.Select(c => new SelectListItem
-        {
-            Value = c.Id.ToString(),
-            Text = c.Name
-        }).ToList();
-    }
+    //private List<SelectListItem> GetRegionList(int countryId)
+    //{
+    //    return _profileService.GetRegions(countryId).Result.Select(c => new SelectListItem
+    //    {
+    //        Value = c.Id.ToString(),
+    //        Text = c.Name
+    //    }).ToList();
+    //}
 
-    private List<SelectListItem> GetCityList(int regionId)
-    {
-        return _profileService.GetCities(regionId).Result.Select(c => new SelectListItem
-        {
-            Value = c.Id.ToString(),
-            Text = c.Name
-        }).ToList();
-    }
-    #endregion
+    //private List<SelectListItem> GetCityList(int regionId)
+    //{
+    //    return _profileService.GetCities(regionId).Result.Select(c => new SelectListItem
+    //    {
+    //        Value = c.Id.ToString(),
+    //        Text = c.Name
+    //    }).ToList();
+    //}
+    //#endregion
 }

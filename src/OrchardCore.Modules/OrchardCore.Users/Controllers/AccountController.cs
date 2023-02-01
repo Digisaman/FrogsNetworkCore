@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
@@ -23,6 +24,7 @@ using OrchardCore.Users.Handlers;
 using OrchardCore.Users.Models;
 using OrchardCore.Users.Services;
 using OrchardCore.Users.ViewModels;
+using YesSql;
 using IWorkflowManager = OrchardCore.Workflows.Services.IWorkflowManager;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -214,6 +216,10 @@ namespace OrchardCore.Users.Controllers
                                     {
                                         _logger.LogInformation(1, "User logged in.");
                                         await _accountEvents.InvokeAsync((e, user) => e.LoggedInAsync(user), user, _logger);
+                                        if ( HttpContext.Session.Keys.Contains(nameof(returnUrl) ) )
+                                        {
+                                            returnUrl = HttpContext.Session.GetString(nameof(returnUrl));
+                                        }
                                         return await LoggedInActionResult(user, returnUrl);
                                     }
                                 }
