@@ -1,12 +1,13 @@
 namespace FrogsNetwork.Freelancing.Models
 {
-    public class FreelancerLanguage
+    public class FreelancerExpertise
     {
         public virtual int Id { get; set; }
+
         public virtual int FreelancerId { get; set; }
 
-        public virtual int LanguageId { get; set; }
+        public virtual string ExpertiseId { get; set; }
 
-        public virtual LanguageLevel Level { get; set; }
+        public virtual int LevelId { get; set; }
     }
 }

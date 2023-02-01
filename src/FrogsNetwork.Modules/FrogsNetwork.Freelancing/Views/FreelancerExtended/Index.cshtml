@@ -1,0 +1,273 @@
+@model FrogsNetwork.Freelancing.ViewModels.FreelancerExpertiseViewModel
+
+
+@{
+    ViewLayout = "Layout__Main";
+}
+
+
+
+<h1>@T["Professional Profile"]</h1>
+<p>@T["Use the form below to update your professional information."]</p>
+<form asp-controller="FreelancerExtended" asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal no-multisubmit">
+
+    <div class="row">
+        <div class="col">
+            <fieldset>
+                <legend>@T["Expertise :"]</legend>
+
+                <label>Select First Expertise Level :</label>
+                <br />
+                @Html.ListBoxFor(m => m.ExpertiseFirstIds, Model.ExpertiseFirst, new { @class = "listbox", onchange = "document.forms[0].submit();" })
+                <br />
+
+                <label>Select Second Expertise Level :</label>
+                <br />
+                @Html.ListBoxFor(m => m.ExpertiseSecondIds, Model.ExpertiseSecond, new { @class = "listbox" })
+                <br />
+                <button class="primarybutton" style="width:200px" type="submit">@T["Save"]</button>
+            </fieldset>
+        </div>
+        <div class="col">
+            <fieldset>
+                <legend>@T["Services :"]</legend>
+
+                <label>Select First Expertise Level :</label>
+                <br />
+                @Html.ListBoxFor(m => m.ServicesFirstIds, Model.ServicesFirst, new { @class = "listbox", onchange = "document.forms[0].submit();" })
+                <br />
+
+                <label>Select Second Expertise Level :</label>
+                <br />
+                @Html.ListBoxFor(m => m.ServicesSecondIds, Model.ServicesSecond, new { @class = "listbox" })
+                <br />
+                <button class="primarybutton" style="width:200px" type="submit">@T["Save"]</button>
+            </fieldset>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <fieldset>
+                <legend>@T["Languages :"]</legend>
+                <div class="row">
+                    <div class="col">
+                        <div>
+                            <label for="language">@T["Language :"]</label>
+                            <br />
+                            @Html.DropDownListFor(m => m.SelectedLanguageId, Model.Languages)
+                        </div>
+                        <div>
+                            <label for="vat">@T["Level:"]</label>
+                            <br />
+                            @Html.DropDownListFor(m => m.SelectedLevelId, Model.LanguageLevels)
+                        </div>
+                        <div>
+                            <button class="primarybutton" style="width:200px" type="submit"
+                                    formaction="@Url.Action("AddLanguage")">
+                                @T["Add Language"]
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col panel-body">
+                        <table id="assets-data-table" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Level</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            @foreach (var entry in Model.FreelancerLanguages)
+                            {
+                                <tr>
+                                    <td>
+                                        @entry.LanguageTitle
+                                    </td>
+                                    <td>
+                                        @entry.LevelTitle
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Remove", "RemoveLanguage", "FreelancerExtended", new { entry.Id }, null)
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+
+
+            </fieldset>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <fieldset>
+
+                <legend>@T["Certificates :"]</legend>
+                <div class="row">
+                    <div class="col">
+                        <div>
+                            <label for="CertificateTitle">@T["Certificate Title:"]</label>
+                            @Html.TextBox("CertificateTitle")
+                        </div>
+                        <div>
+                            <label for="CertificateOrganization">@T["Issuing Organization :"]</label>
+                            @Html.TextBox("CertificateOrganization")
+                        </div>
+                        <div>
+                            <label for="CertificateDesctiption">@T["Description :"]</label>
+                            @Html.TextBox("CertificateDesctiption")
+                        </div>
+                        <div>
+                            <button class="primarybutton" style="width:200px" type="submit"
+                                    formaction="@Url.Action("AddCertificate")">
+                                @T["Add Certificate"]
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col panel-body">
+                        <table id="assets-data-table" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Certificate Title</th>
+                                    <th>Issuing organization</th>
+                                    <th>Description</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            @foreach (var entry in Model.FreelancerCertificates)
+                            {
+                                <tr>
+                                    <td>
+                                        @entry.Certificate
+                                    </td>
+                                    <td>
+                                        @entry.Organization
+                                    </td>
+                                    <td>
+                                        @entry.Description
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Remove", "RemoveCertificate", "FreelancerExtended", new { entry.Id }, null)
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <fieldset>
+
+                <legend>@T["Education :"]</legend>
+                <div class="row">
+                    <div class="col">
+                        <div>
+                            <label for="EducationSchool">@T["School / University Name :"]</label>
+                            @Html.TextBox("EducationSchool")
+                        </div>
+                        <div>
+                            <label for="country">@T["Country :"]</label>
+                            <br />
+                            @Html.DropDownListFor(m => m.EducationCountryId, Model.Countries, "Please select")
+                        </div>
+                        <div>
+                            <label for="EducationCity">@T["City :"]</label>
+                            @Html.TextBox("EducationCity")
+                        </div>
+                        <div>
+                            <label for="EducationField">@T["Field of Study :"]</label>
+                            @Html.TextBox("EducationField")
+                        </div>
+                        <div>
+                            <label for="EducationDegree">@T["Degree :"]</label>
+                            @Html.TextBox("EducationDegree")
+                        </div>
+                        <div>
+                            <label for="EducationEndYear">@T["End Year :"]</label>
+                            @Html.TextBox("EducationEndYear")
+                        </div>
+                        <div>
+                            <button class="primarybutton" style="width:200px" type="submit"
+                                    formaction="@Url.Action("AddEducation")">
+                                @T["Add Education"]
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col panel-body">
+                        <table id="assets-data-table" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>School</th>
+                                    <th>Country</th>
+                                    <th>City</th>
+                                    <th>Field</th>
+                                    <th>Degree</th>
+                                    <th>End Year</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            @foreach (var entry in Model.FreelancerEducations)
+                            {
+                                <tr>
+                                    <td>
+                                        @entry.School
+                                    </td>
+                                    <td>
+                                        @entry.CountryName
+                                    </td>
+                                    <td>
+                                        @entry.City
+                                    </td>
+                                    <td>
+                                        @entry.Field
+                                    </td>
+                                    <td>
+                                        @entry.Degree
+                                    </td>
+                                    <td>
+                                        @entry.EndYear
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Remove", "RemoveEducation", "FreelancerExtended", new { entry.Id }, null)
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            @*<div>
+            <button class="primarybutton" style="width:200px" type="submit">@T["Save")</button>
+            </div>*@
+            <div>
+                <button class="primarybutton" style="width:200px" formaction="/FreelancerProfile" type="submit">Basic Profile</button>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col">
+                <div>
+                    <button class="primarybutton" style="width:200px" type="submit"
+                            formaction="@Url.Action("PreviewProfile")">
+                        @T["Preview Profile"]
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</form>

@@ -12,6 +12,7 @@ using OrchardCore.Users;
 namespace FrogsNetwork.Freelancing.Services;
 public interface IProfileService
 {
+    Task<bool> AddFreelancerLanguage(FreelancerLanguage freelancerLanguage);
     Task<bool> AddFreelancerNationality(FreelancerNationality freelancerNationality);
     Task<bool> AddUserProfile(IUser user);
     Task<bool> EditCompany(CompanyProfileViewModel viewModel);
@@ -19,11 +20,22 @@ public interface IProfileService
     Task<IEnumerable<SelectListItem>> GetCities(int regionId);
     Task<CompanyProfileViewModel> GetCompanyProfile(string userId);
     Task<IEnumerable<SelectListItem>> GetCountries();
+    Task<IEnumerable<SelectListItem>> GetExpertise(IContentManager contentManager,
+        IContentHandleManager contentHamdleManager, string parentId);
+    Task<string[]> GetFreelancerExpertiseIds(int freelancerId, int levelId);
+    Task<List<FreelancerLanguageViewModel>> GetFreelancerLanguages(int freelancerId);
     Task<List<FreelancerNationalityViewModel>> GetFreelancerNationalities(int freelancerId);
     Task<FreelancerProfileViewModel> GetFreelancerProfile(string userId);
+    Task<string[]> GetFreelancerServiceIds(int freelancerId, int levelId);
+    IEnumerable<SelectListItem> GetLanguageLevels();
     Task<IEnumerable<SelectListItem>> GetNationalities();
     Task<IEnumerable<SelectListItem>> GetRegions(int countryId);
-    Task<IDictionary<string, string>> GetTaxonomies(IContentManager contentManager, string taxonomyName);
+    Task<IEnumerable<SelectListItem>> GetServices(IContentManager contentManager,
+        IContentHandleManager contentHamdleManager, string parentId);
+    Task<IEnumerable<SelectListItem>> GetTaxonomies(IReadOnlyList<ContentItem> contentItems, string parentItemId);
+
+    //Task<IEnumerable<TaxonomyItemViewModel>> GetTaxonomies(Taxonomies taxonomy, string parentItemId);
     Roles GetUserRole(IUser user);
+    Task<bool> RemoveFreelancerLanguage(int id);
     Task<bool> RemoveFreelancerNationality(int id);
 }

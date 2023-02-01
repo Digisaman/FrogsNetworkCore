@@ -6,45 +6,45 @@ namespace FrogsNetwork.Freelancing.ViewModels
     {
         public FreelancerExpertiseViewModel()
         {
-            this.ExpertiseFirst = new List<SelectListItem>();
-            this.ExpertiseSecond = new List<SelectListItem>();
+            this.ExpertiseFirst = new List<SelectListItem>().AsEnumerable();
+            this.ExpertiseSecond = new List<SelectListItem>().AsEnumerable();
 
-            this.ServicesFirst = new List<SelectListItem>();
-            this.ServicesSecond = new List<SelectListItem>();
+            this.ServicesFirst = new List<SelectListItem>().AsEnumerable();
+            this.ServicesSecond = new List<SelectListItem>().AsEnumerable();
 
-            this.Languages = new List<SelectListItem>();
-            this.LanguageLevels = new List<SelectListItem>();
+            this.Languages = new List<SelectListItem>().AsEnumerable();
+            this.LanguageLevels = new List<SelectListItem>().AsEnumerable();
 
-            this.FreelancerLanguages = new List<FreelancerLanguageViewModel>();
-            this.FreelancerCertificates = new List<FreelancerCertificateViewModel>();
-            this.FreelancerEducations = new List<FreelancerEducationViewModel>();
-            this.Countries = new List<SelectListItem>();
+            this.FreelancerLanguages = new List<FreelancerLanguageViewModel>().AsEnumerable();
+            this.FreelancerCertificates = new List<FreelancerCertificateViewModel>().AsEnumerable();
+            this.FreelancerEducations = new List<FreelancerEducationViewModel>().AsEnumerable();
+            this.Countries = new List<SelectListItem>().AsEnumerable();
         }
 
         public int Id { get; set; }
 
 
-        public List<SelectListItem> Countries { get; set; }
+        public IEnumerable<SelectListItem> Countries { get; set; }
 
-        public List<SelectListItem> ExpertiseFirst { get; set; }
-        public List<SelectListItem> ExpertiseSecond { get; set; }
+        public IEnumerable<SelectListItem> ExpertiseFirst { get; set; }
+        public IEnumerable<SelectListItem> ExpertiseSecond { get; set; }
 
-        public List<SelectListItem> ServicesFirst { get; set; }
-        public List<SelectListItem> ServicesSecond { get; set; }
+        public IEnumerable<SelectListItem> ServicesFirst { get; set; }
+        public IEnumerable<SelectListItem> ServicesSecond { get; set; }
 
-        public List<SelectListItem> Languages { get; set; }
+        public IEnumerable<SelectListItem> Languages { get; set; }
 
-        public List<SelectListItem> LanguageLevels { get; set; }
-        public List<FreelancerLanguageViewModel> FreelancerLanguages { get; set; }
-        public List<FreelancerCertificateViewModel> FreelancerCertificates { get; set; }
+        public IEnumerable<SelectListItem> LanguageLevels { get; set; }
+        public IEnumerable<FreelancerLanguageViewModel> FreelancerLanguages { get; set; }
+        public IEnumerable<FreelancerCertificateViewModel> FreelancerCertificates { get; set; }
 
-        public List<FreelancerEducationViewModel> FreelancerEducations { get; set; }
+        public IEnumerable<FreelancerEducationViewModel> FreelancerEducations { get; set; }
 
-        public int[] ExpertiseFirstIds { get; set; }
-        public int[] ExpertiseSecondIds { get; set; }
+        public string[] ExpertiseFirstIds { get; set; }
+        public string[] ExpertiseSecondIds { get; set; }
 
-        public int[] ServicesFirstIds { get; set; }
-        public int[] ServicesSecondIds { get; set; }
+        public string[] ServicesFirstIds { get; set; }
+        public string[] ServicesSecondIds { get; set; }
 
         public int SelectedLanguageId { get; set; }
 

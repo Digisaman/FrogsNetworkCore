@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\FreelancerExtendedController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Remove="DBScripts\LocalDB_Seed.sql" />
     <EmbeddedResource Remove="DBScripts\LocationDB\01 - Create Tables.sql" />
     <EmbeddedResource Remove="DBScripts\LocationDB\02 - Insert Countries.sql" />
@@ -68,7 +64,6 @@
     <PackageReference Include="OrchardCore.Module.Targets" Version="1.5.0" />
     <PackageReference Include="OrchardCore.ContentManagement" Version="1.5.0" />
     <PackageReference Include="OrchardCore.ContentTypes.Abstractions" Version="1.5.0" />
-    <PackageReference Include="OrchardCore.DisplayManagement" Version="1.5.0" />
   </ItemGroup>
 
   <ItemGroup>

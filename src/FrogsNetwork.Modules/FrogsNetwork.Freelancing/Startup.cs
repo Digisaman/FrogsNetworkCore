@@ -31,7 +31,7 @@ namespace FrogsNetwork.Freelancing
 
         public override void ConfigureServices(IServiceCollection services)
         {
-          
+
             services.AddScoped<IPermissionProvider, Permissions>();
             services.AddDataMigration<Migrations>();
             services.AddScoped<IRegistrationFormEvents, UserRegistrationHandler>();
@@ -49,15 +49,11 @@ namespace FrogsNetwork.Freelancing
         {
             var moduleRoutePrefix = "freelancing";
             var freelancerProfileControllerName = typeof(FreelancerProfileController).ControllerName();
+            var freelancerExtendedControllerName = typeof(FreelancerExtendedController).ControllerName();
             var companyProfileControllerName = typeof(CompanyProfileController).ControllerName();
 
-            //routes.MapAreaControllerRoute(
-            //    name: "Freelancing",
-            //    areaName: "FrogsNetwork.Freelancing",
-            //    pattern: "Home/Index",
-            //    defaults: new { controller = "Home", action = "Index" }
-            //);
-
+            #region Routes
+            #region FreeLancerProFile
             routes.MapAreaControllerRoute(
               name: $"{freelancerProfileControllerName}{nameof(FreelancerProfileController.Index)}",
               areaName: "FrogsNetwork.Freelancing",
@@ -65,22 +61,70 @@ namespace FrogsNetwork.Freelancing
               defaults: new { controller = freelancerProfileControllerName, action = nameof(FreelancerProfileController.Index) });
 
             routes.MapAreaControllerRoute(
-             name: $"{companyProfileControllerName}{nameof(CompanyProfileController.Index)}",
-             areaName: "FrogsNetwork.Freelancing",
-             pattern: $"{companyProfileControllerName}/{nameof(CompanyProfileController.Index)}",
-             defaults: new { controller = companyProfileControllerName, action = nameof(CompanyProfileController.Index) });
-
-            routes.MapAreaControllerRoute(
-              name: $"{freelancerProfileControllerName}{nameof(FreelancerProfileController.AddNationality)}",
-              areaName: "FrogsNetwork.Freelancing",
-              pattern: $"{freelancerProfileControllerName}/{nameof(FreelancerProfileController.AddNationality)}",
-              defaults: new { controller = freelancerProfileControllerName, action = nameof(FreelancerProfileController.AddNationality) });
+            name: $"{freelancerProfileControllerName}{nameof(FreelancerProfileController.AddNationality)}",
+            areaName: "FrogsNetwork.Freelancing",
+            pattern: $"{freelancerProfileControllerName}/{nameof(FreelancerProfileController.AddNationality)}",
+            defaults: new { controller = freelancerProfileControllerName, action = nameof(FreelancerProfileController.AddNationality) });
 
             routes.MapAreaControllerRoute(
               name: $"{freelancerProfileControllerName}{nameof(FreelancerProfileController.RemoveNationality)}",
               areaName: "FrogsNetwork.Freelancing",
               pattern: $"{freelancerProfileControllerName}/{nameof(FreelancerProfileController.RemoveNationality)}",
               defaults: new { controller = freelancerProfileControllerName, action = nameof(FreelancerProfileController.RemoveNationality) });
+            #endregion
+
+            routes.MapAreaControllerRoute(
+             name: $"{companyProfileControllerName}{nameof(CompanyProfileController.Index)}",
+             areaName: "FrogsNetwork.Freelancing",
+             pattern: $"{companyProfileControllerName}/{nameof(CompanyProfileController.Index)}",
+             defaults: new { controller = companyProfileControllerName, action = nameof(CompanyProfileController.Index) });
+
+            #region
+            routes.MapAreaControllerRoute(
+             name: $"{freelancerExtendedControllerName}{nameof(FreelancerExtendedController.Index)}",
+             areaName: "FrogsNetwork.Freelancing",
+             pattern: $"{freelancerExtendedControllerName}/{nameof(FreelancerExtendedController.Index)}",
+             defaults: new { controller = freelancerExtendedControllerName, action = nameof(FreelancerExtendedController.Index) });
+
+            routes.MapAreaControllerRoute(
+            name: $"{freelancerExtendedControllerName}{nameof(FreelancerExtendedController.AddCertificate)}",
+            areaName: "FrogsNetwork.Freelancing",
+            pattern: $"{freelancerExtendedControllerName}/{nameof(FreelancerExtendedController.AddCertificate)}",
+            defaults: new { controller = freelancerExtendedControllerName, action = nameof(FreelancerExtendedController.AddCertificate) });
+
+            routes.MapAreaControllerRoute(
+           name: $"{freelancerExtendedControllerName}{nameof(FreelancerExtendedController.RemoveCertificate)}",
+           areaName: "FrogsNetwork.Freelancing",
+           pattern: $"{freelancerExtendedControllerName}/{nameof(FreelancerExtendedController.RemoveCertificate)}",
+           defaults: new { controller = freelancerExtendedControllerName, action = nameof(FreelancerExtendedController.RemoveCertificate) });
+
+            routes.MapAreaControllerRoute(
+          name: $"{freelancerExtendedControllerName}{nameof(FreelancerExtendedController.AddEducation)}",
+          areaName: "FrogsNetwork.Freelancing",
+          pattern: $"{freelancerExtendedControllerName}/{nameof(FreelancerExtendedController.AddEducation)}",
+          defaults: new { controller = freelancerExtendedControllerName, action = nameof(FreelancerExtendedController.AddEducation) });
+
+            routes.MapAreaControllerRoute(
+        name: $"{freelancerExtendedControllerName}{nameof(FreelancerExtendedController.RemoveEducation)}",
+        areaName: "FrogsNetwork.Freelancing",
+        pattern: $"{freelancerExtendedControllerName}/{nameof(FreelancerExtendedController.RemoveEducation)}",
+        defaults: new { controller = freelancerExtendedControllerName, action = nameof(FreelancerExtendedController.RemoveEducation) });
+
+            routes.MapAreaControllerRoute(
+       name: $"{freelancerExtendedControllerName}{nameof(FreelancerExtendedController.AddLanguage)}",
+       areaName: "FrogsNetwork.Freelancing",
+       pattern: $"{freelancerExtendedControllerName}/{nameof(FreelancerExtendedController.AddLanguage)}",
+       defaults: new { controller = freelancerExtendedControllerName, action = nameof(FreelancerExtendedController.AddLanguage) });
+
+
+            routes.MapAreaControllerRoute(
+     name: $"{freelancerExtendedControllerName}{nameof(FreelancerExtendedController.RemoveLanguage)}",
+     areaName: "FrogsNetwork.Freelancing",
+     pattern: $"{freelancerExtendedControllerName}/{nameof(FreelancerExtendedController.RemoveLanguage)}",
+     defaults: new { controller = freelancerExtendedControllerName, action = nameof(FreelancerExtendedController.RemoveLanguage) });
+            #endregion
+
+            #endregion
 
             builder.UseAuthorization();
 

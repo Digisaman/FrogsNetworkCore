@@ -1,36 +1,47 @@
 using FrogsNetwork.Freelancing.Models;
 using FrogsNetwork.Freelancing.ViewModels;
+using GraphQL.Language.AST;
 using LinqToDB;
 using Lombiq.HelpfulLibraries.LinqToDb;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json.Linq;
 using OrchardCore.ContentManagement;
+using OrchardCore.Taxonomies.Models;
 using OrchardCore.Users;
 using OrchardCore.Users.Models;
 using OrchardCore.Users.Services;
 using ISession = YesSql.ISession;
 
 namespace FrogsNetwork.Freelancing.Services;
+
+
 public class ProfileService : IProfileService
 {
     private readonly IUserService _userService;
     private readonly ISession _session;
+    //private readonly IContentManager _contentManager;
+    //private readonly IContentHandleManager _contentHandleManager;
 
     public ProfileService(
         IUserService userService,
         ISession session)
+        //IContentManager contentManager,
+        //IContentHandleManager contentHandleManager)
     {
         _userService = userService;
         _session = session;
+        //_contentManager = contentManager;
+        //_contentHandleManager = contentHandleManager;
     }
 
     public async Task<bool> AddUserProfile(IUser user)
     {
 
         var userInfo = _userService.GetUserAsync(user.UserName).Result as User;
-        
-       
+
+
         if (userInfo.RoleNames.Contains(nameof(Roles.Freelancer)))
         {
             bool result = AddFreelancerAsync(userInfo.UserId).Result;
@@ -301,6 +312,32 @@ public class ProfileService : IProfileService
          }).ToListAsync()).Result;
     }
 
+    public async Task<IEnumerable<SelectListItem>> GetLanguages()
+    {
+        return _session.LinqQueryAsync(c =>
+         c.GetTable<Language>()
+         .OrderBy(c => c.Name)
+         .Select(c => new SelectListItem
+         {
+             Value = c.Id.ToString(),
+             Text = c.Name
+         }).ToListAsync()).Result;
+    }
+
+    public IEnumerable<SelectListItem> GetLanguageLevels()
+    {
+        List<SelectListItem> list = new List<SelectListItem>();
+        foreach (var value in Enum.GetValues(typeof(LanguageLevel)))
+        {
+            list.Add(new SelectListItem
+            {
+                Value = value.ToString(),
+                Text = ((LanguageLevel)value).GetDisplayNameAttribute()
+            });
+        }
+        return list;
+    }
+
     public async Task<IEnumerable<SelectListItem>> GetCountries()
     {
         return _session.LinqQueryAsync(c =>
@@ -365,6 +402,51 @@ public class ProfileService : IProfileService
         return result;
     }
 
+    public async Task<List<FreelancerLanguageViewModel>> GetFreelancerLanguages(int freelancerId)
+    {
+
+        var result = _session.LinqQueryAsync(
+            accessor =>
+                (from freelancerLanguage in accessor.GetTable<FreelancerLanguage>()
+                 join language in accessor.GetTable<Language>()
+                 on freelancerLanguage.LanguageId equals language.Id
+                 where freelancerLanguage.FreelancerId == freelancerId
+                 orderby language.Name
+                 select new FreelancerLanguageViewModel
+                 {
+                     FreelancerId = freelancerLanguage.FreelancerId,
+                     Id = freelancerLanguage.Id,
+                     LanguageId = language.Id,
+                     LanguageTitle = language.Name,
+                     LevelId = Convert.ToInt32(freelancerLanguage.Level),
+                     LevelTitle = freelancerLanguage.Level.GetDisplayNameAttribute()
+                 })
+                .ToListAsync()).Result;
+        return result;
+    }
+
+    public async Task<bool> AddFreelancerLanguage(FreelancerLanguage freelancerLanguage)
+    {
+        var insertedCount = _session.LinqTableQueryAsync<FreelancerLanguage, int>(table => table
+            .InsertAsync(
+                () => new FreelancerLanguage
+                {
+                    FreelancerId = freelancerLanguage.FreelancerId,
+                    LanguageId = freelancerLanguage.LanguageId,
+                    Level = freelancerLanguage.Level
+                }));
+        return (insertedCount.Result == 1);
+    }
+
+    public async Task<bool> RemoveFreelancerLanguage(int id)
+    {
+
+        var deletedCount = _session.LinqTableQueryAsync<FreelancerLanguage, int>(table => table
+            .Where(record => record.Id == id)
+            .DeleteAsync());
+
+        return (deletedCount.Result == 1);
+    }
     public async Task<bool> AddFreelancerNationality(FreelancerNationality freelancerNationality)
     {
         var insertedCount = _session.LinqTableQueryAsync<FreelancerNationality, int>(table => table
@@ -387,41 +469,227 @@ public class ProfileService : IProfileService
         return (deletedCount.Result == 1);
     }
 
-    public async Task<IDictionary<string, string>> GetTaxonomies(IContentManager contentManager, string taxonomyName)
+    public async Task<IEnumerable<TaxonomyItemViewModel>> GetTaxonomies(IContentManager contentManager,
+        IContentHandleManager contentHandleManager, Taxonomies taxonomy, string parentItemId)
     {
 
-        IDictionary<string, string> terms = await contentManager.GetTaxonomyTermsDisplayTextsAsync(taxonomyName);
-        return terms;
+        var terms = contentManager.GetTaxonomyTermsAsync(contentHandleManager, nameof(taxonomy)).Result;
+        if (parentItemId == null)
+        {
+            return terms.Select(c => new TaxonomyItemViewModel
+            {
+                Id = c.ContentItemId,
+                Name = c.DisplayText
+            });
+        }
+        else
+        {
+            var term = terms.FirstOrDefault(c => c.ContentItemId == parentItemId);
+            var termContent = term.Content.Terms as JArray;
+            List<ContentItem> subTerms = termContent?.ToObject<List<ContentItem>>();
+            return subTerms.Select(c => new TaxonomyItemViewModel
+            {
+                Id = c.ContentItemId,
+                Name = c.DisplayText
+            });
+
+        }
+        //var items = terms.First().Content.Terms as JArray;
+        //List<ContentItem> subItem0 = items?.ToObject<List<ContentItem>>();
+
+       
+    }
+
+    public async Task<IEnumerable<SelectListItem>> GetTaxonomies(IReadOnlyList<ContentItem> contentItems, string parentItemId = null)
+    {
+
+      
+        if (parentItemId == null)
+        {
+            return contentItems.Select(c => new SelectListItem
+            {
+                Value = c.ContentItemId,
+                Text = c.DisplayText
+            });
+        }
+        else
+        {
+            var term = contentItems.FirstOrDefault(c => c.ContentItemId == parentItemId);
+            var termContent = term.Content.Terms as JArray;
+            List<ContentItem> subTerms = termContent?.ToObject<List<ContentItem>>();
+            return subTerms.Select(c => new SelectListItem
+            {
+                Value = c.ContentItemId,
+                Text = c.DisplayText
+            });
+
+        }
+        //var items = terms.First().Content.Terms as JArray;
+        //List<ContentItem> subItem0 = items?.ToObject<List<ContentItem>>();
+
+
+    }
+
+    public async Task<string[]> GetFreelancerExpertiseIds(int freelancerId, int levelId)
+    {
+        return _session.LinqQueryAsync(c =>
+         c.GetTable<FreelancerExpertise>()
+         .Where(c => c.FreelancerId == freelancerId && c.LevelId == levelId)
+        .Select(c => c.ExpertiseId).ToListAsync()).Result.ToArray();
+    }
+
+    public async Task<string[]> GetFreelancerServiceIds(int freelancerId, int levelId)
+    {
+        return _session.LinqQueryAsync(c =>
+         c.GetTable<FreelancerService>()
+         .Where(c => c.FreelancerId == freelancerId && c.LevelId == levelId)
+        .Select(c => c.ServiceId).ToListAsync()).Result.ToArray();
     }
 
 
+    public async Task<bool> SaveFreelancerExpertiseIds(int freelancerId, int levelId, string[] expertiseIds)
+    {
+        var  deleteQuery = _session.LinqTableQueryAsync<FreelancerExpertise, int>(table => table
+          .Where(c => c.FreelancerId == freelancerId && c.LevelId == levelId)
+          .DeleteAsync());
+        bool result = (deleteQuery.Result == 1);
 
-    //public IEnumerable<TaxonomyItemViewModel> GetExpertise(int parentId = 0)
-    //{
+        foreach (string expertiseId in expertiseIds)
+        {
+            var insertedCount = _session.LinqTableQueryAsync<FreelancerExpertise, int>(table => table
+            .InsertAsync(
+                () => new FreelancerExpertise
+                {
+                    FreelancerId = freelancerId,
+                    ExpertiseId = expertiseId,
+                    LevelId = levelId
+                }));
+            result = result && (insertedCount.Result == 1);
+        }
 
-    //    if (parentId == 0)
-    //    {
-    //        TaxonomyPart masterTaxonomyPart = _taxonomyService.GetTaxonomyByName("Expertise");
-    //        IQueryable<TermPart> parts = masterTaxonomyPart.Terms.AsQueryable();
+        return result;
+    }
 
-    //        parts = parts.Where(c => c.Path == "/" && c.TaxonomyId == masterTaxonomyPart.Id);
-    //        return parts.Select(c => new TaxonomyItemViewModel
-    //        {
-    //            Id = c.Id,
-    //            Name = c.Name
-    //        });
-    //    }
-    //    else
-    //    {
-    //        TaxonomyPart masterTaxonomyPart = _taxonomyService.GetTaxonomyByName("Expertise");
-    //        IQueryable<TermPart> parts = masterTaxonomyPart.Terms.AsQueryable();
-    //        string path = string.Format("/{0}/", parentId);
-    //        parts = parts.Where(c => c.Path.EndsWith(path) && c.TaxonomyId == masterTaxonomyPart.Id);
-    //        return parts.Select(c => new TaxonomyItemViewModel
-    //        {
-    //            Id = c.Id,
-    //            Name = c.Name
-    //        });
-    //    }
-    //}
+    public async Task<bool> SaveFreelancerServiceIds(int freelancerId, int levelId, string[] serviceIds)
+    {
+        var deleteQuery = _session.LinqTableQueryAsync<FreelancerService, int>(table => table
+          .Where(c => c.FreelancerId == freelancerId && c.LevelId == levelId)
+          .DeleteAsync());
+
+        bool result = (deleteQuery.Result == 1);
+
+        foreach (string serviceId in serviceIds)
+        {
+            var insertedCount = _session.LinqTableQueryAsync<FreelancerService, int>(table => table
+            .InsertAsync(
+                () => new FreelancerService
+                {
+                    FreelancerId = freelancerId,
+                    ServiceId = serviceId,
+                    LevelId = levelId
+                }));
+            result = result && (insertedCount.Result == 1);
+        }
+
+        return result;
+    }
+
+    public async Task<IEnumerable<FreelancerCertificateViewModel>> GetFreelancerCertificate(int freelancerId)
+    {
+        return _session.LinqQueryAsync(c =>
+        c.GetTable<FreelancerCertificate>()
+        .Where(c => c.FreelancerId == freelancerId)
+       .Select(c => new FreelancerCertificateViewModel
+       {
+           Certificate = c.Certificate,
+           Description = c.Description,
+           Id = c.Id,
+           Organization = c.Organization
+       }).ToListAsync()).Result;
+    }
+
+    public async Task<IEnumerable<FreelancerEducationViewModel>> GetFreelancerEducation(int freelancerId)
+    {
+        var result = _session.LinqQueryAsync(
+           accessor =>
+               (from freelancerEducation in accessor.GetTable<FreelancerEducation>()
+                join country in accessor.GetTable<Country>()
+                on freelancerEducation.CountryId equals country.Id
+                where freelancerEducation.FreelancerId == freelancerId
+                orderby freelancerEducation.EndYear descending
+                select new FreelancerEducationViewModel
+                {
+                    School = freelancerEducation.School,
+                    City = freelancerEducation.City,
+                    CountryId = freelancerEducation.CountryId,
+                    CountryName =country.Name,
+                    Degree = freelancerEducation.Degree,
+                    EndYear = freelancerEducation.EndYear,
+                    Field = freelancerEducation.Field,
+                    FreelancerId = freelancerEducation.FreelancerId,
+                    Id = freelancerEducation.Id
+                })
+               .ToListAsync()).Result;
+        return result;
+    }
+
+    public async Task<bool> AddFreelancerEducation(FreelancerEducation freelancerEducation)
+    {
+        var insertedCount = _session.LinqTableQueryAsync<FreelancerEducation, int>(table => table
+            .InsertAsync(
+                () => freelancerEducation));
+        return (insertedCount.Result == 1);
+    }
+
+    public async Task<bool> AddFreelancerCertificate(FreelancerCertificate freelancerCertificate)
+    {
+        var insertedCount = _session.LinqTableQueryAsync<FreelancerCertificate, int>(table => table
+            .InsertAsync(
+                () => freelancerCertificate));
+        return (insertedCount.Result == 1);
+    }
+
+    public async Task<bool> RemoveFreelancerCertificate(int id)
+    {
+        var deletedCount = _session.LinqTableQueryAsync<FreelancerCertificate, int>(table => table
+           .Where(record => record.Id == id)
+           .DeleteAsync());
+
+        return (deletedCount.Result == 1);
+    }
+
+    public async Task<bool> RemoveFreelancerEducation(int id)
+    {
+        var deletedCount = _session.LinqTableQueryAsync<FreelancerEducation, int>(table => table
+          .Where(record => record.Id == id)
+          .DeleteAsync());
+
+        return (deletedCount.Result == 1);
+    }
+
+    public async Task<IEnumerable<SelectListItem>> GetExpertise(IContentManager contentManager, IContentHandleManager contentHandleManager, string parentId = null)
+    {
+      
+        return GetTaxonomies(contentManager, contentHandleManager, Taxonomies.Expertise, parentId).Result.Select(c => new SelectListItem
+        {
+            Value = c.Id,
+            Text = c.Name
+        });
+    }
+
+    public async Task<IEnumerable<SelectListItem>> GetServices(IContentManager contentManager, IContentHandleManager contentHandleManager, string parentId = null)
+    {
+        return GetTaxonomies(contentManager, contentHandleManager, Taxonomies.Services, parentId).Result.Select(c => new SelectListItem
+        {
+            Value = c.Id,
+            Text = c.Name
+        });
+    }
+
+
+    
+
+
+
+
 }
