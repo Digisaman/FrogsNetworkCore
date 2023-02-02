@@ -7,42 +7,48 @@
 
 
 
-<h1>@T["Basic Profile"]</h1>
-<p>@T["Use the form below to update your basic information."]</p>
-<form asp-controller="FreelancerProfile" asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal no-multisubmit">
 
+<form asp-controller="FreelancerProfile" asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal no-multisubmit">
+    <h1>@T["Basic Profile"]</h1>
+    <p>@T["Use the form below to update your basic information."]</p>
 
     <fieldset>
         <div class="row">
             <div class="col">
-
-                <legend>@T["Profile Information"]</legend>
+@*
+                <legend>@T["Profile Information"]</legend>*@
                 <div>
                     <label for="vat">@T["First Name:"]</label>
+                    <br />
                     @Html.TextBox("FirstName")
                 </div>
                 <div>
                     <label for="vat">@T["Last Name:"]</label>
+                    <br />
                     @Html.TextBox("LastName")
                 </div>
 
                 <div>
                     <label for="Website">@T["Website:"]</label>
+                    <br />
                     @Html.TextBox("Website")
                 </div>
 
                 <div>
                     <label for="Tel">@T["Tel:"]</label>
+                    <br />
                     @Html.TextBox("Tel")
                 </div>
 
                 <div>
                     <label for="Mobile">@T["Mobile:"]</label>
+                    <br />
                     @Html.TextBox("Mobile")
                 </div>
 
                 <div>
                     <label for="VAT">@T["VAT:"]</label>
+                    <br />
                     @Html.TextBox("VAT")
                 </div>
 
@@ -53,7 +59,7 @@
                 </div>
 
                 <div>
-                    <button class="primarybutton" style="width:200px" type="submit">@T["Save"]</button>
+                    <button class="btn btn-primary" style="width:200px" type="submit">@T["Save"]</button>
                 </div>
 
                 <fieldset>
@@ -63,7 +69,7 @@
                         @Html.DropDownListFor(m => m.SelectedNationalityId, Model.Nationalities)
                     </div>
                     <div>
-                        <button class="primarybutton" style="width:200px" type="submit"
+                        <button class="btn btn-primary" style="width:200px" type="submit"
                                 formaction="@Url.Action("AddNationality")">
                             @T["Add Nationality"]
                         </button>
@@ -95,9 +101,9 @@
 
                 <div>
 
-                    <button class="primarybutton" style="width:200px" type="submit">@T["Save"]</button>
+                    <button class="btn btn-primary" style="width:200px" type="submit">@T["Save"]</button>
                     <br />
-                    <button class="primarybutton" style="width:200px" formaction="/FreelancerExtended/Index" type="submit">Professional Profile</button>
+                    <button class="btn btn-primary" style="width:200px" formaction="/FreelancerExtended/Index" type="submit">Professional Profile</button>
                 </div>
 
             </div>
@@ -122,10 +128,12 @@
 
                 <div>
                     <label for="vat">@T["Address:"]</label>
+                    <br />
                     @Html.TextBox("Address")
                 </div>
                 <div>
                     <label for="vat">@T["PostalCode:"]</label>
+                    <br />
                     @Html.TextBox("PostalCode")
                 </div>
                 <br />
