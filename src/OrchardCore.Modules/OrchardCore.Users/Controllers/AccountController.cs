@@ -216,7 +216,8 @@ namespace OrchardCore.Users.Controllers
                                     {
                                         _logger.LogInformation(1, "User logged in.");
                                         await _accountEvents.InvokeAsync((e, user) => e.LoggedInAsync(user), user, _logger);
-                                        if ( HttpContext.Session.Keys.Contains(nameof(returnUrl) ) )
+
+                                        if (HttpContext.Session.Keys.Contains(nameof(returnUrl)))
                                         {
                                             returnUrl = HttpContext.Session.GetString(nameof(returnUrl));
                                         }
@@ -253,6 +254,11 @@ namespace OrchardCore.Users.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
+
+            if (HttpContext.Session.Keys.Contains("returnUrl"))
+            {
+                HttpContext.Session.Remove("returnUrl");
+            }
 
             return Redirect("~/");
         }
