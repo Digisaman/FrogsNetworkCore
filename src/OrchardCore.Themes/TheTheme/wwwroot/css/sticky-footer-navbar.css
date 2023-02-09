@@ -17,30 +17,8 @@ body > footer {
     /* Set the fixed height of the footer here */
     height: 60px;
     line-height: 60px; /* Vertically center the text there */
-    background-color: #94d600;
+    background-color: #f5f5f5;
 }
-
-    body > footer > a:link {
-        color: black;
-        text-decoration: none;
-    }
-
-    body > footer > a:visited {
-        color: black;
-        text-decoration: none;
-    }
-
-    body > footer > a:hover {
-        color: black;
-        text-decoration: none;
-    }
-
-    body > footer > a:active {
-        color: black;
-        text-decoration: none;
-    }
-
-
 
 
 /* Custom page CSS
