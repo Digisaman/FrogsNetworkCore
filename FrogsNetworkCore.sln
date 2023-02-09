@@ -488,6 +488,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrogsNetwork.Modules", "Fro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrogsNetwork.Freelancing", "src\FrogsNetwork.Modules\FrogsNetwork.Freelancing\FrogsNetwork.Freelancing.csproj", "{1CAEA549-F9EF-4498-80D5-369F10C9E15B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrogsNetwork.Themes", "FrogsNetwork.Themes", "{40CAA29A-7ABC-4941-9C9D-25CBF189C65D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1518,6 +1520,7 @@ Global
 		{7BDF280B-70B7-4AFC-A6F7-B5759DCA2A2C} = {90030E85-0C4F-456F-B879-443E8A3F220D}
 		{91127688-2353-4523-B9BE-506AB124A657} = {275E087F-A4E2-4A7B-A924-ED68E3A52086}
 		{1CAEA549-F9EF-4498-80D5-369F10C9E15B} = {91127688-2353-4523-B9BE-506AB124A657}
+		{40CAA29A-7ABC-4941-9C9D-25CBF189C65D} = {275E087F-A4E2-4A7B-A924-ED68E3A52086}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46A1D25A-78D1-4476-9CBF-25B75E296341}

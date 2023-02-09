@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using FrogsNetwork.Freelancing.Models;
 using FrogsNetwork.Freelancing.ViewModels;
 using GraphQL.Language.AST;
@@ -27,8 +28,8 @@ public class ProfileService : IProfileService
     public ProfileService(
         IUserService userService,
         ISession session)
-        //IContentManager contentManager,
-        //IContentHandleManager contentHandleManager)
+    //IContentManager contentManager,
+    //IContentHandleManager contentHandleManager)
     {
         _userService = userService;
         _session = session;
@@ -331,7 +332,7 @@ public class ProfileService : IProfileService
         {
             list.Add(new SelectListItem
             {
-                Value = value.ToString(),
+                Value = Convert.ToInt32(value).ToString(),
                 Text = ((LanguageLevel)value).GetDisplayNameAttribute()
             });
         }
@@ -497,13 +498,13 @@ public class ProfileService : IProfileService
         //var items = terms.First().Content.Terms as JArray;
         //List<ContentItem> subItem0 = items?.ToObject<List<ContentItem>>();
 
-       
+
     }
 
     public async Task<IEnumerable<SelectListItem>> GetTaxonomies(IReadOnlyList<ContentItem> contentItems, string parentItemId = null)
     {
 
-      
+
         if (parentItemId == null)
         {
             return contentItems.Select(c => new SelectListItem
@@ -517,11 +518,12 @@ public class ProfileService : IProfileService
             var term = contentItems.FirstOrDefault(c => c.ContentItemId == parentItemId);
             var termContent = term.Content.Terms as JArray;
             List<ContentItem> subTerms = termContent?.ToObject<List<ContentItem>>();
-            return subTerms.Select(c => new SelectListItem
+            IEnumerable<SelectListItem> finalTerms = subTerms.Select(c => new SelectListItem
             {
                 Value = c.ContentItemId,
-                Text = c.DisplayText
+                Text = $"{term.DisplayText} - {c.DisplayText}"
             });
+            return finalTerms;
 
         }
         //var items = terms.First().Content.Terms as JArray;
@@ -549,7 +551,7 @@ public class ProfileService : IProfileService
 
     public async Task<bool> SaveFreelancerExpertiseIds(int freelancerId, int levelId, string[] expertiseIds)
     {
-        var  deleteQuery = _session.LinqTableQueryAsync<FreelancerExpertise, int>(table => table
+        var deleteQuery = _session.LinqTableQueryAsync<FreelancerExpertise, int>(table => table
           .Where(c => c.FreelancerId == freelancerId && c.LevelId == levelId)
           .DeleteAsync());
         bool result = (deleteQuery.Result == 1);
@@ -622,7 +624,7 @@ public class ProfileService : IProfileService
                     School = freelancerEducation.School,
                     City = freelancerEducation.City,
                     CountryId = freelancerEducation.CountryId,
-                    CountryName =country.Name,
+                    CountryName = country.Name,
                     Degree = freelancerEducation.Degree,
                     EndYear = freelancerEducation.EndYear,
                     Field = freelancerEducation.Field,
@@ -637,7 +639,16 @@ public class ProfileService : IProfileService
     {
         var insertedCount = _session.LinqTableQueryAsync<FreelancerEducation, int>(table => table
             .InsertAsync(
-                () => freelancerEducation));
+                () => new FreelancerEducation
+                {
+                    City = freelancerEducation.City,
+                    CountryId = freelancerEducation.CountryId,
+                    Degree = freelancerEducation.Degree,
+                    EndYear = freelancerEducation.EndYear,
+                    Field = freelancerEducation.Field,
+                    FreelancerId = freelancerEducation.FreelancerId,
+                    School = freelancerEducation.School
+                }));
         return (insertedCount.Result == 1);
     }
 
@@ -645,7 +656,13 @@ public class ProfileService : IProfileService
     {
         var insertedCount = _session.LinqTableQueryAsync<FreelancerCertificate, int>(table => table
             .InsertAsync(
-                () => freelancerCertificate));
+                () => new FreelancerCertificate
+                {
+                    Certificate = freelancerCertificate.Certificate,
+                    Description = freelancerCertificate.Description,
+                    FreelancerId = freelancerCertificate.FreelancerId,
+                    Organization = freelancerCertificate.Organization
+                }));
         return (insertedCount.Result == 1);
     }
 
@@ -669,7 +686,7 @@ public class ProfileService : IProfileService
 
     public async Task<IEnumerable<SelectListItem>> GetExpertise(IContentManager contentManager, IContentHandleManager contentHandleManager, string parentId = null)
     {
-      
+
         return GetTaxonomies(contentManager, contentHandleManager, Taxonomies.Expertise, parentId).Result.Select(c => new SelectListItem
         {
             Value = c.Id,
@@ -687,7 +704,7 @@ public class ProfileService : IProfileService
     }
 
 
-    
+
 
 
 

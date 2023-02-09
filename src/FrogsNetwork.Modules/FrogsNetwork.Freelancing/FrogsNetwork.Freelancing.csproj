@@ -64,6 +64,7 @@
     <PackageReference Include="OrchardCore.Module.Targets" Version="1.5.0" />
     <PackageReference Include="OrchardCore.ContentManagement" Version="1.5.0" />
     <PackageReference Include="OrchardCore.ContentTypes.Abstractions" Version="1.5.0" />
+    <PackageReference Include="Select2.js" Version="4.0.13" />
   </ItemGroup>
 
   <ItemGroup>

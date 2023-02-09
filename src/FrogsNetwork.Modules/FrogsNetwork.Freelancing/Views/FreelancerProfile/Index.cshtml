@@ -17,10 +17,9 @@
             <div class="col">
                 @*<legend>@T["Profile Information"]</legend>*@
                 <div>
-
                     <label asp-for="FirstName">@T["First Name:"]</label>
                     <input asp-for="FirstName" class="form-control" autofocus tabindex="1" />
-                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                   @* <span asp-validation-for="FirstName" class="text-danger"></span>*@
                 </div>
                 <div>
                     <label asp-for="LastName">@T["Last Name:"]</label>
@@ -43,13 +42,13 @@
                 <div>
                     <label asp-for="Mobile">@T["Mobile:"]</label>
                     <input asp-for="Mobile" class="form-control" autofocus tabindex="1" />
-                    <span asp-validation-for="Mobile" class="text-danger"></span>
+                    @*<span asp-validation-for="Mobile" class="text-danger"></span>*@
                 </div>
 
                 <div>
                     <label asp-for="VAT">@T["VAT:"]</label>
                     <input asp-for="VAT" class="form-control" autofocus tabindex="1" />
-                    <span asp-validation-for="VAT" class="text-danger"></span>
+                  @*  <span asp-validation-for="VAT" class="text-danger"></span>*@
                 </div>
 
                 <div>
@@ -59,7 +58,7 @@
                 </div>
 
                 <div>
-                    <button class="btn btn-primary" style="width:200px" type="submit">@T["Save"]</button>
+                    <button class="btn btn-primary" type="submit">@T["Save"]</button>
                 </div>
 
                 <fieldset>
@@ -69,7 +68,7 @@
                         @Html.DropDownListFor(m => m.SelectedNationalityId, Model.Nationalities, new { @class = "form-control" })
                     </div>
                     <div>
-                        <button class="btn btn-primary" style="width:200px" type="submit"
+                        <button class="btn btn-primary" type="submit"
                                 formaction="@Url.Action("AddNationality")">
                             @T["Add Nationality"]
                         </button>
@@ -124,12 +123,12 @@
                 <div>
                     <label asp-for="Address">@T["Address:"]</label>
                     <input asp-for="Address" class="form-control" autofocus tabindex="1" />
-                    <span asp-validation-for="Address" class="text-danger"></span>
+                  @*  <span asp-validation-for="Address" class="text-danger"></span>*@
                 </div>
                 <div>
                     <label asp-for="PostalCode">@T["PostalCode:"]</label>
                     <input asp-for="PostalCode" class="form-control" autofocus tabindex="1" />
-                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+                  @*  <span asp-validation-for="PostalCode" class="text-danger"></span>*@
                 </div>
                 <br />
                 <div id="MapDiv" style="width: 400px; height: 400px">
@@ -140,9 +139,9 @@
         <div class="row">
             <div class="col-2">
 
-                <button class="btn btn-primary" style="width:200px" type="submit">@T["Save"]</button>
+                <button class="btn btn-primary" type="submit">@T["Save"]</button>
                 <br />
-                <button class="btn btn-primary" style="width:200px" formaction="/FreelancerExtended/Index" type="submit">Professional Profile</button>
+                <button class="btn btn-primary" formaction="/FreelancerExtended/Index" type="submit">Professional Profile</button>
             </div>
         </div>
     </fieldset>

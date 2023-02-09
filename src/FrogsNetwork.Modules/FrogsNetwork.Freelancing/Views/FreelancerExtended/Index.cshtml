@@ -18,14 +18,13 @@
 
                 <label>Select First Expertise Level :</label>
                 <br />
-                @Html.ListBoxFor(m => m.ExpertiseFirstIds, Model.ExpertiseFirst, new { @class = "listbox", onchange = "document.forms[0].submit();" })
+                @Html.ListBoxFor(m => m.ExpertiseFirstIds, Model.ExpertiseFirst, new {  @class = "form-control", @multiple="multiple", @id="ExpertiseFirst", onchange = "this.form.submit();" })
                 <br />
-
                 <label>Select Second Expertise Level :</label>
                 <br />
-                @Html.ListBoxFor(m => m.ExpertiseSecondIds, Model.ExpertiseSecond, new { @class = "listbox" })
+                @Html.ListBoxFor(m => m.ExpertiseSecondIds, Model.ExpertiseSecond, new { @class = "form-control", @multiple="multiple", @id="ExpertiseSecond"})
                 <br />
-                <button class="primarybutton" style="width:200px" type="submit">@T["Save"]</button>
+                <button class="btn btn-primary" type="submit">@T["Save"]</button>
             </fieldset>
         </div>
         <div class="col">
@@ -34,14 +33,14 @@
 
                 <label>Select First Expertise Level :</label>
                 <br />
-                @Html.ListBoxFor(m => m.ServicesFirstIds, Model.ServicesFirst, new { @class = "listbox", onchange = "document.forms[0].submit();" })
+                @Html.ListBoxFor(m => m.ServicesFirstIds, Model.ServicesFirst, new {  @class = "form-control", @multiple="multiple", @id="ServicesFirst", onchange = "this.form.submit();" })
                 <br />
 
                 <label>Select Second Expertise Level :</label>
                 <br />
-                @Html.ListBoxFor(m => m.ServicesSecondIds, Model.ServicesSecond, new { @class = "listbox" })
+                @Html.ListBoxFor(m => m.ServicesSecondIds, Model.ServicesSecond, new { @class = "form-control", @multiple="multiple", @id="ServicesSecond"})
                 <br />
-                <button class="primarybutton" style="width:200px" type="submit">@T["Save"]</button>
+                <button class="btn btn-primary" type="submit">@T["Save"]</button>
             </fieldset>
         </div>
     </div>
@@ -54,15 +53,15 @@
                         <div>
                             <label for="language">@T["Language :"]</label>
                             <br />
-                            @Html.DropDownListFor(m => m.SelectedLanguageId, Model.Languages)
+                            @Html.DropDownListFor(m => m.SelectedLanguageId, Model.Languages, new { @class = "form-control"})
                         </div>
                         <div>
                             <label for="vat">@T["Level:"]</label>
                             <br />
-                            @Html.DropDownListFor(m => m.SelectedLevelId, Model.LanguageLevels)
+                            @Html.DropDownListFor(m => m.SelectedLevelId, Model.LanguageLevels, new { @class = "form-control"})
                         </div>
                         <div>
-                            <button class="primarybutton" style="width:200px" type="submit"
+                            <button class="btn btn-primary" type="submit"
                                     formaction="@Url.Action("AddLanguage")">
                                 @T["Add Language"]
                             </button>
@@ -107,19 +106,22 @@
                 <div class="row">
                     <div class="col">
                         <div>
-                            <label for="CertificateTitle">@T["Certificate Title:"]</label>
-                            @Html.TextBox("CertificateTitle")
+                            <label asp-for="CertificateTitle">@T["Certificate Title:"]</label>
+                            <input asp-for="CertificateTitle" class="form-control" />
+                            @*<span asp-validation-for="CertificateTitle" class="text-danger"></span>*@
                         </div>
                         <div>
-                            <label for="CertificateOrganization">@T["Issuing Organization :"]</label>
-                            @Html.TextBox("CertificateOrganization")
+                            <label asp-for="CertificateOrganization">@T["Issuing Organization:"]</label>
+                            <input asp-for="CertificateOrganization" class="form-control"  />
+                            @*<span asp-validation-for="CertificateOrganization" class="text-danger"></span>*@                           
                         </div>
                         <div>
-                            <label for="CertificateDesctiption">@T["Description :"]</label>
-                            @Html.TextBox("CertificateDesctiption")
+                            <label asp-for="CertificateDesctiption">@T["Description:"]</label>
+                            <input asp-for="CertificateDesctiption" class="form-control"  />
+                            @*<span asp-validation-for="CertificateDesctiption" class="text-danger"></span>*@
                         </div>
                         <div>
-                            <button class="primarybutton" style="width:200px" type="submit"
+                            <button class="btn btn-primary"type="submit"
                                     formaction="@Url.Action("AddCertificate")">
                                 @T["Add Certificate"]
                             </button>
@@ -169,32 +171,37 @@
                 <div class="row">
                     <div class="col">
                         <div>
-                            <label for="EducationSchool">@T["School / University Name :"]</label>
-                            @Html.TextBox("EducationSchool")
+                            <label asp-for="EducationSchool">@T["School / University Name :"]</label>
+                            <input asp-for="EducationSchool" class="form-control" autofocus tabindex="1" />
+                            @*<span asp-validation-for="EducationSchool" class="text-danger"></span>*@                            
                         </div>
                         <div>
                             <label for="country">@T["Country :"]</label>
                             <br />
-                            @Html.DropDownListFor(m => m.EducationCountryId, Model.Countries, "Please select")
+                            @Html.DropDownListFor(m => m.EducationCountryId, Model.Countries, new { @class = "form-control"})
                         </div>
                         <div>
-                            <label for="EducationCity">@T["City :"]</label>
-                            @Html.TextBox("EducationCity")
+                            <label asp-for="EducationCity">@T["City :"]</label>
+                            <input asp-for="EducationCity" class="form-control" />
+                            @*<span asp-validation-for="EducationCity" class="text-danger"></span>*@                           
                         </div>
                         <div>
-                            <label for="EducationField">@T["Field of Study :"]</label>
-                            @Html.TextBox("EducationField")
+                            <label asp-for="EducationField">@T["Field of Study :"]</label>
+                            <input asp-for="EducationField" class="form-control" />
+                            @*<span asp-validation-for="EducationField" class="text-danger"></span>*@
                         </div>
                         <div>
-                            <label for="EducationDegree">@T["Degree :"]</label>
-                            @Html.TextBox("EducationDegree")
+                            <label asp-for="EducationDegree">@T["Degree :"]</label>
+                            <input asp-for="EducationDegree" class="form-control" />
+                            @*<span asp-validation-for="EducationDegree" class="text-danger"></span>*@
                         </div>
                         <div>
-                            <label for="EducationEndYear">@T["End Year :"]</label>
-                            @Html.TextBox("EducationEndYear")
+                            <label asp-for="EducationEndYear">@T["End Year :"]</label>
+                            <input asp-for="EducationEndYear" class="form-control" />
+                            @*<span asp-validation-for="EducationEndYear" class="text-danger"></span>*@
                         </div>
                         <div>
-                            <button class="primarybutton" style="width:200px" type="submit"
+                            <button class="btn btn-primary" type="submit"
                                     formaction="@Url.Action("AddEducation")">
                                 @T["Add Education"]
                             </button>
@@ -254,14 +261,14 @@
             <button class="primarybutton" style="width:200px" type="submit">@T["Save")</button>
             </div>*@
             <div>
-                <button class="primarybutton" style="width:200px" formaction="/FreelancerProfile" type="submit">Basic Profile</button>
+                <button class="btn btn-primary" formaction="/FreelancerProfile/Index" type="submit">Basic Profile</button>
             </div>
 
         </div>
         <div class="row">
             <div class="col">
                 <div>
-                    <button class="primarybutton" style="width:200px" type="submit"
+                    <button class="btn btn-primary" type="submit"
                             formaction="@Url.Action("PreviewProfile")">
                         @T["Preview Profile"]
                     </button>
@@ -269,5 +276,15 @@
             </div>
         </div>
     </div>
-   
+
 </form>
+
+@*<script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
+<link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('listbox').multiselect();
+    });
+</script>
+*@

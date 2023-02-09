@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 namespace FrogsNetwork.Freelancing.Models;
 public enum LanguageLevel
 {
+
     [Display( Name = "Native Speaker")]
-    Native,
+    Native = 1,
 
     [Display(Name = "Near native / fluent")]
     Fluent,
