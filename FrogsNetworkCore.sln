@@ -488,7 +488,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrogsNetwork.Modules", "Fro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrogsNetwork.Freelancing", "src\FrogsNetwork.Modules\FrogsNetwork.Freelancing\FrogsNetwork.Freelancing.csproj", "{1CAEA549-F9EF-4498-80D5-369F10C9E15B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrogsTheme", "src\OrchardCore.Themes\FrogsTheme\FrogsTheme.csproj", "{1EF79288-4216-4F56-B7F0-1B3730681051}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrogsTheme", "src\OrchardCore.Themes\FrogsTheme\FrogsTheme.csproj", "{15894A32-99E3-4DCA-955D-A1FFCB622781}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1294,10 +1294,10 @@ Global
 		{1CAEA549-F9EF-4498-80D5-369F10C9E15B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CAEA549-F9EF-4498-80D5-369F10C9E15B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CAEA549-F9EF-4498-80D5-369F10C9E15B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1EF79288-4216-4F56-B7F0-1B3730681051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1EF79288-4216-4F56-B7F0-1B3730681051}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1EF79288-4216-4F56-B7F0-1B3730681051}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1EF79288-4216-4F56-B7F0-1B3730681051}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15894A32-99E3-4DCA-955D-A1FFCB622781}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15894A32-99E3-4DCA-955D-A1FFCB622781}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15894A32-99E3-4DCA-955D-A1FFCB622781}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15894A32-99E3-4DCA-955D-A1FFCB622781}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1524,7 +1524,7 @@ Global
 		{7BDF280B-70B7-4AFC-A6F7-B5759DCA2A2C} = {90030E85-0C4F-456F-B879-443E8A3F220D}
 		{91127688-2353-4523-B9BE-506AB124A657} = {275E087F-A4E2-4A7B-A924-ED68E3A52086}
 		{1CAEA549-F9EF-4498-80D5-369F10C9E15B} = {91127688-2353-4523-B9BE-506AB124A657}
-		{1EF79288-4216-4F56-B7F0-1B3730681051} = {AF3BADEA-CC93-4116-B3C1-F8D074EBEE4F}
+		{15894A32-99E3-4DCA-955D-A1FFCB622781} = {AF3BADEA-CC93-4116-B3C1-F8D074EBEE4F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {46A1D25A-78D1-4476-9CBF-25B75E296341}
