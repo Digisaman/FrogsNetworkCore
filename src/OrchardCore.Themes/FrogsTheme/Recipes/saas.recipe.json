@@ -30,7 +30,7 @@
         "OrchardCore.Users",
 
         // Themes
-        "TheTheme",
+        "FrogsTheme",
         "TheAdmin",
         "SafeMode"
       ]
@@ -38,14 +38,14 @@
     {
       "name": "themes",
       "admin": "TheAdmin",
-      "site": "TheTheme"
+      "site": "FrogsTheme"
     },
     {
       "name": "settings",
       "HomeRoute": {
         "Action": "Index",
         "Controller": "Home",
-        "Area": "TheTheme"
+        "Area": "FrogsTheme"
       }
     }
   ]
