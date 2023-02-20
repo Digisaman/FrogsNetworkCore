@@ -2930,6 +2930,10 @@ textarea.form-control-lg {
     color: #fff;
     background-color: #94d600;
     border-color: #94d600;
+    margin: 14px;
+    border-radius: 30px;
+    border: none;
+    font-size: 16px;
 }
     .btn-primary:hover {
         color: #fff;
