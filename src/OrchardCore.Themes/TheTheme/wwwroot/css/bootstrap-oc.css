@@ -2188,6 +2188,7 @@ progress {
     appearance: none;
     border-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    border-color: #94d600;
 }
 @media (prefers-reduced-motion: reduce) {
   .form-control {
@@ -2934,6 +2935,7 @@ textarea.form-control-lg {
     border-radius: 30px;
     border: none;
     font-size: 16px;
+    min-width: 200px;
 }
     .btn-primary:hover {
         color: #fff;
