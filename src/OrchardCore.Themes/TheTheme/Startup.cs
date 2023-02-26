@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using OrchardCore.Modules;
@@ -10,6 +11,8 @@ namespace OrchardCore.Themes.TheTheme
         public override void ConfigureServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddTransient<IConfigureOptions<ResourceManagementOptions>, ResourceManagementOptionsConfiguration>();
+
+            serviceCollection.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
         }
     }
 }

@@ -12,6 +12,7 @@ using OrchardCore.Data.Migration;
 using OrchardCore.Environment.Shell;
 using OrchardCore.Modules;
 using OrchardCore.Mvc.Core.Utilities;
+using OrchardCore.Navigation;
 using OrchardCore.Security.Permissions;
 using OrchardCore.Users.Events;
 using OrchardCore.Users.Services;
@@ -31,7 +32,7 @@ namespace FrogsNetwork.Freelancing
 
         public override void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddScoped<INavigationProvider, MainMenu>();
             services.AddScoped<IPermissionProvider, Permissions>();
             services.AddDataMigration<Migrations>();
             services.AddScoped<IRegistrationFormEvents, UserRegistrationHandler>();
