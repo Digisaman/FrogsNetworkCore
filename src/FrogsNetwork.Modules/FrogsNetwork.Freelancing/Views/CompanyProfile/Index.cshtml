@@ -7,43 +7,48 @@
 
 
 
-<h1>@T["Basic Profile"]</h1>
-<p>@T["Use the form below to update your basic information."]</p>
 <form asp-controller="CompanyProfile" asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal no-multisubmit">
-
-
+    \
+    <h1>@T["Basic Profile"]</h1>
+    <p>@T["Use the form below to update your basic information."]</p>
 
     <div class="row">
         <div class="col">
             <fieldset>
                 <legend>@T["Profile Information"]</legend>
                 <div>
-                    <label for="CompanyName">@T["Company Name:"]</label>
-                    @Html.TextBox("CompanyName")
+                    <label asp-for="CompanyName">@T["Company Name:"]</label>
+                    <input asp-for="CompanyName" class="form-control" autofocus tabindex="1" />
+                    @* <span asp-validation-for="CompanyName" class="text-danger"></span>*@
                 </div>
                 <div>
-                    <label for="Activities">@T["Activities:"]</label>
-                    @Html.TextBox("Activities")
-                </div>
-
-                <div>
-                    <label for="ContactPersonName">@T["Contact Person Name:"]</label>
-                    @Html.TextBox("ContactPersonName")
+                    <label asp-for="Activities">@T["Activities:"]</label>
+                    <input asp-for="Activities" class="form-control" autofocus tabindex="1" />
+                    @* <span asp-validation-for="Activities" class="text-danger"></span>*@
                 </div>
 
                 <div>
-                    <label for="ContactPersonPosition">@T["Contact Person Position:"]</label>
-                    @Html.TextBox("ContactPersonPosition")
+                    <label asp-for="ContactPersonName">@T["Contact Person Name:"]</label>
+                    <input asp-for="ContactPersonName" class="form-control" autofocus tabindex="1" />
+                    @* <span asp-validation-for="Activities" class="text-danger"></span>*@
                 </div>
 
                 <div>
-                    <label for="Tel">@T["Company Tel:"]</label>
-                    @Html.TextBox("Tel")
+                    <label asp-for="ContactPersonPosition">@T["Contact Person Position:"]</label>
+                    <input asp-for="ContactPersonPosition" class="form-control" autofocus tabindex="1" />
+                    @* <span asp-validation-for="Activities" class="text-danger"></span>*@
                 </div>
 
                 <div>
-                    <label for="Website">@T["Website:"]</label>
-                    @Html.TextBox("Website")
+                    <label asp-for="Tel">@T["Company Tel:"]</label>
+                    <input asp-for="Tel" class="form-control" autofocus tabindex="1" />
+                    @* <span asp-validation-for="Tel" class="text-danger"></span>*@
+                </div>
+
+                <div>
+                    <label asp-for="Website">@T["Website:"]</label>
+                    <input asp-for="Website" class="form-control" autofocus tabindex="1" />
+                    @* <span asp-validation-for="Website" class="text-danger"></span>*@
                 </div>
 
             </fieldset>
@@ -56,27 +61,29 @@
                 <div>
                     <label for="country">@T["Country:"]</label>
                     <br />
-                    @Html.DropDownListFor(m => m.CountryId, Model.Countries, "Please select", new { onchange = "document.forms[0].submit();" })
+                    @Html.DropDownListFor(m => m.CountryId, Model.Countries, "Please select", new { @class = "form-control", onchange = "document.forms[0].submit();" })
                 </div>
                 <div>
                     <label for="region">@T["Region:"]</label>
                     <br />
-                    @Html.DropDownListFor(m => m.RegionId, Model.Regions, "Please select", new { onchange = "document.forms[0].submit();" })
+                    @Html.DropDownListFor(m => m.RegionId, Model.Regions, "Please select", new { @class = "form-control", onchange = "document.forms[0].submit();" })
                 </div>
                 <div>
                     <label for="city">@T["City:"]</label>
                     <br />
-                    @Html.DropDownListFor(m => m.CityId, Model.Cities, "Please select")
+                    @Html.DropDownListFor(m => m.CityId, Model.Cities, "Please select", new {@class = "form-control"})
                 </div>
 
 
                 <div>
-                    <label for="vat">@T["Address:"]</label>
-                    @Html.TextBox("Address")
+                    <label asp-for="Address">@T["Address:"]</label>
+                    <input asp-for="Address" class="form-control" autofocus tabindex="1" />
+                    @* <span asp-validation-for="Address" class="text-danger"></span>*@
                 </div>
                 <div>
-                    <label for="vat">@T["PostalCode:"]</label>
-                    @Html.TextBox("PostalCode")
+                    <label asp-for="PostalCode">@T["Address:"]</label>
+                    <input asp-for="PostalCode" class="form-control" autofocus tabindex="1" />
+                    @* <span asp-validation-for="PostalCode" class="text-danger"></span>*@
                 </div>
                 <br />
                 @*<div id="MapDiv" style="width: 400px; height: 400px">
@@ -89,11 +96,12 @@
 
     <div class="row">
         <div class="col-2">
-            <button class="primarybutton" style="width:200px" type="submit">@T["Save Profile"]</button>
+            <button class="btn btn-primary" type="submit">@T["Save Profile"]</button>
             <br />
-            <button class="primarybutton" style="width:200px" formaction="/FreelancerSearch" type="submit">Search Freelancers</button>
+            <button class="btn btn-primary" formaction="/FreelancerSearch" type="submit">@T["Search Freelancers"]</button>
         </div>
     </div>
+    <br />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
             crossorigin="anonymous"></script>
@@ -151,7 +159,7 @@
                             infoWindow.open(map, marker);
         @*@Model.Lat = evt.latLng.lat().toFixed(6);
                                 @Model.Long = evt.latLng.lng().toFixed(6);*@
-                                            });
+                                                    });
 
         @* google.maps.event.addListener(marker, 'dragend', function (evt) {
                             @Model.Lat = evt.latLng.lat().toFixed(6);
@@ -159,7 +167,7 @@
 
                             map.panTo(evt.latLng);
                             });*@
-                                        })(marker, data);
+                                                })(marker, data);
                 }
             }
         });
