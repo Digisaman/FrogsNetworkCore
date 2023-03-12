@@ -8,7 +8,7 @@
 
 
 <form asp-controller="CompanyProfile" asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal no-multisubmit">
-    \
+    
     <h1>@T["Basic Profile"]</h1>
     <p>@T["Use the form below to update your basic information."]</p>
 
@@ -81,7 +81,7 @@
                     @* <span asp-validation-for="Address" class="text-danger"></span>*@
                 </div>
                 <div>
-                    <label asp-for="PostalCode">@T["Address:"]</label>
+                    <label asp-for="PostalCode">@T["Postal Code:"]</label>
                     <input asp-for="PostalCode" class="form-control" autofocus tabindex="1" />
                     @* <span asp-validation-for="PostalCode" class="text-danger"></span>*@
                 </div>
@@ -98,92 +98,14 @@
         <div class="col-2">
             <button class="btn btn-primary" type="submit">@T["Save Profile"]</button>
             <br />
-            <button class="btn btn-primary" formaction="/FreelancerSearch" type="submit">@T["Search Freelancers"]</button>
+            <button class="btn btn-primary" formaction="/FreelancerSearch/Index" type="submit">@T["Search Freelancers"]</button>
         </div>
     </div>
     <br />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-            crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAW1SgI7RCtbjx3t5yUIfjiDTW6fvn50OA"></script>
-    <script>
-        $(function () {
-            var markers = [];
-
-            var marker = {};
-
-            marker["lat"] = '@Model.Lat';
-            marker["lng"] = '@Model.Long';
-
-            markers.push(marker);
-
-
-            //call Map function with all markers passed as list of arrays
-            initializeMap(markers);
-
-
-            function initializeMap(markers) {
-                //you can check your marker data in console
-                console.log(markers);
-                //Create Google map options
-                var GoogleMapOptions = {
-                    center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
-                    zoom: 6,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-
-
-                //create a variable of InfoWindow type to show data on clicking map icon
-                var infoWindow = new google.maps.InfoWindow();
-                var map = new google.maps.Map(document.getElementById("MapDiv"), GoogleMapOptions);
-
-
-                //loop through each marker data
-                for (i = 0; i < markers.length; i++) {
-                    var data = markers[i]
-                    //set lat long of current marker
-                    var myLatlng = new google.maps.LatLng(data.lat, data.lng);
-
-                    var marker = new google.maps.Marker({
-                        position: myLatlng,
-                        map: map,
-                        title: data.title,
-                        draggable: false
-                    });
-
-                    (function (marker, data) {
-                        //add a on marker click event
-                        google.maps.event.addListener(marker, "click", function (e) {
-                            //show description
-                            infoWindow.setContent(data.description);
-                            infoWindow.open(map, marker);
-        @*@Model.Lat = evt.latLng.lat().toFixed(6);
-                                @Model.Long = evt.latLng.lng().toFixed(6);*@
-                                                    });
-
-        @* google.maps.event.addListener(marker, 'dragend', function (evt) {
-                            @Model.Lat = evt.latLng.lat().toFixed(6);
-                            @Model.Long = evt.latLng.lng().toFixed(6);
-
-                            map.panTo(evt.latLng);
-                            });*@
-                                                })(marker, data);
-                }
-            }
-        });
-    </script>
-
+  
     <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-ui-1.13.0.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $(".datepicker").datepicker({
-                dateFormat: "dd-mm-yy",
-                changemonth: true,
-                changeyear: true
-            });
-        });
-    </script>
+
     <script type="text/javascript">
         $(function () {
             if ($("#RegionId option").length > 1) {

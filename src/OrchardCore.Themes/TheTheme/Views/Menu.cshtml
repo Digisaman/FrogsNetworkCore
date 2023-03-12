@@ -5,11 +5,16 @@
 
     TagBuilder tag = Tag(Model, "ul");
     tag.AddCssClass("navbar-nav ms-auto");
+    foreach (var item in Model.Items)
+    {
+        tag.InnerHtml.AppendHtml(await DisplayAsync(item));
+    }
+
     if (User.Identity.IsAuthenticated)
     {
         tag.InnerHtml.AppendHtml(await DisplayAsync(await New.Navigation(MenuName: "main-menu", RouteData: @ViewContext.RouteData)));
 
-      
+
     }
 }
 

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Linq;
 using FrogsNetwork.Freelancing.Models;
 using FrogsNetwork.Freelancing.ViewModels;
 using GraphQL.Language.AST;
@@ -13,6 +14,7 @@ using OrchardCore.Taxonomies.Models;
 using OrchardCore.Users;
 using OrchardCore.Users.Models;
 using OrchardCore.Users.Services;
+using YesSql;
 using ISession = YesSql.ISession;
 
 namespace FrogsNetwork.Freelancing.Services;
@@ -701,6 +703,218 @@ public class ProfileService : IProfileService
             Value = c.Id,
             Text = c.Name
         });
+    }
+
+
+
+
+    public async Task<IEnumerable<FreelancerResultViewModel>> SearchFreelancers(FreelancerSearchViewModel searchViewModel)
+    {
+        if (!searchViewModel.CountryId.HasValue)
+            searchViewModel.CountryId = 0;
+        if (!searchViewModel.RegionId.HasValue)
+            searchViewModel.RegionId = 0;
+        if (!searchViewModel.CityId.HasValue)
+            searchViewModel.CityId = 0;
+
+        if (searchViewModel.ExpertiseFirstIds == null)
+            searchViewModel.ExpertiseFirstIds = new string[0];
+        if (searchViewModel.ExpertiseSecondIds == null)
+            searchViewModel.ExpertiseSecondIds = new string[0];
+        if (searchViewModel.ServicesFirstIds == null)
+            searchViewModel.ServicesFirstIds = new string[0];
+        if (searchViewModel.ServicesSecondIds == null)
+            searchViewModel.ServicesSecondIds = new string[0];
+
+
+        //    var freelancers = _session.LinqQueryAsync(c =>
+        //c.GetTable<FreelancerUser>()
+        //.Where(c => ( searchViewModel.CountryId == 0 || ( searchViewModel.CountryId != 0 && c.CountryId == searchViewModel.CountryId) ) )
+        // .Where(c => (searchViewModel.RegionId == 0 || (searchViewModel.RegionId != 0 && c.RegionId == searchViewModel.RegionId)))
+        //  .Where(c => (searchViewModel.CityId == 0 || (searchViewModel.CityId != 0 && c.CountryId == searchViewModel.CityId)))
+        //  .Select(c => new FreelancerUser
+        //  {
+        //      Id = c.Id
+
+        //  }).ToListAsync()).Result;
+
+
+        var result = _session.LinqQueryAsync(
+           c =>
+               (from freelancer in c.GetTable<FreelancerUser>()
+                  .Where(c => (searchViewModel.CountryId == 0 || (searchViewModel.CountryId != 0 && c.CountryId == searchViewModel.CountryId)))
+                  .Where(c => (searchViewModel.RegionId == 0 || (searchViewModel.RegionId != 0 && c.RegionId == searchViewModel.RegionId)))
+                  .Where(c => (searchViewModel.CityId == 0 || (searchViewModel.CityId != 0 && c.CountryId == searchViewModel.CityId)))
+
+                join country in c.GetTable<Country>()
+                on freelancer.CountryId equals country.Id
+                join region in c.GetTable<Region>()
+                on freelancer.RegionId equals region.Id
+                join city in c.GetTable<City>()
+                on freelancer.CityId equals city.Id
+                select new FreelancerResultViewModel
+                {
+                    FirstName = freelancer.FirstName,
+                    LastName = freelancer.LastName,
+                    Lat = freelancer.Lat,
+                    Long = freelancer.Long,
+                    Id = freelancer.Id,
+                    UserId = freelancer.UserId,
+                    Country = country.Name,
+                    Region = region.Name,
+                    City = city.Name,
+                })
+               .ToListAsync()).Result;
+        return result;
+
+        //IQuery<FreelancerUser> query = new YesSql.q<FreelancerUser>();
+
+        //#region location
+        //if (searchViewModel.CountryId.HasValue)
+        //{
+        //    query = query.Any(c => c. == searchViewModel.CountryId);
+        //}
+
+        //if (searchViewModel.RegionId != 0)
+        //{
+        //    users = users.Where(c => c.RegionId == searchViewModel.RegionId);
+        //}
+
+        //if (searchViewModel.CityId != 0)
+        //{
+        //    users = users.Where(c => c.CityId == searchViewModel.CityId);
+        //}
+        //#endregion
+
+
+        //#region Expertise
+        //List<string> expertiseIds = new List<string>();
+        //if (searchViewModel.ExpertiseFirstIds.Any() && !searchViewModel.ExpertiseSecondIds.Any())
+        //{
+        //    expertiseIds.AddRange(searchViewModel.ExpertiseFirstIds.Select(c => c.ToString()));
+        //}
+        //else
+        //{
+        //    if (searchViewModel.ExpertiseFirstIds.Any())
+        //    {
+        //        foreach (var id in searchViewModel.ExpertiseFirstIds)
+        //        {
+        //            string[] selectedLevelIds = GetExpertise(id).Select(c => c.Id).ToArray();
+        //            if (selectedLevelIds != null && searchViewModel.ExpertiseSecondIds.Any())
+        //            {
+        //                if (!selectedLevelIds.Intersect(searchViewModel.ExpertiseSecondIds).Any())
+        //                    expertiseIds.Add(id.ToString());
+        //            }
+        //        }
+        //    }
+
+        //    if (searchViewModel.ExpertiseSecondIds.Any())
+        //    {
+        //        expertiseIds.AddRange(searchViewModel.ExpertiseSecondIds.Select(c => c.ToString()));
+        //    }
+        //}
+        //if (expertiseIds.Any())
+        //{
+        //    expertiseIds = expertiseIds.Distinct().ToList();
+        //    int[] freelancerIds = expertise.Where(c => expertiseIds.Contains(c.ExpertiseId)).Select(c => c.FreelancerId).ToArray();
+        //    if (freelancerIds != null && freelancerIds.Any())
+        //    {
+        //        users = users.Where(c => freelancerIds.Contains(c.Id));
+        //    }
+        //    else
+        //    {
+        //        users = Enumerable.Empty<FreelancerUser>().AsQueryable();
+        //    }
+        //}
+        //#endregion
+
+
+        //#region Services
+        //List<string> servicesIds = new List<string>();
+        //if (searchViewModel.ServicesFirstIds.Any() && !searchViewModel.ServicesSecondIds.Any())
+        //{
+        //    servicesIds.AddRange(searchViewModel.ExpertiseFirstIds.Select(c => c.ToString()));
+        //}
+        //else
+        //{
+        //    if (searchViewModel.ServicesFirstIds.Any())
+        //    {
+        //        foreach (var id in searchViewModel.ServicesFirstIds)
+        //        {
+        //            string[] selectedLevelIds = GetServices(id).Select(c => c.Id).ToArray();
+        //            if (selectedLevelIds != null && searchViewModel.ServicesSecondIds != null)
+        //            {
+        //                if (!selectedLevelIds.Intersect(searchViewModel.ServicesSecondIds).Any())
+        //                    servicesIds.Add(id.ToString());
+        //            }
+        //        }
+        //    }
+
+        //    if (searchViewModel.ServicesSecondIds.Any())
+        //    {
+        //        servicesIds.AddRange(searchViewModel.ServicesSecondIds.Select(c => c.ToString()));
+        //    }
+        //}
+        //if (servicesIds.Any())
+        //{
+        //    servicesIds = servicesIds.Distinct().ToList();
+        //    int[] freelancerIds = services.Where(c => servicesIds.Contains(c.ServiceId)).Select(c => c.FreelancerId).ToArray();
+        //    if (freelancerIds != null && freelancerIds.Any())
+        //    {
+        //        users = users.Where(c => freelancerIds.Contains(c.Id));
+        //    }
+        //    else
+        //    {
+        //        users = Enumerable.Empty<FreelancerUser>().AsQueryable();
+        //    }
+        //}
+        //#endregion
+
+        //List<FreelancerResultViewModel> results = users.Select(c => new FreelancerResultViewModel
+        //{
+        //    Id = c.Id,
+        //    Address = c.Address,
+        //    CityId = c.CityId,
+        //    RegionId = c.RegionId,
+        //    CountryId = c.CountryId,
+        //    FirstName = c.FirstName,
+        //    LastName = c.LastName,
+        //    Lat = c.Lat,
+        //    Long = c.Long,
+        //    UserId = c.UserId
+
+        //}).ToList();
+
+
+
+
+        //foreach (var item in results)
+        //{
+        //    if (item.CityId != 0)
+        //    {
+        //        City city = _cityRepository.Table.FirstOrDefault(c => c.Id == item.CityId);
+        //        if (city != null)
+        //            item.City = city.Name;
+        //    }
+
+        //    if (item.RegionId != 0)
+        //    {
+        //        Region region = _regionRepository.Table.FirstOrDefault(c => c.Id == item.RegionId);
+        //        if (region != null)
+        //            item.Region = region.Name;
+
+        //    }
+
+        //    if (item.CountryId != 0)
+        //    {
+        //        Country country = _countryRepository.Table.FirstOrDefault(c => c.Id == item.CountryId);
+        //        if (country != null)
+        //            item.Country = country.Name;
+
+        //    }
+
+        //}
+        //return results;
     }
 
 

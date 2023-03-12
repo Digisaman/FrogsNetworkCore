@@ -11,13 +11,13 @@ namespace FrogsNetwork.Freelancing.ViewModels
             Regions = new List<SelectListItem>().AsEnumerable();
             Cities = new List<SelectListItem>().AsEnumerable();
 
-            ExpertiseFirst = new List<SelectListItem>();
-            ExpertiseSecond = new List<SelectListItem>();
+            ExpertiseFirst = new List<SelectListItem>().AsEnumerable();
+            ExpertiseSecond = new List<SelectListItem>().AsEnumerable();
 
-            ServicesFirst = new List<SelectListItem>();
-            ServicesSecond = new List<SelectListItem>();
+            ServicesFirst = new List<SelectListItem>().AsEnumerable();
+            ServicesSecond = new List<SelectListItem>().AsEnumerable();
 
-            Freelancers = new List<FreelancerResultViewModel>();
+            Freelancers = new List<FreelancerResultViewModel>().AsEnumerable();
 
             SelectedFreelancer = new FreelancerResultViewModel();
 
@@ -40,16 +40,16 @@ namespace FrogsNetwork.Freelancing.ViewModels
 
         public string Long { get; set; }
 
-        public int CountryId { get; set; }
+        public int? CountryId { get; set; }
 
-        public int RegionId { get; set; }
+        public int? RegionId { get; set; }
 
-        public int CityId { get; set; }
+        public int? CityId { get; set; }
 
-        public int[] ExpertiseFirstIds { get; set; }
-        public int[] ExpertiseSecondIds { get; set; }
-        public int[] ServicesFirstIds { get; set; }
-        public int[] ServicesSecondIds { get; set; }
+        public string[] ExpertiseFirstIds { get; set; }
+        public string[] ExpertiseSecondIds { get; set; }
+        public string[] ServicesFirstIds { get; set; }
+        public string[] ServicesSecondIds { get; set; }
 
         public IEnumerable<SelectListItem> Countries { get; set; }
 
@@ -57,13 +57,13 @@ namespace FrogsNetwork.Freelancing.ViewModels
 
         public IEnumerable<SelectListItem> Cities { get; set; }
 
-        public List<SelectListItem> ExpertiseFirst { get; set; }
-        public List<SelectListItem> ExpertiseSecond { get; set; }
+        public IEnumerable<SelectListItem> ExpertiseFirst { get; set; }
+        public IEnumerable<SelectListItem> ExpertiseSecond { get; set; }
 
-        public List<SelectListItem> ServicesFirst { get; set; }
-        public List<SelectListItem> ServicesSecond { get; set; }
+        public IEnumerable<SelectListItem> ServicesFirst { get; set; }
+        public IEnumerable<SelectListItem> ServicesSecond { get; set; }
 
-        public List<FreelancerResultViewModel> Freelancers { get; set; }
+        public IEnumerable<FreelancerResultViewModel> Freelancers { get; set; }
 
         public FreelancerResultViewModel SelectedFreelancer { get; set; }
         public string Address { get; set; }

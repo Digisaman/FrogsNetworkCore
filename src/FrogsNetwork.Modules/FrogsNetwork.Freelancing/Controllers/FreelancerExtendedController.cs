@@ -186,11 +186,6 @@ public class FreelancerExtendedController : Controller
                 {
                     _profileService.SaveFreelancerExpertiseIds(this.ViewModel.Id, 2, this.ViewModel.ExpertiseSecondIds);
 
-                    //List<SelectListItem> level3List = new List<SelectListItem>();
-                    //foreach (var secondLevelId in ExpertiseSecondIds)
-                    //{
-                    //    level2List.AddRange(GetExpertise(secondLevelId));
-                    //}
                 }
             }
 

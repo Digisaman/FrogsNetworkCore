@@ -52,6 +52,7 @@ namespace FrogsNetwork.Freelancing
             var freelancerProfileControllerName = typeof(FreelancerProfileController).ControllerName();
             var freelancerExtendedControllerName = typeof(FreelancerExtendedController).ControllerName();
             var companyProfileControllerName = typeof(CompanyProfileController).ControllerName();
+            var freelancerSearchControllerName = typeof(FreelancerSearchController).ControllerName();
 
             #region Routes
             #region FreeLancerProFile
@@ -79,6 +80,12 @@ namespace FrogsNetwork.Freelancing
              areaName: "FrogsNetwork.Freelancing",
              pattern: $"{companyProfileControllerName}/{nameof(CompanyProfileController.Index)}",
              defaults: new { controller = companyProfileControllerName, action = nameof(CompanyProfileController.Index) });
+
+            routes.MapAreaControllerRoute(
+             name: $"{freelancerSearchControllerName}{nameof(FreelancerSearchController.Index)}",
+             areaName: "FrogsNetwork.Freelancing",
+             pattern: $"{freelancerSearchControllerName}/{nameof(FreelancerSearchController.Index)}",
+             defaults: new { controller = freelancerSearchControllerName, action = nameof(FreelancerSearchController.Index) });
 
             #region
             routes.MapAreaControllerRoute(

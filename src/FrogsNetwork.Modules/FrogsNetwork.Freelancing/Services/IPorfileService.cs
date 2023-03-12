@@ -38,4 +38,5 @@ public interface IProfileService
     Roles GetUserRole(IUser user);
     Task<bool> RemoveFreelancerLanguage(int id);
     Task<bool> RemoveFreelancerNationality(int id);
+    Task<IEnumerable<FreelancerResultViewModel>> SearchFreelancers(FreelancerSearchViewModel searchViewModel);
 }
