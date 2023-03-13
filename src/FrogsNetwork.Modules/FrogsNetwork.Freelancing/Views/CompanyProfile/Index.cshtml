@@ -61,12 +61,12 @@
                 <div>
                     <label for="country">@T["Country:"]</label>
                     <br />
-                    @Html.DropDownListFor(m => m.CountryId, Model.Countries, "Please select", new { @class = "form-control", onchange = "document.forms[0].submit();" })
+                    @Html.DropDownListFor(m => m.CountryId, Model.Countries, "Please select", new { @class = "form-control", onchange = "submit();" })
                 </div>
                 <div>
                     <label for="region">@T["Region:"]</label>
                     <br />
-                    @Html.DropDownListFor(m => m.RegionId, Model.Regions, "Please select", new { @class = "form-control", onchange = "document.forms[0].submit();" })
+                    @Html.DropDownListFor(m => m.RegionId, Model.Regions, "Please select", new { @class = "form-control", onchange = "submit();" })
                 </div>
                 <div>
                     <label for="city">@T["City:"]</label>
@@ -103,26 +103,7 @@
     </div>
     <br />
   
-    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery-ui-1.13.0.min.js"></script>
+ 
 
-    <script type="text/javascript">
-        $(function () {
-            if ($("#RegionId option").length > 1) {
-                $("#RegionId").removeAttr("disabled");
-            }
-
-            if ($("#CityId option").length > 1) {
-                $("#CityId").removeAttr("disabled");
-            }
-
-            //if ($("#CountryId").val() != "" && $("#RegionId").val() != "" && $("#CityId").val() != "") {
-            //    var message = "Country: " + $("#CountryId option:selected").text();
-            //    message += "\nRegion: " + $("#RegionId option:selected").text();
-            //    message += "\nCity: " + $("#CityId option:selected").text();
-            //}
-
-
-        });
-    </script>
+   
 </form>

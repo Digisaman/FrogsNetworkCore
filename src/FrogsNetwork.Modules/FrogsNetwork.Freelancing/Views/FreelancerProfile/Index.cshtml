@@ -106,12 +106,12 @@
                 <div>
                     <label for="country">@T["Country:"]</label>
                     <br />
-                    @Html.DropDownListFor(m => m.CountryId, Model.Countries, "Please select", new { @class = "form-control", onchange = "document.forms[0].submit();" })
+                    @Html.DropDownListFor(m => m.CountryId, Model.Countries, "Please select", new { @class = "form-control", onchange = "submit();" })
                 </div>
                 <div>
                     <label for="region">@T["Region:"]</label>
                     <br />
-                    @Html.DropDownListFor(m => m.RegionId, Model.Regions, "Please select", new { @class = "form-control", onchange = "document.forms[0].submit();" })
+                    @Html.DropDownListFor(m => m.RegionId, Model.Regions, "Please select", new { @class = "form-control", onchange = "submit();" })
                 </div>
                 <div>
                     <label for="city">@T["City:"]</label>

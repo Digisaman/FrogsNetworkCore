@@ -773,6 +773,10 @@ public class ProfileService : IProfileService
                    City = city.Name,
                })
                .ToListAsync()).Result;
+
+        if (!result.Any())
+            return result;
+
         var destinationLocation = new LocationEx(new CoordinateEx(Convert.ToDouble(searchViewModel.Lat), Convert.ToDouble(searchViewModel.Long)));
 
         var originLocations = result.Select(c => new LocationEx(new CoordinateEx(Convert.ToDouble(c.Lat), Convert.ToDouble(c.Long))));
