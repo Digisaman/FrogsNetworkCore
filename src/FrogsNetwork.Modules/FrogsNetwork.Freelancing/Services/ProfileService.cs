@@ -2,6 +2,10 @@ using System.Diagnostics;
 using System.Linq;
 using FrogsNetwork.Freelancing.Models;
 using FrogsNetwork.Freelancing.ViewModels;
+using GoogleApi.Entities.Common;
+using GoogleApi.Entities.Maps.Common;
+using GoogleApi.Entities.Maps.DistanceMatrix.Request;
+using GoogleApi;
 using GraphQL.Language.AST;
 using LinqToDB;
 using Lombiq.HelpfulLibraries.LinqToDb;
@@ -739,36 +743,61 @@ public class ProfileService : IProfileService
         //  }).ToListAsync()).Result;
 
 
-           //.Where(c => (searchViewModel.CountryId == 0 || (searchViewModel.CountryId != 0 && c.CountryId == searchViewModel.CountryId)))
-           //       .Where(c => (searchViewModel.RegionId == 0 || (searchViewModel.RegionId != 0 && c.RegionId == searchViewModel.RegionId)))
-           //       .Where(c => (searchViewModel.CityId == 0 || (searchViewModel.CityId != 0 && c.CountryId == searchViewModel.CityId)))
+        //.Where(c => (searchViewModel.CountryId == 0 || (searchViewModel.CountryId != 0 && c.CountryId == searchViewModel.CountryId)))
+        //       .Where(c => (searchViewModel.RegionId == 0 || (searchViewModel.RegionId != 0 && c.RegionId == searchViewModel.RegionId)))
+        //       .Where(c => (searchViewModel.CityId == 0 || (searchViewModel.CityId != 0 && c.CountryId == searchViewModel.CityId)))
 
         var result = _session.LinqQueryAsync(
-           c =>( 
-               from freelancer in c.GetTable<FreelancerUser>().Where ( c =>
-                   ( searchViewModel.CountryId == 0 || (searchViewModel.CountryId != 0 && c.CountryId == searchViewModel.CountryId) ) &&
-                   ( searchViewModel.RegionId == 0 || (searchViewModel.RegionId != 0 && c.RegionId == searchViewModel.RegionId) ) &&
-                   ( searchViewModel.CityId == 0 || (searchViewModel.RegionId != 0 && c.RegionId == searchViewModel.CityId) ) ) 
-                join country in c.GetTable<Country>()
-                on freelancer.CountryId equals country.Id
-                join region in c.GetTable<Region>()
-                on freelancer.RegionId equals region.Id
-                join city in c.GetTable<City>()
-                on freelancer.CityId equals city.Id
-               
-                select new FreelancerResultViewModel
-                {
-                    FirstName = freelancer.FirstName,
-                    LastName = freelancer.LastName,
-                    Lat = freelancer.Lat,
-                    Long = freelancer.Long,
-                    Id = freelancer.Id,
-                    UserId = freelancer.UserId,
-                    Country = country.Name,
-                    Region = region.Name,
-                    City = city.Name,
-                })
+           c => (
+               from freelancer in c.GetTable<FreelancerUser>().Where(c =>
+                   (searchViewModel.CountryId == 0 || (searchViewModel.CountryId != 0 && c.CountryId == searchViewModel.CountryId)) &&
+                   (searchViewModel.RegionId == 0 || (searchViewModel.RegionId != 0 && c.RegionId == searchViewModel.RegionId)) &&
+                   (searchViewModel.CityId == 0 || (searchViewModel.CityId != 0 && c.CityId == searchViewModel.CityId)))
+               join country in c.GetTable<Country>()
+               on freelancer.CountryId equals country.Id
+               join region in c.GetTable<Region>()
+               on freelancer.RegionId equals region.Id
+               join city in c.GetTable<City>()
+               on freelancer.CityId equals city.Id
+
+               select new FreelancerResultViewModel
+               {
+                   FirstName = freelancer.FirstName,
+                   LastName = freelancer.LastName,
+                   Lat = freelancer.Lat,
+                   Long = freelancer.Long,
+                   Id = freelancer.Id,
+                   UserId = freelancer.UserId,
+                   Country = country.Name,
+                   Region = region.Name,
+                   City = city.Name,
+               })
                .ToListAsync()).Result;
+        var destinationLocation = new LocationEx(new CoordinateEx(Convert.ToDouble(searchViewModel.Lat), Convert.ToDouble(searchViewModel.Long)));
+
+        var originLocations = result.Select(c => new LocationEx(new CoordinateEx(Convert.ToDouble(c.Lat), Convert.ToDouble(c.Long))));
+
+        var request = new DistanceMatrixRequest
+        {
+            Key = "AIzaSyAW1SgI7RCtbjx3t5yUIfjiDTW6fvn50OA",
+            Origins = originLocations,
+            Destinations = new[]
+               {
+                destinationLocation
+            }
+        };
+
+        var distanceMatrix = GoogleMaps.DistanceMatrix.Query(request).Rows.ToArray();
+
+        for( int i = 0; i < result.Count; i++)
+        {
+            result[i].DistanceValue = distanceMatrix[i].Elements.FirstOrDefault().Distance.Value;
+            result[i].DistanceText = distanceMatrix[i].Elements.FirstOrDefault().Distance.Text;
+            result[i].DurationValue = distanceMatrix[i].Elements.FirstOrDefault().Duration.Value;
+            result[i].DurationText = distanceMatrix[i].Elements.FirstOrDefault().Duration.Text;
+        }
+
+        result = result.OrderBy( c=> c.DistanceValue).ToList();
         return result;
 
         //IQuery<FreelancerUser> query = new YesSql.q<FreelancerUser>();

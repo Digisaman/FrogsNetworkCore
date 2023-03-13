@@ -67,6 +67,8 @@ namespace FrogsNetwork.Freelancing.ViewModels
 
         public FreelancerResultViewModel SelectedFreelancer { get; set; }
         public string Address { get; set; }
+
+        //public string PostalCode { get; set; }
     }
 
 }

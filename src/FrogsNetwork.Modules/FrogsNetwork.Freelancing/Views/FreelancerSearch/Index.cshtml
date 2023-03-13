@@ -33,6 +33,15 @@
                             <br />
                             @Html.DropDownListFor(m => m.CityId, Model.Cities, "Please select", new {@class = "form-control"})
                         </div>
+
+                        <div>
+                            <label asp-for="Address">@T["Address:"]</label>
+                            <input asp-for="Address" class="form-control" autofocus tabindex="1" />
+                            @*  <span asp-validation-for="Address" class="text-danger"></span>*@
+                        </div>
+
+                        <br />
+
                     </fieldset>
                 </div>
             </div>
@@ -89,6 +98,8 @@
                             <th>City</th>
                             <th>Region</th>
                             <th>Country</th>
+                            <th>Distance</th>
+                            <th>Duration</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -111,6 +122,12 @@
                                 @entry.Country
                             </td>
                             <td>
+                                @entry.DistanceText
+                            </td>
+                            <td>
+                                @entry.DurationText
+                            </td>
+                            <td>
                                 @Html.ActionLink("Details", "Index", "FreelancerDetail", new { entry.Id }, null)
                             </td>
                         </tr>
@@ -119,9 +136,9 @@
 
             </div>
         </div>
-        <br/>
+        <br />
         <br />
     </div>
 
-  
+
 </form>

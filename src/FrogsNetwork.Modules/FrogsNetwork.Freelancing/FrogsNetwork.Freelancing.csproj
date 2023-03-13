@@ -64,6 +64,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="GoogleApi" Version="4.5.4" />
     <PackageReference Include="Lombiq.HelpfulLibraries.AspNetCore" Version="5.1.0" />
     <PackageReference Include="Lombiq.HelpfulLibraries.Common" Version="5.1.0" />
     <PackageReference Include="Lombiq.HelpfulLibraries.LinqToDb" Version="5.1.0" />

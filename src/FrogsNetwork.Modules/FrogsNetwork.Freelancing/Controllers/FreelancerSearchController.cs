@@ -123,6 +123,69 @@ public class FreelancerSearchController : Controller
         }
         #endregion
 
+
+        #region GeoLocation
+        try
+        {
+            string address = "";
+            if (!string.IsNullOrEmpty(this.ViewModel.Address))
+            {
+                address = this.ViewModel.Address.Replace(" ", "+");
+
+                address += "+";
+
+                if (this.ViewModel.CityId != 0)
+                {
+                    SelectListItem selectListItem = this.ViewModel.Cities.FirstOrDefault(c => c.Value == this.ViewModel.CityId.ToString());
+                    if (selectListItem != null)
+                        address += string.Format("{0}+", selectListItem.Text);
+                }
+
+                if (this.ViewModel.RegionId != 0)
+                {
+                    SelectListItem selectListItem = this.ViewModel.Regions.FirstOrDefault(c => c.Value == this.ViewModel.RegionId.ToString());
+                    if (selectListItem != null)
+                        address += string.Format("{0}+", selectListItem.Text);
+                }
+
+                if (this.ViewModel.CountryId != 0)
+                {
+                    SelectListItem selectListItem = this.ViewModel.Countries.FirstOrDefault(c => c.Value == this.ViewModel.CountryId.ToString());
+                    if (selectListItem != null)
+                        address += string.Format("{0}+", selectListItem.Text);
+                }
+
+
+
+                string url = string.Format("{0}?address={1}&key={2}", "https://maps.googleapis.com/maps/api/geocode/json", address, "AIzaSyAW1SgI7RCtbjx3t5yUIfjiDTW6fvn50OA");
+
+                WebRequest request = WebRequest.Create(url);
+
+                WebResponse response = request.GetResponse();
+
+                Stream data = response.GetResponseStream();
+
+                StreamReader reader = new StreamReader(data);
+
+                // json-formatted string from maps api
+                string responseFromServer = reader.ReadToEnd();
+                //var jsonResponse = JsonConvert.DeserializeObject(responseFromServer);
+                dynamic jsonResponse = JsonConvert.DeserializeObject(responseFromServer);
+                if (jsonResponse.results.Count != 0)
+                {
+                    this.ViewModel.Lat = jsonResponse.results[0].geometry.location.lat.ToString();
+                    this.ViewModel.Long = jsonResponse.results[0].geometry.location.lng.ToString();
+                }
+
+                response.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("GeoLocation Error", ex);
+        }
+        #endregion
+
         this.ViewModel.Freelancers = SearchFreelancers(this.ViewModel);
 
         this.ViewData.Add("ViewModel", this.ViewModel);

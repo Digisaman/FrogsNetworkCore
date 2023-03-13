@@ -2,6 +2,7 @@ using Fluid;
 using FrogsNetwork.Freelancing.Controllers;
 using FrogsNetwork.Freelancing.Handlers;
 using FrogsNetwork.Freelancing.Services;
+using GoogleApi.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -43,6 +44,7 @@ namespace FrogsNetwork.Freelancing
             services.AddMvc()
             .AddSessionStateTempDataProvider();
             services.AddSession();
+            services.AddGoogleApiClients();
 
         }
 
