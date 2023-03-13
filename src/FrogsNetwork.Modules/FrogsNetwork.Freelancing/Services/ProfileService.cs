@@ -739,19 +739,23 @@ public class ProfileService : IProfileService
         //  }).ToListAsync()).Result;
 
 
-        var result = _session.LinqQueryAsync(
-           c =>
-               (from freelancer in c.GetTable<FreelancerUser>()
-                  .Where(c => (searchViewModel.CountryId == 0 || (searchViewModel.CountryId != 0 && c.CountryId == searchViewModel.CountryId)))
-                  .Where(c => (searchViewModel.RegionId == 0 || (searchViewModel.RegionId != 0 && c.RegionId == searchViewModel.RegionId)))
-                  .Where(c => (searchViewModel.CityId == 0 || (searchViewModel.CityId != 0 && c.CountryId == searchViewModel.CityId)))
+           //.Where(c => (searchViewModel.CountryId == 0 || (searchViewModel.CountryId != 0 && c.CountryId == searchViewModel.CountryId)))
+           //       .Where(c => (searchViewModel.RegionId == 0 || (searchViewModel.RegionId != 0 && c.RegionId == searchViewModel.RegionId)))
+           //       .Where(c => (searchViewModel.CityId == 0 || (searchViewModel.CityId != 0 && c.CountryId == searchViewModel.CityId)))
 
+        var result = _session.LinqQueryAsync(
+           c =>( 
+               from freelancer in c.GetTable<FreelancerUser>().Where ( c =>
+                   ( searchViewModel.CountryId == 0 || (searchViewModel.CountryId != 0 && c.CountryId == searchViewModel.CountryId) ) &&
+                   ( searchViewModel.RegionId == 0 || (searchViewModel.RegionId != 0 && c.RegionId == searchViewModel.RegionId) ) &&
+                   ( searchViewModel.CityId == 0 || (searchViewModel.RegionId != 0 && c.RegionId == searchViewModel.CityId) ) ) 
                 join country in c.GetTable<Country>()
                 on freelancer.CountryId equals country.Id
                 join region in c.GetTable<Region>()
                 on freelancer.RegionId equals region.Id
                 join city in c.GetTable<City>()
                 on freelancer.CityId equals city.Id
+               
                 select new FreelancerResultViewModel
                 {
                     FirstName = freelancer.FirstName,
