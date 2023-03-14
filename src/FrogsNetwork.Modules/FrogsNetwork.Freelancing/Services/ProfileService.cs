@@ -538,12 +538,12 @@ public class ProfileService : IProfileService
 
     public async Task<IEnumerable<SelectListItem>> GetTaxonomies(IReadOnlyList<ContentItem> contentItems, string[] contectItemIds)
     {
-        return contentItems.Where( c=> contectItemIds.Contains(c.ContentItemId))
+        return contentItems.Where(c => contectItemIds.Contains(c.ContentItemId))
             .Select(c => new SelectListItem
-        {
-            Value = c.ContentItemId,
-            Text = c.DisplayText
-        });
+            {
+                Value = c.ContentItemId,
+                Text = c.DisplayText
+            });
     }
 
     public async Task<string[]> GetFreelancerExpertiseIds(int freelancerId, int levelId = 0)
@@ -551,7 +551,7 @@ public class ProfileService : IProfileService
         return _session.LinqQueryAsync(c =>
          c.GetTable<FreelancerExpertise>()
          .Where(c => c.FreelancerId == freelancerId &&
-             (levelId == 0 || levelId != 0 && c.LevelId == levelId) )
+             (levelId == 0 || levelId != 0 && c.LevelId == levelId))
         .Select(c => c.ExpertiseId).ToListAsync()).Result.ToArray();
     }
 
@@ -722,7 +722,7 @@ public class ProfileService : IProfileService
 
 
 
-    public async Task<IEnumerable<FreelancerResultViewModel>> SearchFreelancers(FreelancerSearchViewModel searchViewModel)
+    public async Task<IEnumerable<FreelancerResultViewModel>> SearchFreelancers(IContentManager contentManager, IContentHandleManager contentHandleManager, FreelancerSearchViewModel searchViewModel)
     {
         if (!searchViewModel.CountryId.HasValue)
             searchViewModel.CountryId = 0;
@@ -740,22 +740,70 @@ public class ProfileService : IProfileService
         if (searchViewModel.ServicesSecondIds == null)
             searchViewModel.ServicesSecondIds = new string[0];
 
+        #region Expertise
 
-        //    var freelancers = _session.LinqQueryAsync(c =>
-        //c.GetTable<FreelancerUser>()
-        //.Where(c => ( searchViewModel.CountryId == 0 || ( searchViewModel.CountryId != 0 && c.CountryId == searchViewModel.CountryId) ) )
-        // .Where(c => (searchViewModel.RegionId == 0 || (searchViewModel.RegionId != 0 && c.RegionId == searchViewModel.RegionId)))
-        //  .Where(c => (searchViewModel.CityId == 0 || (searchViewModel.CityId != 0 && c.CountryId == searchViewModel.CityId)))
-        //  .Select(c => new FreelancerUser
-        //  {
-        //      Id = c.Id
+        List<string> expertiseIds = new List<string>();
+        if (searchViewModel.ExpertiseFirstIds.Any() && !searchViewModel.ExpertiseSecondIds.Any())
+        {
+            expertiseIds.AddRange(searchViewModel.ExpertiseFirstIds.Select(c => c.ToString()));
+        }
+        else
+        {
+            if (searchViewModel.ExpertiseFirstIds.Any())
+            {
+                foreach (var id in searchViewModel.ExpertiseFirstIds)
+                {
+                    string[] selectedLevelIds = GetExpertise(contentManager, contentHandleManager, id).Result.Select(c => c.Value).ToArray();
+                    if (selectedLevelIds != null && searchViewModel.ExpertiseSecondIds.Any())
+                    {
+                        if (!selectedLevelIds.Intersect(searchViewModel.ExpertiseSecondIds).Any())
+                            expertiseIds.Add(id.ToString());
+                    }
+                }
+            }
 
-        //  }).ToListAsync()).Result;
+            if (searchViewModel.ExpertiseSecondIds.Any())
+            {
+                expertiseIds.AddRange(searchViewModel.ExpertiseSecondIds.Select(c => c.ToString()));
+            }
+        }
+        if (expertiseIds.Any())
+        {
+            expertiseIds = expertiseIds.Distinct().ToList();
+        }
+        #endregion
 
+        #region Services
+        List<string> servicesIds = new List<string>();
+        if (searchViewModel.ServicesFirstIds.Any() && !searchViewModel.ServicesSecondIds.Any())
+        {
+            servicesIds.AddRange(searchViewModel.ExpertiseFirstIds.Select(c => c.ToString()));
+        }
+        else
+        {
+            if (searchViewModel.ServicesFirstIds.Any())
+            {
+                foreach (var id in searchViewModel.ServicesFirstIds)
+                {
+                    string[] selectedLevelIds = GetServices(contentManager, contentHandleManager, id).Result.Select(c => c.Value).ToArray();
+                    if (selectedLevelIds != null && searchViewModel.ServicesSecondIds != null)
+                    {
+                        if (!selectedLevelIds.Intersect(searchViewModel.ServicesSecondIds).Any())
+                            servicesIds.Add(id.ToString());
+                    }
+                }
+            }
 
-        //.Where(c => (searchViewModel.CountryId == 0 || (searchViewModel.CountryId != 0 && c.CountryId == searchViewModel.CountryId)))
-        //       .Where(c => (searchViewModel.RegionId == 0 || (searchViewModel.RegionId != 0 && c.RegionId == searchViewModel.RegionId)))
-        //       .Where(c => (searchViewModel.CityId == 0 || (searchViewModel.CityId != 0 && c.CountryId == searchViewModel.CityId)))
+            if (searchViewModel.ServicesSecondIds.Any())
+            {
+                servicesIds.AddRange(searchViewModel.ServicesSecondIds.Select(c => c.ToString()));
+            }
+        }
+        if (servicesIds.Any())
+        {
+            servicesIds = servicesIds.Distinct().ToList();
+        }
+        #endregion
 
         var result = _session.LinqQueryAsync(
            c => (
@@ -780,13 +828,48 @@ public class ProfileService : IProfileService
                    UserId = freelancer.UserId,
                    Country = country.Name,
                    Region = region.Name,
-                   City = city.Name,
+                   City = city.Name
                })
                .ToListAsync()).Result;
+
+
 
         if (!result.Any())
             return result;
 
+        List<FreelancerResultViewModel> filteredResults = new List<FreelancerResultViewModel>();
+        if (expertiseIds.Any() || servicesIds.Any())
+        {
+            foreach (var item in result)
+            {  
+                var currentExpertiese = _session.LinqQueryAsync(
+                          c => (from frlexp in c.GetTable<FreelancerExpertise>()
+                                where frlexp.FreelancerId == item.Id &&
+                                expertiseIds.Contains(frlexp.ExpertiseId)
+                                select frlexp)
+                              .ToListAsync()).Result;
+
+                var currentServices = _session.LinqQueryAsync(
+                       c => (from frlsrv in c.GetTable<FreelancerService>()
+                             where frlsrv.FreelancerId == item.Id &&
+                             expertiseIds.Contains(frlsrv.ServiceId)
+                             select frlsrv)
+                           .ToListAsync()).Result;
+
+
+                if (currentExpertiese.Any() || currentServices.Any())
+                    filteredResults.Add(item);
+            }
+        }
+        else
+        {
+            filteredResults.AddRange(result);
+        }
+
+        if (!filteredResults.Any())
+            return filteredResults;
+
+        
         var destinationLocation = new LocationEx(new CoordinateEx(Convert.ToDouble(searchViewModel.Lat), Convert.ToDouble(searchViewModel.Long)));
 
         var originLocations = result.Select(c => new LocationEx(new CoordinateEx(Convert.ToDouble(c.Lat), Convert.ToDouble(c.Long))));
@@ -803,169 +886,30 @@ public class ProfileService : IProfileService
 
         var distanceMatrix = GoogleMaps.DistanceMatrix.Query(request).Rows.ToArray();
 
-        for (int i = 0; i < result.Count; i++)
+        for (int i = 0; i < filteredResults.Count; i++)
         {
             var distanceElement = distanceMatrix[i].Elements.FirstOrDefault();
             if (distanceElement != null && distanceElement.Status == GoogleApi.Entities.Common.Enums.Status.Ok)
             {
-                result[i].DistanceValue = distanceMatrix[i].Elements.FirstOrDefault().Distance.Value;
-                result[i].DistanceText = distanceMatrix[i].Elements.FirstOrDefault().Distance.Text;
-                result[i].DurationValue = distanceMatrix[i].Elements.FirstOrDefault().Duration.Value;
-                result[i].DurationText = distanceMatrix[i].Elements.FirstOrDefault().Duration.Text;
+                filteredResults[i].DistanceValue = distanceMatrix[i].Elements.FirstOrDefault().Distance.Value;
+                filteredResults[i].DistanceText = distanceMatrix[i].Elements.FirstOrDefault().Distance.Text;
+                filteredResults[i].DurationValue = distanceMatrix[i].Elements.FirstOrDefault().Duration.Value;
+                filteredResults[i].DurationText = distanceMatrix[i].Elements.FirstOrDefault().Duration.Text;
             }
         }
 
-        result = result.OrderBy(c => c.DistanceValue).ToList();
+        result = filteredResults.OrderBy(c => c.DistanceValue).ToList();
         return result;
 
-        //IQuery<FreelancerUser> query = new YesSql.q<FreelancerUser>();
-
-        //#region location
-        //if (searchViewModel.CountryId.HasValue)
-        //{
-        //    query = query.Any(c => c. == searchViewModel.CountryId);
-        //}
-
-        //if (searchViewModel.RegionId != 0)
-        //{
-        //    users = users.Where(c => c.RegionId == searchViewModel.RegionId);
-        //}
-
-        //if (searchViewModel.CityId != 0)
-        //{
-        //    users = users.Where(c => c.CityId == searchViewModel.CityId);
-        //}
-        //#endregion
-
-
-        //#region Expertise
-        //List<string> expertiseIds = new List<string>();
-        //if (searchViewModel.ExpertiseFirstIds.Any() && !searchViewModel.ExpertiseSecondIds.Any())
-        //{
-        //    expertiseIds.AddRange(searchViewModel.ExpertiseFirstIds.Select(c => c.ToString()));
-        //}
-        //else
-        //{
-        //    if (searchViewModel.ExpertiseFirstIds.Any())
-        //    {
-        //        foreach (var id in searchViewModel.ExpertiseFirstIds)
-        //        {
-        //            string[] selectedLevelIds = GetExpertise(id).Select(c => c.Id).ToArray();
-        //            if (selectedLevelIds != null && searchViewModel.ExpertiseSecondIds.Any())
-        //            {
-        //                if (!selectedLevelIds.Intersect(searchViewModel.ExpertiseSecondIds).Any())
-        //                    expertiseIds.Add(id.ToString());
-        //            }
-        //        }
-        //    }
-
-        //    if (searchViewModel.ExpertiseSecondIds.Any())
-        //    {
-        //        expertiseIds.AddRange(searchViewModel.ExpertiseSecondIds.Select(c => c.ToString()));
-        //    }
-        //}
-        //if (expertiseIds.Any())
-        //{
-        //    expertiseIds = expertiseIds.Distinct().ToList();
-        //    int[] freelancerIds = expertise.Where(c => expertiseIds.Contains(c.ExpertiseId)).Select(c => c.FreelancerId).ToArray();
-        //    if (freelancerIds != null && freelancerIds.Any())
-        //    {
-        //        users = users.Where(c => freelancerIds.Contains(c.Id));
-        //    }
-        //    else
-        //    {
-        //        users = Enumerable.Empty<FreelancerUser>().AsQueryable();
-        //    }
-        //}
-        //#endregion
-
-
-        //#region Services
-        //List<string> servicesIds = new List<string>();
-        //if (searchViewModel.ServicesFirstIds.Any() && !searchViewModel.ServicesSecondIds.Any())
-        //{
-        //    servicesIds.AddRange(searchViewModel.ExpertiseFirstIds.Select(c => c.ToString()));
-        //}
-        //else
-        //{
-        //    if (searchViewModel.ServicesFirstIds.Any())
-        //    {
-        //        foreach (var id in searchViewModel.ServicesFirstIds)
-        //        {
-        //            string[] selectedLevelIds = GetServices(id).Select(c => c.Id).ToArray();
-        //            if (selectedLevelIds != null && searchViewModel.ServicesSecondIds != null)
-        //            {
-        //                if (!selectedLevelIds.Intersect(searchViewModel.ServicesSecondIds).Any())
-        //                    servicesIds.Add(id.ToString());
-        //            }
-        //        }
-        //    }
-
-        //    if (searchViewModel.ServicesSecondIds.Any())
-        //    {
-        //        servicesIds.AddRange(searchViewModel.ServicesSecondIds.Select(c => c.ToString()));
-        //    }
-        //}
-        //if (servicesIds.Any())
-        //{
-        //    servicesIds = servicesIds.Distinct().ToList();
-        //    int[] freelancerIds = services.Where(c => servicesIds.Contains(c.ServiceId)).Select(c => c.FreelancerId).ToArray();
-        //    if (freelancerIds != null && freelancerIds.Any())
-        //    {
-        //        users = users.Where(c => freelancerIds.Contains(c.Id));
-        //    }
-        //    else
-        //    {
-        //        users = Enumerable.Empty<FreelancerUser>().AsQueryable();
-        //    }
-        //}
-        //#endregion
-
-        //List<FreelancerResultViewModel> results = users.Select(c => new FreelancerResultViewModel
-        //{
-        //    Id = c.Id,
-        //    Address = c.Address,
-        //    CityId = c.CityId,
-        //    RegionId = c.RegionId,
-        //    CountryId = c.CountryId,
-        //    FirstName = c.FirstName,
-        //    LastName = c.LastName,
-        //    Lat = c.Lat,
-        //    Long = c.Long,
-        //    UserId = c.UserId
-
-        //}).ToList();
 
 
 
 
-        //foreach (var item in results)
-        //{
-        //    if (item.CityId != 0)
-        //    {
-        //        City city = _cityRepository.Table.FirstOrDefault(c => c.Id == item.CityId);
-        //        if (city != null)
-        //            item.City = city.Name;
-        //    }
+       
 
-        //    if (item.RegionId != 0)
-        //    {
-        //        Region region = _regionRepository.Table.FirstOrDefault(c => c.Id == item.RegionId);
-        //        if (region != null)
-        //            item.Region = region.Name;
 
-        //    }
 
-        //    if (item.CountryId != 0)
-        //    {
-        //        Country country = _countryRepository.Table.FirstOrDefault(c => c.Id == item.CountryId);
-        //        if (country != null)
-        //            item.Country = country.Name;
 
-        //    }
-
-        //}
-        //return results;
     }
 
 
@@ -1013,18 +957,54 @@ public class ProfileService : IProfileService
 
             var services = await contentManager.GetTaxonomyTermsAsync(contentHandleManager, nameof(Taxonomies.Services));
 
-           
-            string[] expertiseIds = GetFreelancerExpertiseIds(id).Result.ToArray();
 
-            string[] serviceIds = GetFreelancerServiceIds(id).Result.ToArray();
+          
+
+            List<string> expertiseValues = new List<string>();
+          
+            var firstExpertise = GetTaxonomies(expertise).Result;
+
+            var filteredFirstExpertiseIds = GetFreelancerExpertiseIds(id, 1).Result;
+
+            firstExpertise = firstExpertise.Where(c => filteredFirstExpertiseIds.Contains(c.Value));
+            expertiseValues.AddRange(firstExpertise.Select(c => c.Text));
+
+            foreach( var item in firstExpertise)
+            {
+                var secondExpertise = GetTaxonomies(expertise, item.Value).Result;
+
+                var filteredSecondExpertiseIds = GetFreelancerExpertiseIds(id, 2).Result;
+                secondExpertise = secondExpertise.Where(c => filteredSecondExpertiseIds.Contains(c.Value));
+                expertiseValues.AddRange(secondExpertise.Select(c => c.Text));
+
+            }
+
+            List<string> servicesValues = new List<string>();
+            var firstService = GetTaxonomies(services).Result;
+
+            var filteredFirstServiceIds = GetFreelancerServiceIds(id, 1).Result;
+
+            firstService = firstService.Where(c => filteredFirstServiceIds.Contains(c.Value));
+            servicesValues.AddRange(firstService.Select(c => c.Text));
+
+            foreach (var item in firstService)
+            {
+                var secondServices = GetTaxonomies(services, item.Value).Result;
+
+                var filteredSecondServicesIds = GetFreelancerServiceIds(id, 2).Result;
+                secondServices = secondServices.Where(c => filteredSecondServicesIds.Contains(c.Value));
+                servicesValues.AddRange(secondServices.Select(c => c.Text));
+
+            }
 
 
 
-            IEnumerable<SelectListItem> expertiseFiltered = GetTaxonomies(expertise, expertiseIds).Result;
-            IEnumerable<SelectListItem> servicesFiltered = GetTaxonomies(services, serviceIds).Result;
 
-            freelancerUser.Expertise = expertiseFiltered.Select(c => c.Text);
-            freelancerUser.Services = servicesFiltered.Select(c => c.Text); 
+            //IEnumerable<SelectListItem> expertiseFiltered = GetTaxonomies(expertise, expertiseIds.ToArray()).Result;
+            //IEnumerable<SelectListItem> servicesFiltered = GetTaxonomies(services, serviceIds.ToArray()).Result;
+
+            freelancerUser.Expertise = expertiseValues;
+            freelancerUser.Services = servicesValues;
 
             freelancerUser.Nationalities = GetFreelancerNationalities(id).Result;
             freelancerUser.Educations = GetFreelancerEducation(id).Result;

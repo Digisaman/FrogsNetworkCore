@@ -14,11 +14,11 @@ namespace FrogsNetwork.Freelancing.ViewModels
 
         public string Country { get; set; }
 
-        public int[] ExpertiseFirstIds { get; set; }
-        public int[] ExpertiseSecondIds { get; set; }
+        public string[] ExpertiseFirstIds { get; set; }
+        public string[] ExpertiseSecondIds { get; set; }
 
-        public int[] ServicesFirstIds { get; set; }
-        public int[] ServicesSecondIds { get; set; }
+        public string[] ServicesFirstIds { get; set; }
+        public string[] ServicesSecondIds { get; set; }
 
         public int DistanceValue { get; set; }
 
