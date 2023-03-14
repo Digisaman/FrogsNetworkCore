@@ -1,0 +1,289 @@
+@model FrogsNetwork.Freelancing.ViewModels.FreelancerDetailViewModel
+@{
+    ViewLayout = "Layout__Main";
+}
+
+
+
+
+<form asp-controller="FreelancerSearch" asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal no-multisubmit">
+    <h1>@T["Freelancer Profile"]</h1>
+    <fieldset>
+        <div class="row">
+            <div class="col">
+
+                <fieldset>
+                    <legend>@T["Basic Information"]</legend>
+
+                    <div>
+                        <label for="vat">@T["First Name:"]</label>
+                        @Html.Label("FirstName", Model.FirstName)
+                    </div>
+                    <div>
+                        <label for="vat">@T["Last Name:"]</label>
+                        @Html.Label("LastName", Model.LastName)
+                    </div>
+                    <div>
+                        <label for="email">@T["Email Address:"]</label>
+                        @Html.Label("Email", Model.Email)
+                    </div>
+                    <div>
+                        <label for="CompanyTel">@T["Telephone:"]</label>
+                        @Html.Label("CompanyTel", Model.CompanyTel)
+                    </div>
+                    <div>
+                        <label for="Website">@T["Website:"]</label>
+                        @Html.Label("Website", Model.Website)
+                    </div>
+
+                    <div>
+                        <label for="VAT">@T["VAT:"]</label>
+                        @Html.Label("VAT", Model.VAT)
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>@T["Location"]</legend>
+                    <div>
+                        <div>
+                            <label for="vat">@T["Country:"]</label>
+                            @Html.Label("Country", Model.CountryTitle)
+                        </div>
+                        <div>
+                            <label for="vat">@T["City:"]</label>
+                            @Html.Label("City", Model.CityTitle)
+                        </div>
+                        <div>
+                            <label for="vat">@T["Address:"]</label>
+                            @Html.Label("Address", Model.Address)
+                        </div>
+                        <div>
+                            <label for="vat">@T["PostalCode:"]</label>
+                            @Html.Label("PostalCode", Model.PostalCode)
+                        </div>
+                        <br />
+                        <div id="MapDiv" style="width: 500px; height: 500px">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>@T["Expertise"]</legend>
+                    <div>
+                        <label for="expertise">@T["Expertise:"]</label>
+                        <ul>
+                            @foreach (string exp in Model.Expertise)
+                            {
+                                <li>@exp</li>
+                            }
+                        </ul>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>@T["Services"]</legend>
+                    <div>
+                        <label for="services">@T["Services:"]</label>
+                        <ul>
+                            @foreach (string srv in Model.Services)
+                            {
+                                <li>@srv</li>
+                            }
+                        </ul>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>@T["Nationalities"]</legend>
+                    <div class="col panel-body">
+                        <table id="assets-data-table" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Nationality</th>
+                                </tr>
+                            </thead>
+                            @foreach (var entry in Model.Nationalities)
+                            {
+                                <tr>
+                                    <td>
+                                        @entry.NationalityTitle
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>@T["Languages"]</legend>
+                    <div class="col panel-body">
+                        <table id="assets-data-table" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Level</th>
+                                </tr>
+                            </thead>
+                            @foreach (var entry in Model.Languages)
+                            {
+                                <tr>
+                                    <td>
+                                        @entry.LanguageTitle
+                                    </td>
+                                    <td>
+                                        @entry.LevelTitle
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>@T["Certificates"]</legend>
+                    <div class="col panel-body">
+                        <table id="assets-data-table" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Certificate Title</th>
+                                    <th>Issuing organization</th>
+                                </tr>
+                            </thead>
+                            @foreach (var entry in Model.Certificates)
+                            {
+                                <tr>
+                                    <td>
+                                        @entry.Certificate
+                                    </td>
+                                    <td>
+                                        @entry.Organization
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>@T["Education"]</legend>
+                    <div class="col panel-body">
+                        <table id="assets-data-table" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>School</th>
+                                    <th>Country</th>
+                                    <th>City</th>
+                                    <th>Field</th>
+                                    <th>Degree</th>
+                                    <th>End Year</th>
+                                </tr>
+                            </thead>
+                            @foreach (var entry in Model.Educations)
+                            {
+                                <tr>
+                                    <td>
+                                        @entry.School
+                                    </td>
+                                    <td>
+                                        @entry.CountryName
+                                    </td>
+                                    <td>
+                                        @entry.City
+                                    </td>
+                                    <td>
+                                        @entry.Field
+                                    </td>
+                                    <td>
+                                        @entry.Degree
+                                    </td>
+                                    <td>
+                                        @entry.EndYear
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+
+                    </div>
+                </fieldset>
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-primary"  formaction="/FreelancerSearch/Index" type="submit">Back To Search</button>
+            </div>
+        </div>
+    </fieldset>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAW1SgI7RCtbjx3t5yUIfjiDTW6fvn50OA"></script>
+    <script>
+        $(function () {
+            var markers = [];
+
+            var marker = {};
+
+            marker["lat"] = '@Model.Lat';
+            marker["lng"] = '@Model.Long';
+
+            markers.push(marker);
+
+
+            //call Map function with all markers passed as list of arrays
+            initializeMap(markers);
+
+
+            function initializeMap(markers) {
+                //you can check your marker data in console
+                console.log(markers);
+                //Create Google map options
+                var GoogleMapOptions = {
+                    center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
+                    zoom: 6,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+
+
+                //create a variable of InfoWindow type to show data on clicking map icon
+                var infoWindow = new google.maps.InfoWindow();
+                var map = new google.maps.Map(document.getElementById("MapDiv"), GoogleMapOptions);
+
+
+                //loop through each marker data
+                for (i = 0; i < markers.length; i++) {
+                    var data = markers[i]
+                    //set lat long of current marker
+                    var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+
+                    var marker = new google.maps.Marker({
+                        position: myLatlng,
+                        map: map,
+                        title: data.title,
+                        draggable: false
+                    });
+
+                    (function (marker, data) {
+                        //add a on marker click event
+                        google.maps.event.addListener(marker, "click", function (e) {
+                            //show description
+                            infoWindow.setContent(data.description);
+                            infoWindow.open(map, marker);
+        @*@Model.Lat = evt.latLng.lat().toFixed(6);
+                            @Model.Long = evt.latLng.lng().toFixed(6);*@
+                        });
+
+        @* google.maps.event.addListener(marker, 'dragend', function (evt) {
+                            @Model.Lat = evt.latLng.lat().toFixed(6);
+                            @Model.Long = evt.latLng.lng().toFixed(6);
+
+                            map.panTo(evt.latLng);
+                        });*@
+                    })(marker, data);
+                }
+            }
+        });
+    </script>
+
+   
+</form>

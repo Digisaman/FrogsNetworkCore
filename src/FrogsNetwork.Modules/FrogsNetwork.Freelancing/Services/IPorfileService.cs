@@ -22,6 +22,8 @@ public interface IProfileService
     Task<IEnumerable<SelectListItem>> GetCountries();
     Task<IEnumerable<SelectListItem>> GetExpertise(IContentManager contentManager,
         IContentHandleManager contentHamdleManager, string parentId);
+    
+    Task<FreelancerDetailViewModel> GetFreelancerDetail(IContentManager contentManager, IContentHandleManager contentHandleManager, int id);
     Task<string[]> GetFreelancerExpertiseIds(int freelancerId, int levelId);
     Task<List<FreelancerLanguageViewModel>> GetFreelancerLanguages(int freelancerId);
     Task<List<FreelancerNationalityViewModel>> GetFreelancerNationalities(int freelancerId);
@@ -33,6 +35,7 @@ public interface IProfileService
     Task<IEnumerable<SelectListItem>> GetServices(IContentManager contentManager,
         IContentHandleManager contentHamdleManager, string parentId);
     Task<IEnumerable<SelectListItem>> GetTaxonomies(IReadOnlyList<ContentItem> contentItems, string parentItemId);
+    Task<IEnumerable<SelectListItem>> GetTaxonomies(IReadOnlyList<ContentItem> contentItems, string[] contectItemIds);
 
     //Task<IEnumerable<TaxonomyItemViewModel>> GetTaxonomies(Taxonomies taxonomy, string parentItemId);
     Roles GetUserRole(IUser user);

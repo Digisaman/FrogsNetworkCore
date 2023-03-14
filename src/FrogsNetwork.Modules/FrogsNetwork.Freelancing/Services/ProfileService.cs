@@ -20,6 +20,7 @@ using OrchardCore.Users.Models;
 using OrchardCore.Users.Services;
 using YesSql;
 using ISession = YesSql.ISession;
+using OrchardCore.Users.Indexes;
 
 namespace FrogsNetwork.Freelancing.Services;
 
@@ -386,10 +387,7 @@ public class ProfileService : IProfileService
 
     public async Task<List<FreelancerNationalityViewModel>> GetFreelancerNationalities(int freelancerId)
     {
-        //var result = _session.LinqQueryAsync(c =>
-        // c.GetTable<FreelancerNationality>()
-        // .Where( c => c.FreelancerId == freelancerId)
-        // .ToListAsync()).Result;
+
 
         var result = _session.LinqQueryAsync(
             accessor =>
@@ -538,19 +536,31 @@ public class ProfileService : IProfileService
 
     }
 
-    public async Task<string[]> GetFreelancerExpertiseIds(int freelancerId, int levelId)
+    public async Task<IEnumerable<SelectListItem>> GetTaxonomies(IReadOnlyList<ContentItem> contentItems, string[] contectItemIds)
+    {
+        return contentItems.Where( c=> contectItemIds.Contains(c.ContentItemId))
+            .Select(c => new SelectListItem
+        {
+            Value = c.ContentItemId,
+            Text = c.DisplayText
+        });
+    }
+
+    public async Task<string[]> GetFreelancerExpertiseIds(int freelancerId, int levelId = 0)
     {
         return _session.LinqQueryAsync(c =>
          c.GetTable<FreelancerExpertise>()
-         .Where(c => c.FreelancerId == freelancerId && c.LevelId == levelId)
+         .Where(c => c.FreelancerId == freelancerId &&
+             (levelId == 0 || levelId != 0 && c.LevelId == levelId) )
         .Select(c => c.ExpertiseId).ToListAsync()).Result.ToArray();
     }
 
-    public async Task<string[]> GetFreelancerServiceIds(int freelancerId, int levelId)
+    public async Task<string[]> GetFreelancerServiceIds(int freelancerId, int levelId = 0)
     {
         return _session.LinqQueryAsync(c =>
          c.GetTable<FreelancerService>()
-         .Where(c => c.FreelancerId == freelancerId && c.LevelId == levelId)
+         .Where(c => c.FreelancerId == freelancerId &&
+             (levelId == 0 || levelId != 0 && c.LevelId == levelId))
         .Select(c => c.ServiceId).ToListAsync()).Result.ToArray();
     }
 
@@ -793,15 +803,19 @@ public class ProfileService : IProfileService
 
         var distanceMatrix = GoogleMaps.DistanceMatrix.Query(request).Rows.ToArray();
 
-        for( int i = 0; i < result.Count; i++)
+        for (int i = 0; i < result.Count; i++)
         {
-            result[i].DistanceValue = distanceMatrix[i].Elements.FirstOrDefault().Distance.Value;
-            result[i].DistanceText = distanceMatrix[i].Elements.FirstOrDefault().Distance.Text;
-            result[i].DurationValue = distanceMatrix[i].Elements.FirstOrDefault().Duration.Value;
-            result[i].DurationText = distanceMatrix[i].Elements.FirstOrDefault().Duration.Text;
+            var distanceElement = distanceMatrix[i].Elements.FirstOrDefault();
+            if (distanceElement != null && distanceElement.Status == GoogleApi.Entities.Common.Enums.Status.Ok)
+            {
+                result[i].DistanceValue = distanceMatrix[i].Elements.FirstOrDefault().Distance.Value;
+                result[i].DistanceText = distanceMatrix[i].Elements.FirstOrDefault().Distance.Text;
+                result[i].DurationValue = distanceMatrix[i].Elements.FirstOrDefault().Duration.Value;
+                result[i].DurationText = distanceMatrix[i].Elements.FirstOrDefault().Duration.Text;
+            }
         }
 
-        result = result.OrderBy( c=> c.DistanceValue).ToList();
+        result = result.OrderBy(c => c.DistanceValue).ToList();
         return result;
 
         //IQuery<FreelancerUser> query = new YesSql.q<FreelancerUser>();
@@ -956,7 +970,74 @@ public class ProfileService : IProfileService
 
 
 
+    public async Task<FreelancerDetailViewModel> GetFreelancerDetail(IContentManager contentManager, IContentHandleManager contentHandleManager, int id)
+    {
 
+        var freelancerUser = _session.LinqQueryAsync(c =>
+           (from freelancer in c.GetTable<FreelancerUser>().Where(c => c.Id == id)
+            join user in c.GetTable<UserIndex>()
+            on freelancer.UserId equals user.UserId
+            join country in c.GetTable<Country>()
+            on freelancer.CountryId equals country.Id
+            join region in c.GetTable<Region>()
+            on freelancer.RegionId equals region.Id
+            join city in c.GetTable<City>()
+            on freelancer.CityId equals city.Id
+
+            select new FreelancerDetailViewModel
+            {
+                Address = freelancer.Address,
+                CityTitle = city.Name,
+                CountryTitle = country.Name,
+                Id = freelancer.Id,
+                Lat = freelancer.Lat,
+                Long = freelancer.Long,
+                PostalCode = freelancer.PostalCode,
+                RegionTitle = region.Name,
+                Tel = freelancer.Tel,
+                CompanyTel = freelancer.Tel,
+                UserId = freelancer.UserId,
+                VAT = freelancer.VAT,
+                Mobile = freelancer.Mobile,
+                BirthDate = freelancer.BirthDate,
+                FirstName = freelancer.FirstName,
+                LastName = freelancer.LastName,
+                Website = freelancer.Website,
+                Email = user.NormalizedEmail
+            }).FirstOrDefaultAsync()).Result;
+
+
+        if (freelancerUser != null)
+        {
+            var expertise = await contentManager.GetTaxonomyTermsAsync(contentHandleManager, nameof(Taxonomies.Expertise));
+
+            var services = await contentManager.GetTaxonomyTermsAsync(contentHandleManager, nameof(Taxonomies.Services));
+
+           
+            string[] expertiseIds = GetFreelancerExpertiseIds(id).Result.ToArray();
+
+            string[] serviceIds = GetFreelancerServiceIds(id).Result.ToArray();
+
+
+
+            IEnumerable<SelectListItem> expertiseFiltered = GetTaxonomies(expertise, expertiseIds).Result;
+            IEnumerable<SelectListItem> servicesFiltered = GetTaxonomies(services, serviceIds).Result;
+
+            freelancerUser.Expertise = expertiseFiltered.Select(c => c.Text);
+            freelancerUser.Services = servicesFiltered.Select(c => c.Text); 
+
+            freelancerUser.Nationalities = GetFreelancerNationalities(id).Result;
+            freelancerUser.Educations = GetFreelancerEducation(id).Result;
+            freelancerUser.Certificates = GetFreelancerCertificate(id).Result;
+            freelancerUser.Languages = GetFreelancerLanguages(id).Result;
+
+
+
+            return freelancerUser;
+
+        }
+        return null;
+    }
 
 
 
