@@ -72,8 +72,16 @@ public class FreelancerSearchController : Controller
 
         var services = await _contentManager.GetTaxonomyTermsAsync(_contentHandleManager, nameof(Taxonomies.Services));
 
-        this.ViewModel = new FreelancerSearchViewModel();
-        this.ViewModel.UpdateModel(viewModel);
+        //this.ViewModel = new FreelancerSearchViewModel();
+        //this.ViewModel.UpdateModel(viewModel);
+
+        this.ViewModel = viewModel;
+
+        //this.ViewModel.ExpertiseFirstIds = viewModel.ExpertiseFirstIds != null ? viewModel.ExpertiseFirstIds : _profileService.GetFreelancerExpertiseIds(freelancerUser.Id, 1).Result;
+        //this.ViewModel.ExpertiseSecondIds = viewModel.ExpertiseSecondIds != null ? viewModel.ExpertiseSecondIds : _profileService.GetFreelancerExpertiseIds(freelancerUser.Id, 2).Result;
+        //this.ViewModel.ServicesFirstIds = viewModel.ServicesFirstIds != null ? viewModel.ServicesFirstIds : _profileService.GetFreelancerServiceIds(freelancerUser.Id, 1).Result;
+        //this.ViewModel.ServicesSecondIds = viewModel.ServicesSecondIds != null ? viewModel.ServicesSecondIds : _profileService.GetFreelancerServiceIds(freelancerUser.Id, 2).Result;
+
 
         #region Lookups
         this.ViewModel.ExpertiseFirst = _profileService.GetTaxonomies(expertise).Result;
@@ -106,6 +114,7 @@ public class FreelancerSearchController : Controller
                 SelectListItem firstLevelItem = this.ViewModel.ExpertiseFirst.FirstOrDefault(c => c.Value == firstLevelId.ToString());
                 level2List.AddRange(_profileService.GetTaxonomies(expertise, firstLevelId).Result);
             }
+            this.ViewModel.ExpertiseSecond = level2List;
         }
         #endregion
 
