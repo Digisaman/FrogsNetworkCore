@@ -16,6 +16,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MainMenu.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Remove="DBScripts\LocalDB_Seed.sql" />
     <EmbeddedResource Remove="DBScripts\LocationDB\01 - Create Tables.sql" />
     <EmbeddedResource Remove="DBScripts\LocationDB\02 - Insert Countries.sql" />

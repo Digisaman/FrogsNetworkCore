@@ -33,7 +33,7 @@ namespace FrogsNetwork.Freelancing
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<INavigationProvider, MainMenu>();
+            //services.AddScoped<INavigationProvider, MainMenu>();
             services.AddScoped<IPermissionProvider, Permissions>();
             services.AddDataMigration<Migrations>();
             services.AddScoped<IRegistrationFormEvents, UserRegistrationHandler>();

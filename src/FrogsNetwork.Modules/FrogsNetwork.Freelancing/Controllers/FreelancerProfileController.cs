@@ -1,21 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using FrogsNetwork.Freelancing.Helpers;
+using FrogsNetwork.Freelancing.Services;
 using FrogsNetwork.Freelancing.ViewModels;
-using Lombiq.HelpfulLibraries.OrchardCore.DependencyInjection;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using OrchardCore.Users.Services;
-using OrchardCore.Users;
 using OrchardCore.Users.Models;
-using FrogsNetwork.Freelancing.Services;
-using FrogsNetwork.Freelancing.Helpers;
+using OrchardCore.Users.Services;
 
 namespace FrogsNetwork.Freelancing.Controllers;
 
@@ -25,40 +18,41 @@ public class FreelancerProfileController : Controller
 
     private readonly IUserService _userService;
     private readonly ProfileService _profileService;
-    //private readonly IOrchardServices _orchardServices;
-    //private readonly ITaxonomyService _taxonomyService;
     private readonly IAuthenticationService _authenticationService;
+    private readonly IAuthorizationService _authorizationService;
 
     public FreelancerProfileController(
         IUserService userService,
-        ProfileService profileService
-        //IOrchardServices orchardServices,
-        //IAuthenticationService authenticationService,
-        //ITaxonomyService taxonomyService
-        )
+        ProfileService profileService,
+        IAuthenticationService authenticationService,
+        IAuthorizationService authorizationService)
     {
-      
         _userService = userService;
         _profileService = profileService;
-        //_authenticationService = authenticationService;
-        //_orchardServices = orchardServices;
-        //_taxonomyService = taxonomyService;
+        _authenticationService = authenticationService;
+        _authorizationService = authorizationService;
+        ViewModel = new FreelancerProfileViewModel();
     }
 
     public FreelancerProfileViewModel ViewModel { get; set; }
 
 
-   
+
     public async Task<IActionResult> Index()
     {
         try
         {
-            
-            var user = _userService.GetAuthenticatedUserAsync(User).Result as User; 
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageFreelancerProfile))
+            {
+                return Unauthorized();
+            }
+
+
+            var user = _userService.GetAuthenticatedUserAsync(User).Result as User;
 
             this.ViewModel = _profileService.GetFreelancerProfile(user.UserId).Result;
-          
-            
+
+
 
 
             this.ViewModel.Nationalities = _profileService.GetNationalities().Result;
@@ -156,15 +150,21 @@ public class FreelancerProfileController : Controller
 
 
     [HttpPost]
-    public ActionResult Index(FreelancerProfileViewModel viewModel)
+    public async Task<ActionResult> Index(FreelancerProfileViewModel viewModel)
     {
         try
         {
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageFreelancerProfile))
+            {
+                return Unauthorized();
+            }
+
+
             var user = _userService.GetAuthenticatedUserAsync(User).Result as User;
             this.ViewModel = _profileService.GetFreelancerProfile(user.UserId).Result;
 
             this.ViewModel.UpdateModel(viewModel);
-           
+
 
             this.ViewModel.Countries = _profileService.GetCountries().Result;
 

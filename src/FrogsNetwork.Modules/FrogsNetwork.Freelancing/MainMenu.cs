@@ -47,20 +47,21 @@ public class MainMenu : INavigationProvider
             return Task.CompletedTask;
         }
 
-        if (_httpContext.HttpContext.User.IsInRole("Freelancer"))
-        {
-            builder
-                 .Add(S["Freelancer Profile"], S["FreelancerProfile"], layers => layers
-                .Action("Index", "FreelancerProfile", new { area = "FrogsNetwork.Freelancing" })
-                .LocalNav());
-        }
-        else if (_httpContext.HttpContext.User.IsInRole("Company"))
-        {
-            builder
-                 .Add(S["Company Profile"], S["ComapanyProfile"], layers => layers
-                .Action("Index", "CompanyProfile", new { area = "FrogsNetwork.Freelancing" })
-                .LocalNav());
-        }
+
+        builder
+             .Add(S["Freelancer Profile"], S["FreelancerProfile"], layers => layers
+            .Action("Index", "FreelancerProfile", new { area = "FrogsNetwork.Freelancing" })
+            .Permission(Permissions.ManageFreelancerProfile)
+            //.AddClass("a")
+            .LocalNav());
+
+        builder
+             .Add(S["Company Profile"], S["ComapanyProfile"], layers => layers
+            .Action("Index", "CompanyProfile", new { area = "FrogsNetwork.Freelancing" })
+             .Permission(Permissions.ManageCompanyProfile)
+             //.AddClass("a")
+            .LocalNav());
+
         return Task.CompletedTask;
     }
 }

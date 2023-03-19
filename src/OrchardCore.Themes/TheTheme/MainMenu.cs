@@ -14,7 +14,7 @@ using OrchardCore.Security.Services;
 using OrchardCore.Users;
 using OrchardCore.Users.Models;
 
-namespace FrogsNetwork.Freelancing;
+namespace OrchardCore.Themes.TheTheme;
 
 public class MainMenu : INavigationProvider
 {
@@ -28,21 +28,6 @@ public class MainMenu : INavigationProvider
         _httpContext = httpContext;
     }
 
-    //public async Task BuildNavigation(string name, NavigationBuilder builder)
-    //{
-    //    //Only interact with the "main" navigation menu here.
-    //    if (!String.Equals(name, "main", StringComparison.OrdinalIgnoreCase))
-    //    {
-    //        return;
-    //    }
-
-    //    builder
-    //        .Add(S["Notifications"], S["Notifications"], layers => layers
-    //            .Action("Index", "Template", new { area = "CRT.Client.OrchardModules.CommunicationTemplates", groupId = 1 })
-    //            .LocalNav()
-    //        );
-    //}
-
     public Task BuildNavigationAsync(string name, NavigationBuilder builder)
     {
         if (!String.Equals(name, "main-menu", StringComparison.OrdinalIgnoreCase))
@@ -50,34 +35,19 @@ public class MainMenu : INavigationProvider
             return Task.CompletedTask;
         }
 
-        if (!_httpContext.HttpContext.User.Identity.IsAuthenticated ||
-            ( _httpContext.HttpContext.User.Identity.IsAuthenticated &&
-            _httpContext.HttpContext.User.IsInRole("Administrator")) ) 
-        {
-            //builder.Remove(c => c.Url == "/FreelancerProfile/Index");
 
-            //builder.Remove(c => c.Url == "/CompanyProfile/Index");
-        }
+        builder
+             .Add(S["Freelancer Profile"], S["FreelancerProfile"], layers => layers
+            .Action("Index", "FreelancerProfile", new { area = "FrogsNetwork.Freelancing" })
+            .Permission(FrogsNetwork.Freelancing.Permissions.ManageFreelancerProfile)
+            .LocalNav());
 
-        if (_httpContext.HttpContext.User.IsInRole("Freelancer"))
-        {
-            builder
-                 .Add(S["Freelancer Profile"], S["FreelancerProfile"], layers => layers
-                .Action("Index", "FreelancerProfile", new { area = "FrogsNetwork.Freelancing" })
-                .LocalNav());
+        builder
+             .Add(S["Company Profile"], S["ComapanyProfile"], layers => layers
+            .Action("Index", "CompanyProfile", new { area = "FrogsNetwork.Freelancing" })
+             .Permission(FrogsNetwork.Freelancing.Permissions.ManageCompanyProfile)
+            .LocalNav());
 
-            //builder.Remove(c => c.Url == "/CompanyProfile/Index");
-        }
-        else if (_httpContext.HttpContext.User.IsInRole("Company"))
-        {
-            builder
-                 .Add(S["Company Profile"], S["ComapanyProfile"], layers => layers
-                .Action("Index", "CompanyProfile", new { area = "FrogsNetwork.Freelancing" })
-                .LocalNav());
-            //builder
-            //     .Remove(c => c.Url == "/FreelancerProfile/Index");
-        }
-        //}
         return Task.CompletedTask;
     }
 }

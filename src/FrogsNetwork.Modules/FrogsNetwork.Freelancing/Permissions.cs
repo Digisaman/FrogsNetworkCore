@@ -10,7 +10,9 @@ using OrchardCore.Security.Services;
 namespace FrogsNetwork.Freelancing;
 public class Permissions : IPermissionProvider
 {
-    public static readonly Permission ManageProfile = new Permission("ManageProfile", "Manage profile information");
+    public static readonly Permission ManageFreelancerProfile = new Permission("ManageFreelancerProfile", "Manage profile information for freelancers", true);
+
+    public static readonly Permission ManageCompanyProfile = new Permission("ManageCompanyProfile", "Manage profile information for companies", true);
 
     private readonly IRoleService _roleService;
 
@@ -24,11 +26,11 @@ public class Permissions : IPermissionProvider
         return new[] {
                 new PermissionStereotype {
                     Name = nameof(Roles.Freelancer),
-                    Permissions = new[] { ManageProfile }
+                    Permissions = new[] { ManageFreelancerProfile }
                 },
                 new PermissionStereotype {
                     Name = nameof(Roles.Company),
-                    Permissions = new[] { ManageProfile }
+                    Permissions = new[] { ManageCompanyProfile }
                 }
             };
     }
@@ -37,19 +39,9 @@ public class Permissions : IPermissionProvider
     {
         var list = new List<Permission>
             {
-                ManageProfile
+                ManageFreelancerProfile,
+                ManageCompanyProfile
             };
-
-        //var roles = new string[] {
-        //    nameof(Roles.Freelancer),
-        //    nameof(Roles.Company)
-        //};
-
-        //foreach (var role in roles)
-        //{
-        //    list.Add(CommonPermissions.CreatePermissionForManageUsersInRole(role));
-        //}
-
         return list;
     }
 }

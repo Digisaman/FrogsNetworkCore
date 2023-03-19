@@ -9,12 +9,10 @@
     {
         tag.InnerHtml.AppendHtml(await DisplayAsync(item));
     }
-
+   
     if (User.Identity.IsAuthenticated)
     {
         tag.InnerHtml.AppendHtml(await DisplayAsync(await New.Navigation(MenuName: "main-menu", RouteData: @ViewContext.RouteData)));
-
-
     }
 }
 

@@ -23,16 +23,21 @@ public class CompanyProfileController : Controller
 
     private readonly IUserService _userService;
     private readonly ProfileService _profileService;
-    //private readonly ITaxonomyService _taxonomyService;
-    //private readonly IAuthenticationService _authenticationService;
+    private readonly IAuthenticationService _authenticationService;
+    private readonly IAuthorizationService _authorizationService;
 
     public CompanyProfileController(
         IUserService userService,
-       ProfileService profileService)
+       ProfileService profileService,
+        IAuthenticationService authenticationService,
+        IAuthorizationService authorizationService)
     {
        
         _userService = userService;
         _profileService = profileService;
+        _authenticationService = authenticationService;
+        _authorizationService = authorizationService;
+        ViewModel = new CompanyProfileViewModel();
     }
 
     public CompanyProfileViewModel ViewModel { get; set; }
@@ -41,6 +46,10 @@ public class CompanyProfileController : Controller
     
     public async Task<ActionResult> Index()
     {
+        if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageCompanyProfile))
+        {
+            return Unauthorized();
+        }
 
         User user = _userService.GetAuthenticatedUserAsync(User).Result as User;
         this.ViewModel = _profileService.GetCompanyProfile(user.UserId).Result;
@@ -60,6 +69,10 @@ public class CompanyProfileController : Controller
     [HttpPost]
     public async Task<ActionResult> Index(CompanyProfileViewModel viewModel)
     {
+        if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageCompanyProfile))
+        {
+            return Unauthorized();
+        }
         var user = _userService.GetAuthenticatedUserAsync(User).Result as User;
         this.ViewModel = _profileService.GetCompanyProfile(user.UserId).Result;
 
