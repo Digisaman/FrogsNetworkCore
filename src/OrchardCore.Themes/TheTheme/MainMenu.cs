@@ -40,12 +40,14 @@ public class MainMenu : INavigationProvider
              .Add(S["Freelancer Profile"], S["FreelancerProfile"], layers => layers
             .Action("Index", "FreelancerProfile", new { area = "FrogsNetwork.Freelancing" })
             .Permission(FrogsNetwork.Freelancing.Permissions.ManageFreelancerProfile)
+            .AddClass("nav-link")
             .LocalNav());
 
         builder
              .Add(S["Company Profile"], S["ComapanyProfile"], layers => layers
             .Action("Index", "CompanyProfile", new { area = "FrogsNetwork.Freelancing" })
              .Permission(FrogsNetwork.Freelancing.Permissions.ManageCompanyProfile)
+             .AddClass("nav-link")
             .LocalNav());
 
         return Task.CompletedTask;
