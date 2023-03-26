@@ -232,13 +232,13 @@ sup {
 }
 
 a {
-    color: #94D600;
+    color: #000000;
     font-weight: bold;
     text-decoration: none;
 }
 
     a:hover {
-        color: #000000;
+        color: #ffffff;
     }
 
     a:not([href]):not([class]), a:not([href]):not([class]):hover {
