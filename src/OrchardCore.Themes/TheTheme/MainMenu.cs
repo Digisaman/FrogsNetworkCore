@@ -35,17 +35,33 @@ public class MainMenu : INavigationProvider
             return Task.CompletedTask;
         }
 
+        if ( _httpContext.HttpContext.User.IsInRole("Administrator"))
+        {
+            builder.Remove(c => c.Position == "FreelancerProfile");
+            builder.Remove(c => c.Position == "ComapanyProfile");
+            return Task.CompletedTask;
+        }
 
         builder
              .Add(S["Freelancer Profile"], S["FreelancerProfile"], layers => layers
             .Action("Index", "FreelancerProfile", new { area = "FrogsNetwork.Freelancing" })
             .Permission(FrogsNetwork.Freelancing.Permissions.ManageFreelancerProfile)
+            .AddClass("nav-link")
             .LocalNav());
+       
+
 
         builder
              .Add(S["Company Profile"], S["ComapanyProfile"], layers => layers
             .Action("Index", "CompanyProfile", new { area = "FrogsNetwork.Freelancing" })
              .Permission(FrogsNetwork.Freelancing.Permissions.ManageCompanyProfile)
+             .AddClass("nav-link")
+            .LocalNav());
+        builder
+             .Add(S["Search Freelancers"], S["SearchFreelancers"], layers => layers
+            .Action("Index", "FreelancerSearch", new { area = "FrogsNetwork.Freelancing" })
+             .Permission(FrogsNetwork.Freelancing.Permissions.ManageCompanyProfile)
+             .AddClass("nav-link")
             .LocalNav());
 
         return Task.CompletedTask;
