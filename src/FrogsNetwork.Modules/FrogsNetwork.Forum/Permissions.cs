@@ -20,17 +20,13 @@ public class Permissions : IPermissionProvider
 
     public IEnumerable<PermissionStereotype> GetDefaultStereotypes()
     {
-        //return new[] {
-        //        new PermissionStereotype {
-        //            Name = nameof(Roles.Freelancer),
-        //            Permissions = new[] { ManageFreelancerProfile }
-        //        },
-        //        new PermissionStereotype {
-        //            Name = nameof(Roles.Company),
-        //            Permissions = new[] { ManageCompanyProfile }
-        //        }
-        //    };
-        return (new List<PermissionStereotype>()).AsEnumerable();
+        return new[]
+        {
+                new PermissionStereotype {
+                    Name = "Freelancer",
+                    Permissions = new[] { ManageForum }
+                }
+        };
     }
 
     public async Task<IEnumerable<Permission>> GetPermissionsAsync()
