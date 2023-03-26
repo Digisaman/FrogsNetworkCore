@@ -30,6 +30,7 @@
   -->
 
   <ItemGroup>
+    <ProjectReference Include="..\..\FrogsNetwork.Modules\FrogsNetwork.Forum\FrogsNetwork.Forum.csproj" />
     <ProjectReference Include="..\..\FrogsNetwork.Modules\FrogsNetwork.Freelancing\FrogsNetwork.Freelancing.csproj" />
     <ProjectReference Include="..\OrchardCore.Application.Targets\OrchardCore.Application.Targets.csproj" PrivateAssets="none" />
 
