@@ -17,27 +17,27 @@
                 <table id="assets-data-table" class="table table-striped table-bordered" style="width:100%">
                     <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>Title</th>
+                            @*<th>Id</th>
+                            <th>Title</th>*@
                             <th>Description</th>
-                            <th>CreatedTime</th>
+                           @* <th>CreatedTime</th>*@
                         </tr>
                     </thead>
                     @foreach (var entry in Model.Forums)
                     {
                         <tr>
-                            <td>
+                            @*<td>
                                 @entry.Id
                             </td>
                             <td>
                                 @entry.Title
-                            </td>
+                            </td>*@
                             <td>
                                 @entry.Description
                             </td>
-                            <td>
+                            @*<td>
                                 @entry.CreatedTime
-                            </td>
+                            </td>*@
                             
                         </tr>
                     }

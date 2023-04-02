@@ -17,10 +17,10 @@ public class Migrations : DataMigration
     // This is a sequenced migration. On a new schemas this is complete after UpdateFrom2.
     public int Create()
     {
-        SchemaBuilder.CreateTable(nameof(Models.Forum), table => table
-            .Column<int>(nameof(Models.Forum.Id), col => col.PrimaryKey())
-            .Column<string>(nameof(Models.Forum.Title), c => c.NotNull().WithLength(50))
-        );
+        //SchemaBuilder.CreateTable(nameof(Models.ForumPart), table => table
+        //    .Column<int>(nameof(Models.ForumPart.Id), col => col.PrimaryKey())
+        //    .Column<string>(nameof(Models.ForumPart.Title), c => c.NotNull().WithLength(50))
+        //);
         return 1;
     }
 }

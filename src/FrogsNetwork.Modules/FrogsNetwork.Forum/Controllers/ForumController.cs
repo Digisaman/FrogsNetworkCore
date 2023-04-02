@@ -13,20 +13,8 @@ public class ForumController : Controller
     public ForumsViewModel ViewModel { get; set; }
     public ForumController()
     {
-        ViewModel = new ForumsViewModel
-        {
-            Forums = new List<Models.Forum>
-            {
-                new Models.Forum
-                {
-                     AuthorId = "admin",
-                      CreatedTime = DateTime.Now, Description = "forum one",
-                       Id = 1,
-                        Title = "forum 1"
-
-                } 
-            }
-        };
+        ViewModel = new ForumsViewModel();
+        
     }
     public async Task<ActionResult> Index()
     {
