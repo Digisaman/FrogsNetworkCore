@@ -83,6 +83,7 @@ public class ThreadPart : ContentPart, IThreadPart
     public virtual string ClosedById { get; set; } = "";
     public virtual string ClosedDescription { get; set; } = "";
     public IUser ClosedBy { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public string PostContentItemId { get; set; } = ""; 
 }
 
 public interface IThreadPart : IContent

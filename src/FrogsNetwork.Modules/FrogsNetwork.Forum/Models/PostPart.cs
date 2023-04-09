@@ -1,4 +1,4 @@
-﻿using OrchardCore.ContentManagement;
+using OrchardCore.ContentManagement;
 
 namespace FrogsNetwork.Forum.Models;
 
@@ -10,6 +10,7 @@ public class PostPart : ContentPart
     public virtual string Text { get; set; } = "";
 
     public virtual string Format { get; set; } = "";
+    public string ForumContentItemId { get; set; } = "";
 
     //public ThreadPart ThreadPart
     //{
