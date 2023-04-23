@@ -13,8 +13,31 @@ public class ForumController : Controller
     public ForumsViewModel ViewModel { get; set; }
     public ForumController()
     {
-        ViewModel = new ForumsViewModel();
-        
+        ViewModel = new ForumsViewModel
+        {
+            Forums = new List<Models.ForumPart>
+            {
+                new Models.ForumPart
+                {
+                     Description = "Inspection Forum",
+                      PostCount = 2,
+                      ThreadCount = 10
+                       
+                       
+
+                },
+                new Models.ForumPart
+                {
+                     Description = "Construction Forum",
+                      PostCount = 4,
+                      ThreadCount = 15
+
+
+                }
+            }
+        };
+
+
     }
     public async Task<ActionResult> Index()
     {

@@ -1,0 +1,22 @@
+
+
+
+
+
+<form asp-controller="FreelancerProfile" asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" method="get" class="form-horizontal no-multisubmit">
+    <br/>
+    <br/>
+    <br />
+    <br />
+    <br />
+    <h1>@T["Company Dashboard"]</h1>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary" formaction="/CompanyProfile/Index" type="submit">Compnay Profile</button>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary" formaction="/FreelancerSearch/Index" type="submit">Freelancer Search</button>
+        </div>
+    </div>
+    <br />
+</form>

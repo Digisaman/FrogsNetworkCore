@@ -20,7 +20,9 @@
                             @*<th>Id</th>
                             <th>Title</th>*@
                             <th>Description</th>
-                           @* <th>CreatedTime</th>*@
+                            <th>Post Count</th>
+                            <th>Thread Count</th>
+                           @* <th>Post Count</th>*@
                         </tr>
                     </thead>
                     @foreach (var entry in Model.Forums)
@@ -34,6 +36,12 @@
                             </td>*@
                             <td>
                                 @entry.Description
+                            </td>
+                             <td>
+                                @entry.PostCount
+                            </td>
+                            <td>
+                                @entry.ThreadCount
                             </td>
                             @*<td>
                                 @entry.CreatedTime

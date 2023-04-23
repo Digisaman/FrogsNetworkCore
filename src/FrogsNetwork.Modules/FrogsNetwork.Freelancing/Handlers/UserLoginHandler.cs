@@ -28,9 +28,9 @@ namespace FrogsNetwork.Freelancing.Handlers
         {
             Roles role = _profileService.GetUserRole(user);
             if (role == Roles.Freelancer)
-               _httpContext.HttpContext.Session.SetString("returnUrl", "/FreelancerProfile/Index");
+               _httpContext.HttpContext.Session.SetString("returnUrl", "/FreelancerDashboard/Index");
             else if (role == Roles.Company)
-                _httpContext.HttpContext.Session.SetString("returnUrl", "/CompanyProfile/Index");
+                _httpContext.HttpContext.Session.SetString("returnUrl", "/CompanyDashboard/Index");
             return Task.CompletedTask;
         }
 

@@ -56,9 +56,17 @@ namespace FrogsNetwork.Freelancing
             var companyProfileControllerName = typeof(CompanyProfileController).ControllerName();
             var freelancerSearchControllerName = typeof(FreelancerSearchController).ControllerName();
             var freelancerDetailControllerName = typeof(FreelancerDetailController).ControllerName();
+            var freelancerDashboardController = typeof(FreelancerDashboardController).ControllerName();
+            var compnayDashboardController = typeof(CompanyDashboardController).ControllerName();
 
             #region Routes
             #region FreeLancerProFile
+            routes.MapAreaControllerRoute(
+              name: $"{freelancerDashboardController}{nameof(FreelancerDashboardController.Index)}",
+              areaName: "FrogsNetwork.Freelancing",
+              pattern: $"{freelancerDashboardController}/{nameof(FreelancerDashboardController.Index)}",
+              defaults: new { controller = freelancerDashboardController, action = nameof(FreelancerDashboardController.Index) });
+
             routes.MapAreaControllerRoute(
               name: $"{freelancerProfileControllerName}{nameof(FreelancerProfileController.Index)}",
               areaName: "FrogsNetwork.Freelancing",
@@ -78,6 +86,13 @@ namespace FrogsNetwork.Freelancing
               defaults: new { controller = freelancerProfileControllerName, action = nameof(FreelancerProfileController.RemoveNationality) });
             #endregion
 
+            #region CompanyProfile
+            routes.MapAreaControllerRoute(
+            name: $"{compnayDashboardController}{nameof(CompanyDashboardController.Index)}",
+            areaName: "FrogsNetwork.Freelancing",
+            pattern: $"{compnayDashboardController}/{nameof(CompanyDashboardController.Index)}",
+            defaults: new { controller = compnayDashboardController, action = nameof(CompanyDashboardController.Index) });
+
             routes.MapAreaControllerRoute(
              name: $"{companyProfileControllerName}{nameof(CompanyProfileController.Index)}",
              areaName: "FrogsNetwork.Freelancing",
@@ -95,8 +110,9 @@ namespace FrogsNetwork.Freelancing
               areaName: "FrogsNetwork.Freelancing",
               pattern: $"{freelancerDetailControllerName}/{nameof(FreelancerDetailController.Index)}",
               defaults: new { controller = freelancerDetailControllerName, action = nameof(FreelancerDetailController.Index) });
+            #endregion
 
-            #region
+            #region Freelancer Extended Profile
             routes.MapAreaControllerRoute(
              name: $"{freelancerExtendedControllerName}{nameof(FreelancerExtendedController.Index)}",
              areaName: "FrogsNetwork.Freelancing",
