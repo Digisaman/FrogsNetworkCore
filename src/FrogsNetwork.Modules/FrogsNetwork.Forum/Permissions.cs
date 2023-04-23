@@ -43,7 +43,15 @@ public class Permissions : IPermissionProvider
     {
         var list = new List<Permission>
             {
-                ManageForum
+                ManageForum,
+                ManageOwnForums,
+                MoveThread,
+                MoveOwnThread,
+                StickyThread,
+                StickyOwnThread,
+                CloseThread,
+                CloseOwnThread
+
             };
         return list;
     }
