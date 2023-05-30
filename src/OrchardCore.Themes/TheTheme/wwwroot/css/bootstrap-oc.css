@@ -11310,7 +11310,7 @@ html {
 
 body {
   /* Margin bottom by footer height */
-  margin-bottom: 60px;
+  margin-bottom: 100px;
 }
 
 body > footer {
@@ -11318,7 +11318,8 @@ body > footer {
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
-  height: 80px;
+  height: 100px;
+  padding: 20px;
   line-height: 0px;
   /* Vertically center the text there */
   background-color: #94D600;
@@ -11328,5 +11329,5 @@ body > footer {
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
 body > .container {
-  padding: 60px 15px 0;
+  padding: 120px 15px 0;
 }
