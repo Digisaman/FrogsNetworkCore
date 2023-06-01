@@ -1,63 +1,50 @@
 <form asp-controller="FreelancerProfile" asp-action="Index" asp-route-returnurl="@ViewData["ReturnUrl"]" method="get" class="form-horizontal no-multisubmit">
     <br />
     <br />
-    <div class="row"> 
-        <div class="col-3">
+    <div style="text-align:center; align-content:center; margin-left:20%; margin-right:20%">
+        <div class="row">
 
+            <div class="col">
+                <button class="btn btn-primary" formaction="/FreelancerProfile/Index" type="submit">Basic Profile</button>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary" formaction="/Blogs" type="submit">Blogs</button>
+            </div>
         </div>
-        <div class="col-1">
-            <button class="btn btn-primary" formaction="/FreelancerProfile/Index" type="submit">Basic Profile</button>
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-primary" formaction="/FreelancerExtended/Index" type="submit">Professional Profile</button>
+            </div>
+            <div class="col">
+                <button class="btn btn-primary" formaction="/Forums" type="submit">Forums</button>
+            </div>
         </div>
-        <div class="col-2">
-        </div>
-        <div class="col-1">
-            <button class="btn btn-primary" formaction="/Blogs" type="submit">Blogs</button>
-        </div>
-        <div class="col-3">
-        </div>
-
-    </div>
-    <div class="row">
-        <div class="col-3">
-        </div>
-        <div class="col-1">
-            <button class="btn btn-primary" formaction="/FreelancerExtended/Index" type="submit">Professional Profile</button>
-        </div>
-        <div class="col-2">
-        </div>
-        <div class="col-1">
-            <button class="btn btn-primary" formaction="/Forums" type="submit">Forums</button>
-        </div>
-        <div class="col-3">
-        </div>
-
     </div>
 
-
-   @* <div class="row" style="align-content:center">
-        <div class="col-1">
-        </div>
-        <div class="col-3">
-            <button class="btn btn-primary" formaction="/FreelancerProfile/Index" type="submit">Basic Profile</button>
-        </div>
-        <div class="col-3">
-            <button class="btn btn-primary" formaction="/Forums" type="submit">Forums</button>
-        </div>
-        <div class="col-1">
-        </div>
+    @* <div class="row" style="align-content:center">
+    <div class="col-1">
+    </div>
+    <div class="col-3">
+    <button class="btn btn-primary" formaction="/FreelancerProfile/Index" type="submit">Basic Profile</button>
+    </div>
+    <div class="col-3">
+    <button class="btn btn-primary" formaction="/Forums" type="submit">Forums</button>
+    </div>
+    <div class="col-1">
+    </div>
     </div>
 
     <div class="row">
-        <div class="col-1">
-        </div>
-        <div class="col-3">
-            <button class="btn btn-primary" formaction="/FreelancerExtended/Index" type="submit">Professional Profile</button>
-        </div>
-        <div class="col-3">
-            <button class="btn btn-primary" formaction="/Blogs" type="submit">Blogs</button>
-        </div>
-        <div class="col-1">
-        </div>
+    <div class="col-1">
+    </div>
+    <div class="col-3">
+    <button class="btn btn-primary" formaction="/FreelancerExtended/Index" type="submit">Professional Profile</button>
+    </div>
+    <div class="col-3">
+    <button class="btn btn-primary" formaction="/Blogs" type="submit">Blogs</button>
+    </div>
+    <div class="col-1">
+    </div>
     </div>*@
 
 </form>
