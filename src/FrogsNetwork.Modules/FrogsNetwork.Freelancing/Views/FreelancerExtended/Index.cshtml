@@ -172,7 +172,7 @@
                     <div class="col">
                         <div>
                             <label asp-for="EducationSchool">@T["School / University Name :"]</label>
-                            <input asp-for="EducationSchool" class="form-control" autofocus tabindex="1" />
+                            <input asp-for="EducationSchool" class="form-control"  />
                             @*<span asp-validation-for="EducationSchool" class="text-danger"></span>*@                            
                         </div>
                         <div>
@@ -279,12 +279,18 @@
 
 </form>
 
-@*<script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
-<link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css" />
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('listbox').multiselect();
-    });
-</script>
-*@
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js">
+    </script>
+    <script type="text/javascript">
+        $(function () {
+        $("#ExpertiseFirst").select2();
+        $("#ExpertiseSecond").select2();
+        $("#ServicesFirst").select2();
+        $("#ServicesSecond").select2();
+
+        });
+    </script>

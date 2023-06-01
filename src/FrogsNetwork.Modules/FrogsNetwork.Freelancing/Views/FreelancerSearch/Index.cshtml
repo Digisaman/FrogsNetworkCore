@@ -36,7 +36,7 @@
 
                         <div>
                             <label asp-for="Address">@T["Address:"]</label>
-                            <input asp-for="Address" class="form-control" autofocus tabindex="1" />
+                            <input asp-for="Address" class="form-control" />
                             @*  <span asp-validation-for="Address" class="text-danger"></span>*@
                         </div>
 
@@ -141,3 +141,17 @@
 
 
 </form>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js">
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#ExpertiseFirst").select2();
+        $("#ExpertiseSecond").select2();
+        $("#ServicesFirst").select2();
+        $("#ServicesSecond").select2();
+
+    });
+</script>
