@@ -372,7 +372,7 @@ public class FreelancerExtendedController : Controller
             var user = _userService.GetAuthenticatedUserAsync(User).Result as User;
             FreelancerProfileViewModel freelancerUser = _profileService.GetFreelancerProfile(user.UserId).Result;
 
-            return this.Redirect(string.Format("/Users/FreelancerDetail/{0}", freelancerUser.Id));
+            return this.Redirect(string.Format("/FreelancerDetail/Index?Id={0}", freelancerUser.Id));
         }
         catch (Exception ex)
         {
