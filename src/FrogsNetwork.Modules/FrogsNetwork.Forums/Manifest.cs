@@ -1,10 +1,10 @@
 using OrchardCore.Modules.Manifest;
 
 [assembly: Module(
-    Name = "FrogsNetwork.Forums",
-    Author = "The Orchard Core Team",
-    Website = "https://orchardcore.net",
+    Name = "Forums",
+    Author = "Saman Pirooz",
+    Website = "https://samanpirooz.com/frogsnetwork/forums",
     Version = "0.0.1",
     Description = "FrogsNetwork.Forums",
-    Category = "Content Management"
+    Category = "FrogsNetwork"
 )]
