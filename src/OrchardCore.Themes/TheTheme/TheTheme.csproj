@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FrogsNetwork.Modules\FrogsNetwork.Forum\FrogsNetwork.Forum.csproj" />
     <ProjectReference Include="..\..\FrogsNetwork.Modules\FrogsNetwork.Freelancing\FrogsNetwork.Freelancing.csproj" />
     <ProjectReference Include="..\..\OrchardCore\OrchardCore.Theme.Targets\OrchardCore.Theme.Targets.csproj" />
     <ProjectReference Include="..\..\OrchardCore\OrchardCore.Admin.Abstractions\OrchardCore.Admin.Abstractions.csproj" />
