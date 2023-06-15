@@ -1,7 +1,10 @@
 using Fluid;
+using FrogsNetwork.Forums.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using OrchardCore.ContentManagement;
+using OrchardCore.Data.Migration;
 using OrchardCore.Modules;
 
 namespace FrogsNetwork.Forums
@@ -10,6 +13,8 @@ namespace FrogsNetwork.Forums
     {
         public override void ConfigureServices(IServiceCollection services)
         {
+            services.AddDataMigration<Migrations>();
+            services.AddContentPart<ForumPart>();
         }
 
         public override void Configure(IApplicationBuilder builder, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
