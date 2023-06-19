@@ -22,6 +22,8 @@ public class ForumPart : ContentPart
 
     public TextField Description { get; set; }
 
+    public TextField Title { get; set; }
+
     public HtmlField Body { get; set; }
 
     //public ForumField ForumField { get; set; }

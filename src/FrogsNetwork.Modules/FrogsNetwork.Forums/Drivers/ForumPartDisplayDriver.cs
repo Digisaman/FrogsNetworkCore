@@ -47,6 +47,7 @@ public class ForumPartDisplayDriver : ContentPartDisplayDriver<ForumPart>
         part.ThreadCount = viewModel.ThreadCount;
         part.ThreadedPosts = viewModel.ThreadedPosts;
         
+        
         return await EditAsync(part, context);
     }
 
@@ -58,6 +59,7 @@ public class ForumPartDisplayDriver : ContentPartDisplayDriver<ForumPart>
         viewModel.ReplyCount = part.ReplyCount;
         viewModel.ThreadCount = part.ThreadCount;
         viewModel.ThreadedPosts = part.ThreadedPosts;
+        viewModel.Id = part.ContentItem.ContentItemId;
                 
 
     }
