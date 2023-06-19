@@ -52,6 +52,12 @@ namespace FrogsNetwork.Forums.Controllers
             });
             return View(this.ViewModel);
         }
-        
+
+        public async Task<ActionResult> Item(string id)
+        {
+            return this.Redirect($"/Contents/ContentItems/{id}");
+            
+        }
+
     }
 }
