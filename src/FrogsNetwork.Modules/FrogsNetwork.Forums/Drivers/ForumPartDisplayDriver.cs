@@ -46,7 +46,7 @@ public class ForumPartDisplayDriver : ContentPartDisplayDriver<ForumPart>
         part.PostCount = viewModel.PostCount;
         part.ThreadCount = viewModel.ThreadCount;
         part.ThreadedPosts = viewModel.ThreadedPosts;
-
+        
         return await EditAsync(part, context);
     }
 

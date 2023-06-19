@@ -1,5 +1,6 @@
 using Fluid;
 using FrogsNetwork.Forums.Drivers;
+using FrogsNetwork.Forums.Indexes;
 using FrogsNetwork.Forums.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
@@ -8,6 +9,7 @@ using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Display.ContentDisplay;
 using OrchardCore.Data.Migration;
 using OrchardCore.Modules;
+using YesSql.Indexes;
 
 namespace FrogsNetwork.Forums
 {
@@ -18,6 +20,7 @@ namespace FrogsNetwork.Forums
             services.AddContentPart<ForumPart>()
                 .UseDisplayDriver<ForumPartDisplayDriver>();
             services.AddDataMigration<Migrations>();
+            //services.AddSingleton<IIndexProvider, ForumPartIndexProvider>();
         }
 
         public override void Configure(IApplicationBuilder builder, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
@@ -25,9 +28,12 @@ namespace FrogsNetwork.Forums
             routes.MapAreaControllerRoute(
                 name: "Home",
                 areaName: "FrogsNetwork.Forums",
-                pattern: "Home/Index",
-                defaults: new { controller = "Home", action = "Index" }
+                pattern: "Forum/Index",
+                defaults: new { controller = "Forum", action = "Index" }
             );
+
+           
+
         }
     }
 }
