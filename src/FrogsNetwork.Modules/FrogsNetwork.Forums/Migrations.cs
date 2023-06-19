@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FrogsNetwork.Forums.Models;
+using OrchardCore.ContentFields.Fields;
+using OrchardCore.ContentFields.Settings;
 using OrchardCore.ContentManagement.Metadata;
 using OrchardCore.ContentManagement.Metadata.Settings;
 using OrchardCore.Data.Migration;
@@ -33,5 +36,32 @@ public class Migrations : DataMigration
 );
 
         return 1;
+    }
+
+    public int UpdateFrom1()
+    {
+        _contentDefinitionManager.AlterPartDefinition(nameof(ForumPart), part => part
+        .Attachable()
+.WithField(nameof(ForumPart.Title), field => field
+ .OfType(nameof(TextField))
+ .WithDisplayName(nameof(ForumPart.Title))
+ .WithSettings(new TextFieldSettings
+ {
+     Hint = "Forum's Title",
+     Required = true
+ }))
+
+.WithField(nameof(ForumPart.Body), field => field
+ .OfType(nameof(HtmlField))
+ .WithDisplayName(nameof(ForumPart.Body))
+ .WithSettings(new HtmlFieldSettings
+ {
+     Hint = "Forum's Body",
+     SanitizeHtml = true
+ })
+ .WithEditor("Wysiwyg"))
+
+);
+        return 2;
     }
 }

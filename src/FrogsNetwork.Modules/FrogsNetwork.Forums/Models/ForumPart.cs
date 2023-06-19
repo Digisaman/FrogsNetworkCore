@@ -1,3 +1,4 @@
+using OrchardCore.ContentFields.Fields;
 using OrchardCore.ContentManagement;
 
 namespace FrogsNetwork.Forums.Models;
@@ -19,7 +20,15 @@ public class ForumPart : ContentPart
         get { return PostCount >= ThreadCount ? PostCount - ThreadCount : 0; }
     }
 
+    public TextField Title { get; set; }
+
+    public HtmlField Body { get; set; }
+
+    //public ForumField ForumField { get; set; }
     public string PostContentType { get; set; } = "Post";
     public List<ContentItem> Posts { get; set; } = new List<ContentItem>();
 
+
+
+    
 }
