@@ -42,26 +42,33 @@ public class Migrations : DataMigration
     {
         _contentDefinitionManager.AlterPartDefinition(nameof(ForumPart), part => part
         .Attachable()
-.WithField(nameof(ForumPart.Title), field => field
- .OfType(nameof(TextField))
- .WithDisplayName(nameof(ForumPart.Title))
- .WithSettings(new TextFieldSettings
- {
-     Hint = "Forum's Title",
-     Required = true
- }))
+        .WithField(nameof(ForumPart.Title), field => field
+        .OfType(nameof(TextField))
+        .WithDisplayName(nameof(ForumPart.Title))
+        .WithSettings(new TextFieldSettings
+        {
+            Hint = "Forum's Title",
+            Required = true
+        }))
 
-.WithField(nameof(ForumPart.Body), field => field
- .OfType(nameof(HtmlField))
- .WithDisplayName(nameof(ForumPart.Body))
- .WithSettings(new HtmlFieldSettings
- {
-     Hint = "Forum's Body",
-     SanitizeHtml = true
- })
- .WithEditor("Wysiwyg"))
-
-);
+        .WithField(nameof(ForumPart.Body), field => field
+        .OfType(nameof(HtmlField))
+        .WithDisplayName(nameof(ForumPart.Body))
+        .WithSettings(new HtmlFieldSettings
+        {
+            Hint = "Forum's Body",
+            SanitizeHtml = true
+        })
+        .WithEditor("Wysiwyg")) );
         return 2;
+    }
+
+    public int UpdateFrom2()
+    {
+        _contentDefinitionManager.AlterTypeDefinition("Forum", type => type
+            .Listable()
+            .WithPart(nameof(ForumPart)));
+            
+        return 3;
     }
 }
