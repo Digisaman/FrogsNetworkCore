@@ -1,9 +1,11 @@
 using Fluid;
+using FrogsNetwork.Forums.Drivers;
 using FrogsNetwork.Forums.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using OrchardCore.ContentManagement;
+using OrchardCore.ContentManagement.Display.ContentDisplay;
 using OrchardCore.Data.Migration;
 using OrchardCore.Modules;
 
@@ -13,8 +15,9 @@ namespace FrogsNetwork.Forums
     {
         public override void ConfigureServices(IServiceCollection services)
         {
+            services.AddContentPart<ForumPart>()
+                .UseDisplayDriver<ForumPartDisplayDriver>();
             services.AddDataMigration<Migrations>();
-            services.AddContentPart<ForumPart>();
         }
 
         public override void Configure(IApplicationBuilder builder, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)

@@ -22,53 +22,40 @@ public class Migrations : DataMigration
 
     public int Create()
     {
-        // This code will be run when the feature is enabled
+        _contentDefinitionManager.AlterPartDefinition(nameof(ForumPart), part => part
+       .Attachable()
+       .WithField(nameof(ForumPart.Description), field => field
+       .OfType(nameof(TextField))
+       .WithDisplayName(nameof(ForumPart.Description))
+       .WithSettings(new TextFieldSettings
+       {
+           Hint = "Forum's Description",
+           Required = false
+       })
+       .WithEditor("TextArea"))
+
+       .WithField(nameof(ForumPart.Body), field => field
+       .OfType(nameof(HtmlField))
+       .WithDisplayName(nameof(ForumPart.Body))
+       .WithSettings(new HtmlFieldSettings
+       {
+           Hint = "Forum's Body",
+           SanitizeHtml = true
+       })
+       .WithEditor("Wysiwyg")));
+
         _contentDefinitionManager.AlterTypeDefinition("Forum", type => type
-         .WithPart("ForumPart")
-    // content items of this type can have drafts
-    .Draftable()
-    // content items versions of this type have saved
-    .Versionable()
-    // this content type appears in the New menu section
-    .Creatable()
-    // permissions can be applied specifically to instances of this type
-    .Securable()
-);
+         .WithPart(nameof(ForumPart))
+         .Draftable()
+         .Versionable()
+         .Creatable()
+         .Securable()
+         .Listable() );
+
+
 
         return 1;
     }
 
-    public int UpdateFrom1()
-    {
-        _contentDefinitionManager.AlterPartDefinition(nameof(ForumPart), part => part
-        .Attachable()
-        .WithField(nameof(ForumPart.Title), field => field
-        .OfType(nameof(TextField))
-        .WithDisplayName(nameof(ForumPart.Title))
-        .WithSettings(new TextFieldSettings
-        {
-            Hint = "Forum's Title",
-            Required = true
-        }))
-
-        .WithField(nameof(ForumPart.Body), field => field
-        .OfType(nameof(HtmlField))
-        .WithDisplayName(nameof(ForumPart.Body))
-        .WithSettings(new HtmlFieldSettings
-        {
-            Hint = "Forum's Body",
-            SanitizeHtml = true
-        })
-        .WithEditor("Wysiwyg")) );
-        return 2;
-    }
-
-    public int UpdateFrom2()
-    {
-        _contentDefinitionManager.AlterTypeDefinition("Forum", type => type
-            .Listable()
-            .WithPart(nameof(ForumPart)));
-            
-        return 3;
-    }
+   
 }

@@ -5,8 +5,8 @@ namespace FrogsNetwork.Forums.Models;
 
 public class ForumPart : ContentPart
 {   
-    //[StringLengthMax]
-    public virtual string Description { get; set; } = "";
+  
+    //public virtual string Description { get; set; } = "";
 
     public virtual int ThreadCount { get; set; }
     public virtual int PostCount { get; set; }
@@ -20,7 +20,7 @@ public class ForumPart : ContentPart
         get { return PostCount >= ThreadCount ? PostCount - ThreadCount : 0; }
     }
 
-    public TextField Title { get; set; }
+    public TextField Description { get; set; }
 
     public HtmlField Body { get; set; }
 
