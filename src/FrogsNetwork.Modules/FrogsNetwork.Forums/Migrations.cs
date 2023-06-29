@@ -24,6 +24,15 @@ public class Migrations : DataMigration
     {
         _contentDefinitionManager.AlterPartDefinition(nameof(ForumPart), part => part
        .Attachable()
+       .WithField(nameof(ForumPart.Title), field => field
+       .OfType(nameof(TextField))
+       .WithDisplayName(nameof(ForumPart.Title))
+       .WithSettings(new TextFieldSettings
+       {
+           Hint = "Forum's Title",
+           Required = true
+       }))
+
        .WithField(nameof(ForumPart.Description), field => field
        .OfType(nameof(TextField))
        .WithDisplayName(nameof(ForumPart.Description))

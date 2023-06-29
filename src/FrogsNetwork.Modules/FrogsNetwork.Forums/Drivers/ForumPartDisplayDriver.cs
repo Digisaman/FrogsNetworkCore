@@ -41,7 +41,6 @@ public class ForumPartDisplayDriver : ContentPartDisplayDriver<ForumPart>
 
         await updater.TryUpdateModelAsync(viewModel, Prefix);
 
-        //part.Description = viewModel.Description;
         part.Weight = viewModel.Weight;
         part.PostCount = viewModel.PostCount;
         part.ThreadCount = viewModel.ThreadCount;
@@ -60,7 +59,9 @@ public class ForumPartDisplayDriver : ContentPartDisplayDriver<ForumPart>
         viewModel.ThreadCount = part.ThreadCount;
         viewModel.ThreadedPosts = part.ThreadedPosts;
         viewModel.Id = part.ContentItem.ContentItemId;
-                
+        viewModel.Title = part.Title != null ? part.Title.Text : "";
+        viewModel.Description = part.Description != null ? part.Description.Text : "";
+
 
     }
 }

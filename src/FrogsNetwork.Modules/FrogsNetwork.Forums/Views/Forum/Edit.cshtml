@@ -1,0 +1,12 @@
+@model FrogsNetwork.Forums.ViewModels.ForumEditViewModel
+
+<form asp-action="Edit" method="post" class="no-multisubmit">
+    <input type="hidden" asp-for="ForumId" />
+    @await DisplayAsync(Model.ForumEditor)
+
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary" formaction="/FrogsNetwork.Forums/Forum/Index" type="submit">Return To Forums</button>
+        </div>
+    </div>
+</form>
