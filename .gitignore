@@ -210,3 +210,4 @@ src/Templates/**/content/**/[Oo]bj/
 # BenchmarkDotNet artifacts
 BenchmarkDotNet.Artifacts
 
+/src/FrogsNetwork.Modules/FrogsNetwork.Forum

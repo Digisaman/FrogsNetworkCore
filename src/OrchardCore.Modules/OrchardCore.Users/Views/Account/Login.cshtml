@@ -55,7 +55,13 @@
                 @if (userCanRegister)
                 {
                     <div class="mt-4">
-                        <a asp-controller="Registration" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">@T["Register as a new user"]</a>
+                        @*<a asp-controller="Registration" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" >@T["Register as a Freelancer"]</a>*@
+                        <a href="/register?role=Freelancer">Register as a Freelancer</a>
+
+                    </div>
+                    <div class="mt-4">
+                        <a href="/register?role=Company">Register as a Company</a>
+                       @* <a asp-controller="Registration" asp-action="Register]" asp-route-returnurl="@ViewData["ReturnUrl"]" asp-all-route-data="?role=Company">@T["Register as a Company"]</a>*@
                     </div>
                 }
             </form>
