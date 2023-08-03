@@ -61,5 +61,17 @@ public class FreelancerDetailController : Controller
         return View(this.ViewModel);
     }
 
+    public async Task<RedirectToActionResult> NavigateBack()
+    {
+        var user = _userService.GetAuthenticatedUserAsync(User).Result as User;
+        Roles role = _profileService.GetUserRole(user);
+        if (role == Roles.Freelancer)
+            return this.RedirectToAction("Index", "FreelancerExtended", new { area = "FrogsNetwork.Freelancing" });
+        else if (role == Roles.Company)
+            return this.RedirectToAction("Index", "FreelancerSearch", new { area = "FrogsNetwork.Freelancing" });
+        else
+            return this.RedirectToAction("Index");
+    }
+
 
 }

@@ -207,7 +207,11 @@
         </div>
         <div class="row">
             <div class="col">
-                <button class="btn btn-primary"  formaction="/FreelancerSearch/Index" type="submit">Back To Search</button>
+                <button class="btn btn-primary" type="submit"
+                        formaction="@Url.Action("NavigateBack")">
+                    @T["Back"]
+                </button>
+
             </div>
         </div>
     </fieldset>
