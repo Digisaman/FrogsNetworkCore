@@ -93,6 +93,7 @@ namespace FrogsNetwork.Forums.Controllers
         [ActionName("Create")]
         public async Task<ActionResult> CreatePost(ForumEditViewModel viewModel)
         {
+            bool isNew = viewModel.ForumId == null;
             var contentItem = await _contentManager.NewAsync("Forum");
             dynamic model = await _contentItemDisplayManager.BuildEditorAsync(contentItem, _updateModelAccessor.ModelUpdater, true);
             ForumEditViewModel forumEditViewModel = new ForumEditViewModel
@@ -103,16 +104,26 @@ namespace FrogsNetwork.Forums.Controllers
                 ReturnUrl = "/Forum/Index"
             };
             //this.TempData.Add("ViewModel", viewModel);
-           
-            await _contentItemDisplayManager.UpdateEditorAsync(forumEditViewModel.Item, _updateModelAccessor.ModelUpdater, true);
-            await _contentManager.PublishAsync(contentItem);
-            return View("Create", forumEditViewModel);
+
+
+            if (isNew)
+            {
+                return View("Create", forumEditViewModel);
+            }
+            else
+            {
+                await _contentItemDisplayManager.UpdateEditorAsync(forumEditViewModel.Item, _updateModelAccessor.ModelUpdater, true);
+                await _contentManager.PublishAsync(contentItem);
+                return RedirectToAction("Index");
+            }
         }
 
 
-
+        [HttpGet]
+        [ActionName("Edit")]
         public async Task<ActionResult> Edit(string Id)
         {
+           
             var contentItem = await _session
                .Query<ContentItem, ContentItemIndex>(index => index.ContentType == "Forum" && index.ContentItemId == Id)
                .FirstOrDefaultAsync();
@@ -145,7 +156,7 @@ namespace FrogsNetwork.Forums.Controllers
 
 
 
-            // var forum = await _contentManager.UpdateAsync(contentItem);
+            await _contentManager.UpdateAsync(contentItem);
             dynamic model = await _contentItemDisplayManager.BuildEditorAsync(contentItem, _updateModelAccessor.ModelUpdater, false);
 
             ForumEditViewModel forunViewModel = new ForumEditViewModel
@@ -157,7 +168,23 @@ namespace FrogsNetwork.Forums.Controllers
             };
             await _contentItemDisplayManager.UpdateEditorAsync(forunViewModel.Item, _updateModelAccessor.ModelUpdater, true);
             await _contentManager.PublishAsync(contentItem);
-            return View("Edit", forunViewModel);
+            return RedirectToAction("Index");
+        }
+
+        [ActionName("Delete")]
+        public async Task<IActionResult> Delete(string Id)
+        {
+            var contentItem = await _session
+               .Query<ContentItem, ContentItemIndex>(index => index.ContentType == "Forum" && index.ContentItemId == Id)
+               .FirstOrDefaultAsync();
+
+            //var tasks = items.Select(item => contentManager.RemoveAsync(item));
+          
+            _session.Delete(contentItem);
+            //var task = _contentManager.RemoveAsync(contentItem);
+            
+            //await Task.WhenAll(task);
+            return RedirectToAction("Index");
         }
     }
 }

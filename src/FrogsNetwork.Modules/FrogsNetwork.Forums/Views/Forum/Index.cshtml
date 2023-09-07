@@ -45,9 +45,9 @@
                             <td>
                                 @Html.ActionLink("Edit", "Edit", "Forum", new { entry.Id }, null)
                             </td>
-                            @*<td>
-                                @Html.ActionLink("New", "Create", "Forum")
-                            </td>*@
+                            <td>
+                                @Html.ActionLink("Delete", "Delete", "Forum", new { entry.Id }, null)
+                            </td>
                         </tr>
                     }
                 </table>
